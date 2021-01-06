@@ -82,14 +82,7 @@ namespace ResourceTypes.FrameResource
             set { hierachy = value; }
         }
 
-        public FrameObjectModel() : base()
-        {
-
-
-        }
-        public FrameObjectModel (MemoryStream reader, bool isBigEndian)
-        {
-        }
+        public FrameObjectModel(FrameResource OwningResource) : base(OwningResource) { }
 
         public FrameObjectModel(FrameObjectSingleMesh other) : base(other)
         {
@@ -244,6 +237,37 @@ namespace ResourceTypes.FrameResource
             {
                 hitBoxInfo[i].WriteToFile(writer);
             }
+        }
+
+        public FrameBlendInfo ConstructBlendInfoObject()
+        {
+            blendInfo = OwningResource.ConstructFrameAssetOfType<FrameBlendInfo>();
+            AddRef(FrameEntryRefTypes.BlendInfo, blendInfo.RefID);
+            return blendInfo;
+        }
+        public FrameSkeletonHierachy ConstructSkeletonHierarchyObject()
+        {
+            SkeletonHierarchy = OwningResource.ConstructFrameAssetOfType<FrameSkeletonHierachy>();
+            AddRef(FrameEntryRefTypes.SkeletonHierachy, SkeletonHierarchy.RefID);
+            return SkeletonHierarchy;
+        }
+
+        public FrameSkeleton ConstructSkeletonObject()
+        {
+            skeleton = OwningResource.ConstructFrameAssetOfType<FrameSkeleton>();
+            AddRef(FrameEntryRefTypes.Skeleton, skeleton.RefID);
+            return skeleton;
+        }
+
+        public override void CreateMeshFromRawModel(Model NewModel)
+        {
+            base.CreateMeshFromRawModel(NewModel);
+
+            ConstructBlendInfoObject();
+            ConstructGeometryObject();
+            ConstructMaterialObject();
+
+            NewModel.CreateObjectsFromModel();
         }
 
         public override string ToString()
