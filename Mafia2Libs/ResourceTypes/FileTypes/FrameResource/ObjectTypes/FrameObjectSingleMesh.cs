@@ -68,13 +68,13 @@ namespace ResourceTypes.FrameResource
 
         [TypeConverter(typeof(ExpandableObjectConverter)), Category("Linked Blocks"), Description("Avoid editing!")]
         public FrameGeometry Geometry {
-            get { return geometry; }
+            get { return GetGeometry(); }
             set { geometry = value; }
         }
 
         [TypeConverter(typeof(ExpandableObjectConverter)), Category("Linked Blocks"), Description("Avoid editing!")]
         public FrameMaterial Material {
-            get { return material; }
+            get { return GetMaterial(); }
             set { material = value; }
         }
 
@@ -100,7 +100,6 @@ namespace ResourceTypes.FrameResource
             unk14 = 255;
             meshIndex = 0;
             materialIndex = 0;
-            localTransform = new Matrix4x4();
             omTextureHash = new HashName();
             unk18_1 = 0;
             unk18_2 = 0;
@@ -163,17 +162,37 @@ namespace ResourceTypes.FrameResource
             /* End check regarding OM Flag */
         }
 
-        public FrameMaterial ConstructMaterialObject()
+        protected FrameMaterial ConstructMaterialObject()
         {
             Material = OwningResource.ConstructFrameAssetOfType<FrameMaterial>();
             AddRef(FrameEntryRefTypes.Material, Material.RefID);
             return Material;
         }
 
-        public FrameGeometry ConstructGeometryObject()
+        protected FrameGeometry ConstructGeometryObject()
         {
             geometry = OwningResource.ConstructFrameAssetOfType<FrameGeometry>();
             AddRef(FrameEntryRefTypes.Geometry, geometry.RefID);
+            return geometry;
+        }
+
+        public FrameMaterial GetMaterial()
+        {
+            if(material == null)
+            {
+                return ConstructMaterialObject();
+            }
+
+            return material;
+        }
+
+        public FrameGeometry GetGeometry()
+        {
+            if(geometry == null)
+            {
+                return ConstructGeometryObject();
+            }
+
             return geometry;
         }
 
@@ -182,7 +201,7 @@ namespace ResourceTypes.FrameResource
             ConstructMaterialObject();
             ConstructGeometryObject();
 
-            NewModel.FrameMesh = this;
+            NewModel.SetFrameMesh(this);
             NewModel.CreateObjectsFromModel();
         }
 
