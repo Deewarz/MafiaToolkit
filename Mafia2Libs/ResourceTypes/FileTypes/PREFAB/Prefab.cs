@@ -1,8 +1,10 @@
-﻿using System;
+﻿using BitStreams;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using ResourceTypes.Prefab.CrashObject;
 
 namespace ResourceTypes.Prefab
 {
@@ -121,33 +123,25 @@ namespace ResourceTypes.Prefab
                 PrefabType = reader.ReadInt32();
                 Unk0 = reader.ReadInt32();
                 PrefabSize = reader.ReadInt32();
+
+                long CurrentPosition = reader.BaseStream.Position;
                 data = reader.ReadBytes(PrefabSize);
 
-                //BitStreams.BitStream stream = new BitStreams.BitStream(reader.BaseStream);
-                //int globalInitVer = stream.ReadInt32();
-
-                //byte[] data1 = new byte[8];
-                //for (int i = 0; i < 8; i++)
-                //    data1[i] = stream.ReadByte();
-                //ulong int11 = (ulong)((data1[3] << 24) | (data1[2] << 16) | (data1[1] << 8) | data1[0]);
-                //ulong int12 = (ulong)((data1[7] << 24) | (data1[6] << 16) | (data1[5] << 8) | data1[4]);
-                //byte[] data2 = new byte[8];
-                //for (int i = 0; i < 8; i++)
-                //    data2[i] = stream.ReadByte();
-                //ulong int21 = (ulong)((data1[3] << 24) | (data2[2] << 16) | (data2[1] << 8) | data2[0]);
-                //ulong int22 = (ulong)((data1[7] << 24) | (data2[6] << 16) | (data2[5] << 8) | data2[4]);
-                //byte[] data3 = new byte[8];
-                //for (int i = 0; i < 8; i++)
-                //    data3[i] = stream.ReadByte();
-                //ulong int31 = (ulong)((data1[3] << 24) | (data3[2] << 16) | (data3[1] << 8) | data3[0]);
-                //ulong int32 = (ulong)((data1[7] << 24) | (data3[6] << 16) | (data3[5] << 8) | data3[4]);
-                //data = reader.ReadBytes(prefabSize-28);
-
-                //stream.ReadBits(464)
                 using (BinaryWriter writer = new BinaryWriter(File.Open("Prefabs/" + Hash.ToString() + "Type_" + PrefabType + ".prefab", FileMode.Create)))
                 {
                     writer.Write(data);
                 }
+
+                if (Debugger.IsAttached)
+                {
+                    reader.BaseStream.Position = CurrentPosition;
+
+                    BitStream MemStream = new BitStream(reader.BaseStream);
+
+                    S_DeformationInitData DeformationData = new S_DeformationInitData();
+                    DeformationData.Load(MemStream);
+                }
+               
 
 
                 //unk4 = reader.ReadInt32();
@@ -168,6 +162,25 @@ namespace ResourceTypes.Prefab
                 writer.Write(Unk0);
                 writer.Write(PrefabSize);
                 writer.Write(data);
+            }
+
+            private void GetThreeVectors4(BitStream MemStream)
+            {
+                int Vec1_Comp1 = MemStream.ReadInt32();
+                int Vec1_Comp2 = MemStream.ReadInt32();
+                int Vec1_Comp3 = MemStream.ReadInt32();
+
+                int Vec2_Comp1 = MemStream.ReadInt32();
+                int Vec2_Comp2 = MemStream.ReadInt32();
+                int Vec2_Comp3 = MemStream.ReadInt32();
+
+                int Vec3_Comp1 = MemStream.ReadInt32();
+                int Vec3_Comp2 = MemStream.ReadInt32();
+                int Vec3_Comp3 = MemStream.ReadInt32();
+
+                int Vec4_Comp1 = MemStream.ReadInt32();
+                int Vec4_Comp2 = MemStream.ReadInt32();
+                int Vec4_Comp3 = MemStream.ReadInt32();
             }
 
             public int GetSize()

@@ -514,6 +514,14 @@
     <Compile Include="ResourceTypes\FileTypes\Navigation\HPD.cs" />
     <Compile Include="ResourceTypes\FileTypes\Navigation\OBJ_DATA\KynogonRuntimeMesh.cs" />
     <Compile Include="ResourceTypes\FileTypes\Navigation\OBJ_DATA\OBJData.cs" />
+    <Compile Include="ResourceTypes\FileTypes\Prefab\CrashObject\S_InitCollVolume.cs" />
+    <Compile Include="ResourceTypes\FileTypes\Prefab\CrashObject\S_InitDeformPart.cs" />
+    <Compile Include="ResourceTypes\FileTypes\Prefab\CrashObject\S_InitDeformPartCommon.cs" />
+    <Compile Include="ResourceTypes\FileTypes\Prefab\CrashObject\S_InitDeformPartEffects.cs" />
+    <Compile Include="ResourceTypes\FileTypes\Prefab\CrashObject\S_InitJoint.cs" />
+    <Compile Include="ResourceTypes\FileTypes\Prefab\CrashObject\S_InitJointSet.cs" />
+    <Compile Include="ResourceTypes\FileTypes\Prefab\CrashObject\S_InitOwnerDeform.cs" />
+    <Compile Include="ResourceTypes\FileTypes\Prefab\CrashObject\S_InitSMDeformBone.cs" />
     <Compile Include="ResourceTypes\FileTypes\SdsConfigFile.cs" />
     <Compile Include="ResourceTypes\FileTypes\Actors\ActorEnums.cs" />
     <Compile Include="ResourceTypes\FileTypes\Actors\Actor.cs" />
@@ -566,7 +574,7 @@
     <Compile Include="ResourceTypes\FileTypes\Material\MaterialLibrary.cs" />
     <Compile Include="ResourceTypes\FileTypes\Material\MaterialManager.cs" />
     <Compile Include="ResourceTypes\FileTypes\Navigation\NAV_AI.cs" />
-    <Compile Include="ResourceTypes\FileTypes\PREFAB\Prefab.cs" />
+    <Compile Include="ResourceTypes\FileTypes\Prefab\Prefab.cs" />
     <Compile Include="ResourceTypes\FileTypes\ShopMenu2.cs" />
     <Compile Include="ResourceTypes\FileTypes\SoundSectors\SoundSector.cs" />
     <Compile Include="ResourceTypes\FileTypes\StreamMap.cs" />

@@ -345,6 +345,15 @@ namespace Gibbed.Mafia2.FileFormats
 
             // Open a FileStream which contains the SDSContent data.
             string SDSContentPath = Path.Combine(sdsFolder, "SDSContent.xml");
+
+            // First check if it actually exists
+            if (!File.Exists(SDSContentPath))
+            {
+                MessageBox.Show("SDSContent.xml does not exist. Cannot pack this SDS.", "Mafia Toolkit");
+                return false;
+            }
+
+            // Then attempt to read
             using (FileStream XMLStream = new FileStream(SDSContentPath, FileMode.Open))
             {
                 try
