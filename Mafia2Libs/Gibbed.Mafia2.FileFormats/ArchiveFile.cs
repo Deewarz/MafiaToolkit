@@ -631,9 +631,21 @@ namespace Gibbed.Mafia2.FileFormats
             {
                 ResourceEntry Entry = ResourceEntries[i];
 
-                // Get extension, format filename properly.
-                string Extension = DetermineFileExtension(_ResourceTypes[Entry.TypeId].Name);
-                string FileName = string.Format("File_{0}{1}", i, Extension);
+                string FileName = "Unknown_0";
+
+                if (Entry.TypeId != -1)
+                {
+                    // TODO: Determine if this could be done for fusion games
+                    string NameOfFile = "File_";
+                    if (IsGameType(GamesEnumerator.MafiaII) || IsGameType(GamesEnumerator.MafiaII_DE))
+                    {
+                        NameOfFile = ResourceTypes[Entry.TypeId].Name;
+                    }
+
+                    // Get extension, format filename properly.
+                    string Extension = DetermineFileExtension(_ResourceTypes[Entry.TypeId].Name);
+                    FileName = string.Format("{0}{1}{2}", NameOfFile, i, Extension);
+                }
 
                 _ResourceNames.Add(FileName);
             }
