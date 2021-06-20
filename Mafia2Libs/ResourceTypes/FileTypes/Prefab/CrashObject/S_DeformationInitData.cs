@@ -6,7 +6,11 @@ namespace ResourceTypes.Prefab.CrashObject
 {
     public class S_DeformationInitData
     {
-        public void Load(BitStream MemStream)
+        public S_InitDeformPart[] DeformParts { get; set; }
+        public S_InitJoint[] InitJoints { get; set; }
+        public S_InitOwnerDeform[] OwnerDeforms { get; set; }
+
+        public virtual void Load(BitStream MemStream)
         {
             int GlobalPrefabVersion = MemStream.ReadInt32();
 
@@ -15,7 +19,7 @@ namespace ResourceTypes.Prefab.CrashObject
             ulong Hash2 = MemStream.ReadUInt64();
 
             uint NumDeformParts = MemStream.ReadUInt32();
-            S_InitDeformPart[] DeformParts = new S_InitDeformPart[NumDeformParts];
+            DeformParts = new S_InitDeformPart[NumDeformParts];
             for (int i = 0; i < NumDeformParts; i++)
             {
                 S_InitDeformPart DeformPart = new S_InitDeformPart();
@@ -24,7 +28,7 @@ namespace ResourceTypes.Prefab.CrashObject
             }
 
             uint NumJoints = MemStream.ReadUInt32();
-            S_InitJoint[] InitJoints = new S_InitJoint[NumJoints];
+            InitJoints = new S_InitJoint[NumJoints];
             for (int i = 0; i < InitJoints.Length; i++)
             {
                 S_InitJoint NewJoint = new S_InitJoint();
@@ -42,7 +46,7 @@ namespace ResourceTypes.Prefab.CrashObject
             }
 
             uint NumOwnerDeforms = MemStream.ReadUInt32();
-            S_InitOwnerDeform[] OwnerDeforms = new S_InitOwnerDeform[NumOwnerDeforms];
+            OwnerDeforms = new S_InitOwnerDeform[NumOwnerDeforms];
             for (int i = 0; i < OwnerDeforms.Length; i++)
             {
                 S_InitOwnerDeform OwnerDeform = new S_InitOwnerDeform();

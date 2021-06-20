@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using ResourceTypes.Prefab.CrashObject;
+using ResourceTypes.Prefab.Vehicle;
 
 namespace ResourceTypes.Prefab
 {
@@ -138,21 +139,9 @@ namespace ResourceTypes.Prefab
 
                     BitStream MemStream = new BitStream(reader.BaseStream);
 
-                    S_DeformationInitData DeformationData = new S_DeformationInitData();
-                    DeformationData.Load(MemStream);
+                    S_CarInitData VehInitData = new S_CarInitData();
+                    VehInitData.Load(MemStream);
                 }
-               
-
-
-                //unk4 = reader.ReadInt32();
-                //unkHashCount = reader.ReadInt32();
-                //unkHashes = new ulong[unkHashCount];
-
-                //for (int i = 0; i != unkHashes.Length; i++)
-                //    unkHashes[i] = reader.ReadUInt64();
-
-                //if(reader.ReadInt32() != 0) //should be zero?
-                //    Console.WriteLine("Wasn't zero.");
             }
 
             public void WriteToFile(BinaryWriter writer)
@@ -162,25 +151,6 @@ namespace ResourceTypes.Prefab
                 writer.Write(Unk0);
                 writer.Write(PrefabSize);
                 writer.Write(data);
-            }
-
-            private void GetThreeVectors4(BitStream MemStream)
-            {
-                int Vec1_Comp1 = MemStream.ReadInt32();
-                int Vec1_Comp2 = MemStream.ReadInt32();
-                int Vec1_Comp3 = MemStream.ReadInt32();
-
-                int Vec2_Comp1 = MemStream.ReadInt32();
-                int Vec2_Comp2 = MemStream.ReadInt32();
-                int Vec2_Comp3 = MemStream.ReadInt32();
-
-                int Vec3_Comp1 = MemStream.ReadInt32();
-                int Vec3_Comp2 = MemStream.ReadInt32();
-                int Vec3_Comp3 = MemStream.ReadInt32();
-
-                int Vec4_Comp1 = MemStream.ReadInt32();
-                int Vec4_Comp2 = MemStream.ReadInt32();
-                int Vec4_Comp3 = MemStream.ReadInt32();
             }
 
             public int GetSize()
