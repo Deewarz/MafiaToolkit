@@ -16,6 +16,7 @@ namespace ResourceTypes.Prefab.CrashObject
         public byte Unk6 { get; set; }
         public int[] Unk7 { get; set; } // Vector3?
         public uint Unk8 { get; set; }
+
         public void Load(BitStream MemStream)
         {
             Unk0 = MemStream.ReadUInt16();
@@ -62,6 +63,45 @@ namespace ResourceTypes.Prefab.CrashObject
             // If one - means something is available.
             Unk8 = MemStream.ReadUInt32();
             Debug.Assert(Unk8 == 0, "We expect one here. This has extra data!");
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            MemStream.WriteUInt16(Unk0);
+            MemStream.WriteUInt16(Unk1);
+            MemStream.WriteUInt16(Unk2);
+            MemStream.WriteUInt16(Unk3);
+
+            // Write Joints
+            MemStream.WriteUInt32((uint)JointSets.Length);
+            foreach(S_InitJointSet JointSet in JointSets)
+            {
+                JointSet.Save(MemStream);
+            }
+
+            // BitStream type of something
+            // I think its transform (floats)
+            foreach (int Value in Unk4)
+            {
+                MemStream.WriteInt32(Value);
+            }
+
+            // BitStream type of something
+            // I think its transform (floats)
+            foreach (int Value in Unk5)
+            {
+                MemStream.WriteInt32(Value);
+            }
+
+            MemStream.WriteBit(Unk6);
+
+            // Vector3?
+            foreach (int Value in Unk7)
+            {
+                MemStream.WriteInt32(Value);
+            }
+
+            MemStream.WriteUInt32(Unk8);
         }
     }
 }

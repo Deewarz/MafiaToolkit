@@ -1,11 +1,6 @@
 ﻿using BitStreams;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ResourceTypes.Prefab.CrashObject
+namespace ResourceTypes.Prefab.Vehicle
 {
     public class S_InitAxle
     {
@@ -24,6 +19,16 @@ namespace ResourceTypes.Prefab.CrashObject
 
             Wheel = new S_InitWheel();
             Wheel.Load(MemStream);
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            MemStream.WriteUInt64(AxleName);
+            MemStream.WriteUInt64(BrakeDrumName);
+            MemStream.WriteUInt64(RotWingName);
+            MemStream.WriteUInt32(AxleType);
+
+            Wheel.Save(MemStream);
         }
     }
 }

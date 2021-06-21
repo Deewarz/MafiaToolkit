@@ -4,19 +4,26 @@ using System.Diagnostics;
 
 namespace ResourceTypes.Prefab.CrashObject
 {
-    public class S_DeformationInitData
+    public class S_DeformationInitData : S_GlobalInitData
     {
+        public ulong HashCRC { get; set; }
+        public ulong ScaleBoneFrameName { get; set; }
+        public ulong RootFrameName { get; set; }
         public S_InitDeformPart[] DeformParts { get; set; }
         public S_InitJoint[] InitJoints { get; set; }
+        public ulong[] Unk1_Hashes { get; set; }
+        public ushort[] Unk1_Indexes { get; set; }
         public S_InitOwnerDeform[] OwnerDeforms { get; set; }
+        public byte Unk2 { get; set; }
+        public byte Unk3 { get; set; }
 
-        public virtual void Load(BitStream MemStream)
+        public override void Load(BitStream MemStream)
         {
-            int GlobalPrefabVersion = MemStream.ReadInt32();
+            base.Load(MemStream);
 
-            ulong Hash0 = MemStream.ReadUInt64();
-            ulong Hash1 = MemStream.ReadUInt64();
-            ulong Hash2 = MemStream.ReadUInt64();
+            HashCRC = MemStream.ReadUInt64();
+            ScaleBoneFrameName = MemStream.ReadUInt64();
+            RootFrameName = MemStream.ReadUInt64();
 
             uint NumDeformParts = MemStream.ReadUInt32();
             DeformParts = new S_InitDeformPart[NumDeformParts];
@@ -36,13 +43,14 @@ namespace ResourceTypes.Prefab.CrashObject
                 InitJoints[i] = NewJoint;
             }
 
+            // NB: Could be S_InitOwnerGroup?
             uint NumHashes = MemStream.ReadUInt32();
-            ulong[] Hashes = new ulong[NumHashes];
-            ushort[] Index = new ushort[NumHashes];
-            for (int i = 0; i < Hashes.Length; i++)
+            Unk1_Hashes = new ulong[NumHashes];
+            Unk1_Indexes = new ushort[NumHashes];
+            for (int i = 0; i < Unk1_Hashes.Length; i++)
             {
-                Hashes[i] = MemStream.ReadUInt64();
-                Index[i] = MemStream.ReadUInt16();
+                Unk1_Hashes[i] = MemStream.ReadUInt64();
+                Unk1_Indexes[i] = MemStream.ReadUInt16();
             }
 
             uint NumOwnerDeforms = MemStream.ReadUInt32();
@@ -54,8 +62,46 @@ namespace ResourceTypes.Prefab.CrashObject
                 OwnerDeforms[i] = OwnerDeform;
             }
 
-            byte Byte0 = MemStream.ReadBit();
-            byte Byte1 = MemStream.ReadBit();
+            Unk2 = MemStream.ReadBit();
+            Unk3 = MemStream.ReadBit();
+        }
+
+        public override void Save(BitStream MemStream)
+        {
+            base.Save(MemStream);
+
+            MemStream.WriteUInt64(HashCRC);
+            MemStream.WriteUInt64(ScaleBoneFrameName);
+            MemStream.WriteUInt64(RootFrameName);
+
+            MemStream.WriteUInt32((uint)DeformParts.Length);
+            foreach(S_InitDeformPart DeformPart in DeformParts)
+            {
+                DeformPart.Save(MemStream);
+            }
+            
+            MemStream.WriteUInt32((uint)InitJoints.Length);
+            foreach (S_InitJoint InitJoint in InitJoints)
+            {
+                InitJoint.Save(MemStream);
+            }
+
+            // NB: Could be S_InitOwnerGroup?
+            MemStream.WriteUInt32((uint)Unk1_Hashes.Length);
+            for (int i = 0; i < Unk1_Hashes.Length; i++)
+            {
+                MemStream.WriteUInt64(Unk1_Hashes[i]);
+                MemStream.WriteUInt16(Unk1_Indexes[i]);
+            }
+
+            MemStream.WriteUInt32((uint)OwnerDeforms.Length);
+            foreach (S_InitOwnerDeform OwnerDeform in OwnerDeforms)
+            {
+                OwnerDeform.Save(MemStream);
+            }
+
+            MemStream.WriteBit(Unk2);
+            MemStream.WriteBit(Unk3);
         }
     }
 }

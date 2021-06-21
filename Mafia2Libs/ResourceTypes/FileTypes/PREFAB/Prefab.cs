@@ -118,6 +118,11 @@ namespace ResourceTypes.Prefab
 
             byte[] data;
 
+            public PrefabStruct()
+            {
+                AssignedName = "";
+            }
+
             public void ReadFromFile(BinaryReader reader)
             {
                 Hash = reader.ReadUInt64();
@@ -128,19 +133,26 @@ namespace ResourceTypes.Prefab
                 long CurrentPosition = reader.BaseStream.Position;
                 data = reader.ReadBytes(PrefabSize);
 
-                using (BinaryWriter writer = new BinaryWriter(File.Open("Prefabs/" + Hash.ToString() + "Type_" + PrefabType + ".prefab", FileMode.Create)))
-                {
-                    writer.Write(data);
-                }
-
                 if (Debugger.IsAttached)
                 {
                     reader.BaseStream.Position = CurrentPosition;
 
                     BitStream MemStream = new BitStream(reader.BaseStream);
 
-                    S_CarInitData VehInitData = new S_CarInitData();
-                    VehInitData.Load(MemStream);
+                    if (PrefabType == 2)
+                    {
+                        S_CarInitData VehInitData = new S_CarInitData();
+                        VehInitData.Load(MemStream);
+
+                        byte[] Storage = new byte[32768];
+                        BitStream OutStream = new BitStream(Storage);
+                        VehInitData.Save(OutStream);
+
+                        OutStream.ChangeLength(OutStream.GetStream().Position + 1);
+                        data = OutStream.GetStreamData();
+
+                        Debug.Assert(OutStream.Length == PrefabSize, "Incorrect Size when doing the save test");
+                    }
                 }
             }
 

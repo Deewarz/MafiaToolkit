@@ -14,6 +14,12 @@ namespace ResourceTypes.Prefab.CrashObject
             Unk01 = MemStream.ReadUInt32();
             Unk02 = MemStream.ReadInt32();
         }
+
+        public void Save(BitStream MemStream)
+        {
+            MemStream.WriteUInt32(Unk01);
+            MemStream.WriteInt32(Unk02);
+        }
     }
 
     public class S_InitDeformPart
@@ -54,12 +60,7 @@ namespace ResourceTypes.Prefab.CrashObject
             Unk2 = MemStream.ReadBit();
 
             // collect hashes
-            uint NumHashes = MemStream.ReadUInt32();
-            Unk3 = new ulong[NumHashes];
-            for (int i = 0; i < NumHashes; i++)
-            {
-                Unk3[i] = MemStream.ReadUInt64();
-            }
+            Unk3 = PrefabUtils.ReadHashArray(MemStream);
 
             Unk4 = MemStream.ReadInt32(); // float
             Unk5 = MemStream.ReadInt32(); // float
@@ -70,6 +71,8 @@ namespace ResourceTypes.Prefab.CrashObject
 
             Unk10 = MemStream.ReadUInt32(); // Count
             Unk11 = MemStream.ReadUInt32(); // Count
+
+            // Read unknown data
             uint Unk12Count = MemStream.ReadUInt32(); // Count
             Unk12 = new S_InitDeformPart_Unk12Pack[Unk12Count];
             for (int i = 0; i < Unk12Count; i++)
@@ -144,6 +147,83 @@ namespace ResourceTypes.Prefab.CrashObject
 
             CommonData = new S_InitDeformPartCommon();
             CommonData.Load(MemStream);
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            MemStream.WriteUInt32(Unk0);
+            MemStream.WriteUInt32(Unk1);
+            MemStream.WriteBit(Unk2);
+
+            PrefabUtils.WriteHashArray(MemStream, Unk3);
+
+            MemStream.WriteInt32(Unk4);
+            MemStream.WriteInt32(Unk5);
+            MemStream.WriteInt32(Unk6);
+            MemStream.WriteInt32(Unk7);
+            MemStream.WriteInt32(Unk8);
+            MemStream.WriteInt32(Unk9);
+
+            MemStream.WriteUInt32(Unk10);
+            MemStream.WriteUInt32(Unk11);
+
+            // Write Unknown data
+            MemStream.WriteUInt32((uint)Unk12.Length);
+            foreach(S_InitDeformPart_Unk12Pack Value in Unk12)
+            {
+                Value.Save(MemStream);
+            }
+
+            MemStream.WriteUInt32(Unk13);
+            
+            // Write Collision Volumes
+            MemStream.WriteUInt32((uint)CollisionVolumes.Length);
+            foreach (S_InitCollVolume Value in CollisionVolumes)
+            {
+                Value.Save(MemStream);
+            }
+
+            // Write SM Deform bones
+            MemStream.WriteUInt32((uint)SMDeformBones.Length);
+            foreach (S_InitSMDeformBone Value in SMDeformBones)
+            {
+                Value.Save(MemStream);
+            }
+
+            // UInt16s - indexes?
+            MemStream.WriteUInt32((uint)Unk14.Length);
+            foreach (ushort Value in Unk14)
+            {
+                MemStream.WriteUInt16(Value);
+            }
+
+            // BitStream type of something
+            // I think its transform (floats)
+            foreach (int Value in Unk15)
+            {
+                MemStream.WriteInt32(Value);
+            }
+
+            MemStream.WriteUInt64(Unk16);
+            MemStream.WriteUInt16(Unk17);
+            MemStream.WriteByte(Unk18);
+            MemStream.WriteByte(Unk19);
+
+            // UInt20s - indexes?
+            MemStream.WriteUInt32((uint)Unk20.Length);
+            foreach (ushort Value in Unk20)
+            {
+                MemStream.WriteUInt16(Value);
+            }
+
+            MemStream.WriteBit(Unk21);
+            MemStream.WriteBit(Unk22);
+            MemStream.WriteUInt32(Unk23);
+            MemStream.WriteUInt32(Unk24);
+
+            CommonData.Save(MemStream);
+
+            return;
         }
     }
 }

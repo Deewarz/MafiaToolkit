@@ -51,5 +51,39 @@ namespace ResourceTypes.Prefab.CrashObject
             Unk5 = MemStream.ReadBit();
             Debug.Assert(Unk5 == 0, "We expect one here. This has extra data!");
         }
+
+        public void Save(BitStream MemStream)
+        {
+            MemStream.WriteUInt32(Unk0);
+
+            // Transform?
+            foreach(int Value in Unk1)
+            {
+                MemStream.WriteInt32(Value);
+            }
+
+            MemStream.WriteBit(Unk2);
+
+            // Vector3?
+            foreach (int Value in Unk3)
+            {
+                MemStream.WriteInt32(Value);
+            }
+
+            // Only saveable if we have some present
+            bool bUnk4HashesAvailable = (Unk4 != null  && Unk4.Length > 0);
+            MemStream.WriteBit(bUnk4HashesAvailable);
+
+            if(bUnk4HashesAvailable)
+            {
+                // fixed number of 2
+                foreach (ulong Value in Unk4)
+                {
+                    MemStream.WriteUInt64(Value);
+                }
+            }
+
+            MemStream.WriteBit(Unk5);
+        }
     }
 }

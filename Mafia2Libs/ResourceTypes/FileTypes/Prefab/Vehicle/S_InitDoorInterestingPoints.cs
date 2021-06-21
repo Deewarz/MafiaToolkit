@@ -4,15 +4,22 @@ namespace ResourceTypes.Prefab.Vehicle
 {
     public class S_InitDoorInterestingPoints
     {
-        public C_Vector3 Unk0 { get; set; } // m_CarDoorHandlePos
-        public C_Vector3 Unk1 { get; set; } // m_CarDoorLockPos
-        public ulong Unk2 { get; set; } // m_DoorFrameName
+        public C_Vector3 CarDoorHandlePos { get; set; }
+        public C_Vector3 CarDoorLockPos { get; set; }
+        public ulong DoorFrameName { get; set; }
 
         public void Load(BitStream MemStream)
         {
-            Unk0 = C_Vector3.Construct(MemStream);
-            Unk1 = C_Vector3.Construct(MemStream);
-            Unk2 = MemStream.ReadUInt64();
+            CarDoorHandlePos = C_Vector3.Construct(MemStream);
+            CarDoorLockPos = C_Vector3.Construct(MemStream);
+            DoorFrameName = MemStream.ReadUInt64();
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            CarDoorHandlePos.Save(MemStream);
+            CarDoorLockPos.Save(MemStream);
+            MemStream.WriteUInt64(DoorFrameName);
         }
     }
 }

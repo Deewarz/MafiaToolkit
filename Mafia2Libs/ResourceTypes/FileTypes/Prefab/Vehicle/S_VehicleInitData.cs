@@ -22,5 +22,14 @@ namespace ResourceTypes.Prefab.Vehicle
             ShaderEffects = new S_ShaderEffectInit();
             ShaderEffects.Load(MemStream);
         }
+
+        public override void Save(BitStream MemStream)
+        {
+            base.Save(MemStream);
+
+            OtherInitData.Save(MemStream);
+            WheelAxle.Save(MemStream);
+            ShaderEffects.Save(MemStream);
+        }
     }
 }

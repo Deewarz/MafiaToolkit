@@ -4,15 +4,22 @@ namespace ResourceTypes.Prefab.Vehicle
 {
     public class S_InitDrWheelHSnap
     {
-        public ulong Unk0 { get; set; } // m_DrWheelFrameName
-        public ulong Unk1 { get; set; } // m_LeftSnapFrameName
-        public ulong Unk2 { get; set; } // m_RightSnapFrameName
+        public ulong DrWheelFrameName { get; set; }
+        public ulong LeftSnapFrameName { get; set; }
+        public ulong RightSnapFrameName { get; set; }
 
         public void Load(BitStream MemStream)
         {
-            Unk0 = MemStream.ReadUInt64();
-            Unk1 = MemStream.ReadUInt64();
-            Unk2 = MemStream.ReadUInt64();
+            DrWheelFrameName = MemStream.ReadUInt64();
+            LeftSnapFrameName = MemStream.ReadUInt64();
+            RightSnapFrameName = MemStream.ReadUInt64();
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            MemStream.WriteUInt64(DrWheelFrameName);
+            MemStream.WriteUInt64(LeftSnapFrameName);
+            MemStream.WriteUInt64(RightSnapFrameName);
         }
     }
 }

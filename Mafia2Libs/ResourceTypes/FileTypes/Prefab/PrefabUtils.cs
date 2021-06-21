@@ -1,4 +1,5 @@
 ﻿using BitStreams;
+using System;
 
 namespace ResourceTypes.Prefab
 {
@@ -14,6 +15,38 @@ namespace ResourceTypes.Prefab
             }
 
             return HashArray;
+        }
+
+        public static void WriteHashArray(BitStream MemStream, ulong[] Hashes)
+        {
+            MemStream.WriteUInt32((uint)Hashes.Length);
+            foreach(ulong Value in Hashes)
+            {
+                MemStream.WriteUInt64(Value);
+            }
+        }
+    }
+
+    public static class BitStreamUtils
+    {
+        public static float ReadSingle(this BitStream MemStream)
+        {
+            // TODO: Could be read 4 bytes??
+
+            // Read int32, convert to float
+            int Value = MemStream.ReadInt32();
+            byte[] AsBytes = BitConverter.GetBytes(Value);
+            float ConvertedValue = BitConverter.ToSingle(AsBytes, 0);
+
+            return ConvertedValue;
+        }
+
+        public static void WriteSingle(this BitStream MemStream, float Value)
+        {
+            byte[] AsBytes = BitConverter.GetBytes(Value);
+            int ConvertedValue = BitConverter.ToInt32(AsBytes, 0);
+
+            MemStream.WriteInt32(ConvertedValue);
         }
     }
 }

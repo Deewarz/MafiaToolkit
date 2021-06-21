@@ -20,6 +20,14 @@ namespace ResourceTypes.Prefab.CrashObject
                     Unk0[i] = MemStream.ReadInt32();
                 }
             }
+
+            public void Save(BitStream MemStream)
+            {
+                foreach(int Value in Unk0)
+                {
+                    MemStream.WriteInt32(Value);
+                }
+            }
         }
 
         public uint Unk0 { get; set; } // fixed int
@@ -38,6 +46,17 @@ namespace ResourceTypes.Prefab.CrashObject
                 DataPacket NewPacket = new DataPacket();
                 NewPacket.Load(MemStream);
                 Unk2[i] = NewPacket;
+            }
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            MemStream.WriteUInt32(Unk0);
+            MemStream.WriteInt32(Unk1);
+
+            foreach(DataPacket Value in Unk2)
+            {
+                Value.Save(MemStream);
             }
         }
     }

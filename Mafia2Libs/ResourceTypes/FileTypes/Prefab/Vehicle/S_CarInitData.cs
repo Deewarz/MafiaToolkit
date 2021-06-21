@@ -4,8 +4,17 @@ namespace ResourceTypes.Prefab.Vehicle
 {
     public class S_CarInitData : S_VehicleInitData
     {
+        public ulong Hash0 { get; set; }
+        public ulong Hash1 { get; set; }
         public S_InitSeat[] Seats { get; set; }
+        public ulong[] BusSeatsFrameName { get; set; }
+        public ulong[] EnterBusFrameName { get; set; }
+        public ulong[] Hashes4 { get; set; }
+        public ulong[] Hashes5 { get; set; }
+        public ulong[] WipersFrameName { get; set; }
         public S_InitDrWheelHSnap[] DrWheelSnap { get; set; }
+        public ulong[] Hashes8 { get; set; }
+        public ulong[] Hashes9 { get; set; }
         public S_InitDoorInterestingPoints[] DoorInterestingPoints { get; set; }
         public S_InitClimbBox[] ClimbBoxes { get; set; }
 
@@ -13,8 +22,8 @@ namespace ResourceTypes.Prefab.Vehicle
         {
             base.Load(MemStream);
 
-            ulong Hash0 = MemStream.ReadUInt64();
-            ulong Hash1 = MemStream.ReadUInt64();
+            Hash0 = MemStream.ReadUInt64();
+            Hash1 = MemStream.ReadUInt64();
 
             // Read Seats
             uint NumSeats = MemStream.ReadUInt32();
@@ -25,13 +34,12 @@ namespace ResourceTypes.Prefab.Vehicle
                 SeatData.Load(MemStream);
                 Seats[i] = SeatData;
             }
-
-            // TODO: What are these?
-            ulong[] Hashes2 = PrefabUtils.ReadHashArray(MemStream);
-            ulong[] Hashes3 = PrefabUtils.ReadHashArray(MemStream);
-            ulong[] Hashes4 = PrefabUtils.ReadHashArray(MemStream);
-            ulong[] Hashes5 = PrefabUtils.ReadHashArray(MemStream);
-            ulong[] Hashes6 = PrefabUtils.ReadHashArray(MemStream);
+        
+            BusSeatsFrameName = PrefabUtils.ReadHashArray(MemStream);
+            EnterBusFrameName = PrefabUtils.ReadHashArray(MemStream);
+            Hashes4 = PrefabUtils.ReadHashArray(MemStream); // TODO: What are these?
+            Hashes5 = PrefabUtils.ReadHashArray(MemStream); // TODO: What are these?
+            WipersFrameName = PrefabUtils.ReadHashArray(MemStream);
 
             // Read DrWheelHSnap
             uint NumDrWheelHSnap = MemStream.ReadUInt32();
@@ -44,8 +52,8 @@ namespace ResourceTypes.Prefab.Vehicle
             }
 
             // TODO: What are these?
-            ulong[] Hashes8 = PrefabUtils.ReadHashArray(MemStream);
-            ulong[] Hashes9 = PrefabUtils.ReadHashArray(MemStream);
+            Hashes8 = PrefabUtils.ReadHashArray(MemStream); // TODO: What are these?
+            Hashes9 = PrefabUtils.ReadHashArray(MemStream); // TODO: What are these?
 
             // Read DoorInterestingPoints
             uint NumInterestingPoints = MemStream.ReadUInt32();
@@ -65,6 +73,51 @@ namespace ResourceTypes.Prefab.Vehicle
                 S_InitClimbBox ClimbBox = new S_InitClimbBox();
                 ClimbBox.Load(MemStream);
                 ClimbBoxes[i] = ClimbBox;
+            }
+        }
+
+        public override void Save(BitStream MemStream)
+        {
+            base.Save(MemStream);
+
+            MemStream.WriteUInt64(Hash0);
+            MemStream.WriteUInt64(Hash1);
+
+            // Write Seats
+            MemStream.WriteUInt32((uint)Seats.Length);
+            foreach(S_InitSeat Seat in Seats)
+            {
+                Seat.Save(MemStream);
+            }
+
+            PrefabUtils.WriteHashArray(MemStream, BusSeatsFrameName);
+            PrefabUtils.WriteHashArray(MemStream, EnterBusFrameName);
+            PrefabUtils.WriteHashArray(MemStream, Hashes4);
+            PrefabUtils.WriteHashArray(MemStream, Hashes5);
+            PrefabUtils.WriteHashArray(MemStream, WipersFrameName);
+
+            // Write DrWheelHSnap
+            MemStream.WriteUInt32((uint)DrWheelSnap.Length);
+            foreach (S_InitDrWheelHSnap WheelSnap in DrWheelSnap)
+            {
+                WheelSnap.Save(MemStream);
+            }
+
+            PrefabUtils.WriteHashArray(MemStream, Hashes8);
+            PrefabUtils.WriteHashArray(MemStream, Hashes9);
+
+            // Write DoorInterestingPoints
+            MemStream.WriteUInt32((uint)DoorInterestingPoints.Length);
+            foreach (S_InitDoorInterestingPoints DoorPoint in DoorInterestingPoints)
+            {
+                DoorPoint.Save(MemStream);
+            }
+
+            // Write ClimbBoxes
+            MemStream.WriteUInt32((uint)ClimbBoxes.Length);
+            foreach (S_InitClimbBox ClimbBox in ClimbBoxes)
+            {
+                ClimbBox.Save(MemStream);
             }
         }
     }

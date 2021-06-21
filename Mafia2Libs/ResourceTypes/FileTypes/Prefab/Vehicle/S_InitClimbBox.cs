@@ -4,17 +4,25 @@ namespace ResourceTypes.Prefab.Vehicle
 {
     public class S_InitClimbBox
     {
-        public C_Vector3 Unk0 { get; set; } // m_BoxMin
-        public C_Vector3 Unk1 { get; set; } // m_BoxMax
-        public ulong Unk2 { get; set; } // m_BoneFrameName
-        public ulong Unk3 { get; set; } // m_DummyFrameName
+        public C_Vector3 BoxMin { get; set; }
+        public C_Vector3 BoxMax { get; set; }
+        public ulong BoneFrameName { get; set; }
+        public ulong DummyFrameName { get; set; }
 
         public void Load(BitStream MemStream)
         {
-            Unk0 = C_Vector3.Construct(MemStream);
-            Unk1 = C_Vector3.Construct(MemStream);
-            Unk2 = MemStream.ReadUInt64();
-            Unk3 = MemStream.ReadUInt64();
+            BoxMin = C_Vector3.Construct(MemStream);
+            BoxMax = C_Vector3.Construct(MemStream);
+            BoneFrameName = MemStream.ReadUInt64();
+            DummyFrameName = MemStream.ReadUInt64();
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            BoxMin.Save(MemStream);
+            BoxMax.Save(MemStream);
+            MemStream.WriteUInt64(BoneFrameName);
+            MemStream.WriteUInt64(DummyFrameName);
         }
     }
 }

@@ -16,6 +16,12 @@ namespace ResourceTypes.Prefab.CrashObject
         public uint Unk8 { get; set; } // count of unknown data
         public S_InitDeformPartEffects PartEffects { get; set; }
 
+        private int Nested_Unk01; // float
+        private int Nested_Unk02; // float
+        private int Nested_Unk03; // float
+        private uint Nested_Unk04; // int
+        private int Nested_Unk05; // float
+
         public void Load(BitStream MemStream)
         {
             // 6 floats - could be two Vec3s
@@ -44,11 +50,11 @@ namespace ResourceTypes.Prefab.CrashObject
             {
                 // in M2DE exe - sub_1402D1CF0
                 // in logs - INITCOLLVOLUMENESTED
-                uint Nested_Unk01 = MemStream.ReadUInt32(); // float
-                uint Nested_Unk02 = MemStream.ReadUInt32(); // float
-                uint Nested_Unk03 = MemStream.ReadUInt32(); // float
-                uint Nested_Unk04 = MemStream.ReadUInt32(); // int
-                uint Nested_Unk05 = MemStream.ReadUInt32(); // float
+                Nested_Unk01 = MemStream.ReadInt32(); // float
+                Nested_Unk02 = MemStream.ReadInt32(); // float
+                Nested_Unk03 = MemStream.ReadInt32(); // float
+                Nested_Unk04 = MemStream.ReadUInt32(); // int
+                Nested_Unk05 = MemStream.ReadInt32(); // float
             }
 
             Unk6 = MemStream.ReadBit(); // flag for extra data
@@ -61,6 +67,39 @@ namespace ResourceTypes.Prefab.CrashObject
 
             PartEffects = new S_InitDeformPartEffects();
             PartEffects.Load(MemStream);
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            foreach (int Value in Unk1)
+            {
+                MemStream.WriteInt32(Value);
+            }
+
+            MemStream.WriteUInt32((uint)Unk2.Length);
+            foreach (int Value in Unk2)
+            {
+                MemStream.WriteInt32(Value);
+            }
+
+            MemStream.WriteBit(Unk3);
+            MemStream.WriteUInt32(Unk4);
+            MemStream.WriteBit(Unk5);
+
+            if(Unk5 == 1)
+            {
+                MemStream.WriteInt32(Nested_Unk01);
+                MemStream.WriteInt32(Nested_Unk02);
+                MemStream.WriteInt32(Nested_Unk03);
+                MemStream.WriteUInt32(Nested_Unk04);
+                MemStream.WriteInt32(Nested_Unk05);
+            }
+
+            MemStream.WriteBit(Unk6);
+            MemStream.WriteInt32(Unk7);
+            MemStream.WriteUInt32(Unk8);
+
+            PartEffects.Save(MemStream);
         }
     }
 }

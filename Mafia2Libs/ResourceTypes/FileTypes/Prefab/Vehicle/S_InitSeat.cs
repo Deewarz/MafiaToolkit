@@ -2,54 +2,48 @@
 
 namespace ResourceTypes.Prefab.Vehicle
 {
-    public class C_Vector3
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
-
-        public void Load(BitStream MemStream)
-        {
-            X = MemStream.ReadInt32();
-            Y = MemStream.ReadInt32();
-            Z = MemStream.ReadInt32();
-        }
-
-        public static C_Vector3 Construct(BitStream MemStream)
-        {
-            C_Vector3 Vector = new C_Vector3();
-            Vector.Load(MemStream);
-            return Vector;
-        }
-    }
-
     public class S_InitSeat
     {
-        public uint Unk0 { get; set; } // m_Flags
-        public ulong Unk1 { get; set; } // m_DoorIndexFrameName
-        public C_Vector3 Unk2 { get; set; } // m_TargetName
-        public C_Vector3 Unk3 { get; set; } // m_TargetSeat
-        public C_Vector3 Unk4 { get; set; } // m_LockPos
-        public C_Vector3 Unk5 { get; set; } // m_Dir
-        public C_Vector3 Unk6 { get; set; } // m_Pos
-        public uint Unk7 { get; set; } // m_SeatType
-        public uint Unk8 { get; set; } // m_SeatIndex
-        public uint Unk9 { get; set; } // m_SeatGroup
-        public ulong Unk10 { get; set; } // m_FrameName
+        public uint Flags { get; set; }
+        public ulong DoorIndexFrameName { get; set; }
+        public C_Vector3 TargetAim { get; set; }
+        public C_Vector3 TargetSeat { get; set; }
+        public C_Vector3 LockPos { get; set; }
+        public C_Vector3 Direction { get; set; }
+        public C_Vector3 Position { get; set; }
+        public uint SeatType { get; set; }
+        public uint SeatIndex { get; set; }
+        public uint SeatGroup { get; set; }
+        public ulong FrameName { get; set; }
 
         public void Load(BitStream MemStream)
         {
-            Unk0 = MemStream.ReadUInt32();
-            Unk1 = MemStream.ReadUInt64();
-            Unk2 = C_Vector3.Construct(MemStream);
-            Unk3 = C_Vector3.Construct(MemStream);
-            Unk4 = C_Vector3.Construct(MemStream);
-            Unk5 = C_Vector3.Construct(MemStream);
-            Unk6 = C_Vector3.Construct(MemStream);
-            Unk7 = MemStream.ReadUInt32();
-            Unk8 = MemStream.ReadUInt32();
-            Unk9 = MemStream.ReadUInt32();
-            Unk10 = MemStream.ReadUInt64();
+            Flags = MemStream.ReadUInt32();
+            DoorIndexFrameName = MemStream.ReadUInt64();
+            TargetAim = C_Vector3.Construct(MemStream);
+            TargetSeat = C_Vector3.Construct(MemStream);
+            LockPos = C_Vector3.Construct(MemStream);
+            Direction = C_Vector3.Construct(MemStream);
+            Position = C_Vector3.Construct(MemStream);
+            SeatType = MemStream.ReadUInt32();
+            SeatIndex = MemStream.ReadUInt32();
+            SeatGroup = MemStream.ReadUInt32();
+            FrameName = MemStream.ReadUInt64();
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            MemStream.WriteUInt32(Flags);
+            MemStream.WriteUInt64(DoorIndexFrameName);
+            TargetAim.Save(MemStream);
+            TargetSeat.Save(MemStream);
+            LockPos.Save(MemStream);
+            Direction.Save(MemStream);
+            Position.Save(MemStream);
+            MemStream.WriteUInt32(SeatType);
+            MemStream.WriteUInt32(SeatIndex);
+            MemStream.WriteUInt32(SeatGroup);
+            MemStream.WriteUInt64(FrameName);
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using BitStreams;
-using System;
-using System.Diagnostics;
 
 namespace ResourceTypes.Prefab.CrashObject
 {
@@ -23,6 +21,17 @@ namespace ResourceTypes.Prefab.CrashObject
             Unk4 = MemStream.ReadInt32();
             Unk5 = MemStream.ReadInt32();
             Unk6 = MemStream.ReadUInt16();
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            MemStream.WriteUInt16(Unk0);
+            MemStream.WriteUInt16(Unk1);
+            MemStream.WriteInt32(Unk2);
+            MemStream.WriteInt32(Unk3);
+            MemStream.WriteInt32(Unk4);
+            MemStream.WriteInt32(Unk5);
+            MemStream.WriteUInt16(Unk6);
         }
     }
 
@@ -126,6 +135,61 @@ namespace ResourceTypes.Prefab.CrashObject
             Unk37 = MemStream.ReadInt32();
             Unk38 = MemStream.ReadInt32();
             Unk39 = MemStream.ReadInt32();
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            // BitStream type of something
+            // I think its transform (floats)
+            foreach (int Value in Unk0)
+            {
+                MemStream.WriteInt32(Value);
+            }
+
+            // Write whatever this is
+            foreach (S_InitDeformPartEffect_Pack Value in Unk1)
+            {
+                Value.Save(MemStream);
+            }
+
+            MemStream.WriteUInt16(Unk2);
+            MemStream.WriteUInt16(Unk3);
+            MemStream.WriteUInt16(Unk4);
+            MemStream.WriteInt32(Unk5);
+            MemStream.WriteInt32(Unk6);
+            MemStream.WriteInt32(Unk7);
+            MemStream.WriteInt32(Unk8);
+            MemStream.WriteUInt16(Unk9);
+            MemStream.WriteUInt16(Unk10);
+            MemStream.WriteUInt16(Unk11);
+            MemStream.WriteUInt16(Unk12);
+            MemStream.WriteUInt16(Unk13);
+            MemStream.WriteUInt16(Unk14);
+            MemStream.WriteInt32(Unk15);
+            MemStream.WriteInt32(Unk16);
+            MemStream.WriteInt32(Unk17);
+            MemStream.WriteInt32(Unk18);
+            MemStream.WriteUInt16(Unk19);
+            MemStream.WriteUInt16(Unk20);
+            MemStream.WriteUInt16(Unk21);
+            MemStream.WriteUInt16(Unk22);
+            MemStream.WriteUInt16(Unk23);
+            MemStream.WriteUInt16(Unk24);
+            MemStream.WriteUInt16(Unk25);
+            MemStream.WriteUInt16(Unk26);
+            MemStream.WriteUInt16(Unk27);
+            MemStream.WriteUInt16(Unk28);
+            MemStream.WriteUInt16(Unk29);
+            MemStream.WriteUInt16(Unk30);
+            MemStream.WriteUInt16(Unk31);
+            MemStream.WriteUInt16(Unk32);
+            MemStream.WriteUInt16(Unk33);
+            MemStream.WriteBit(Unk34);
+            MemStream.WriteInt32(Unk35);
+            MemStream.WriteInt32(Unk36);
+            MemStream.WriteInt32(Unk37);
+            MemStream.WriteInt32(Unk38);
+            MemStream.WriteInt32(Unk39);
         }
     }
 }
