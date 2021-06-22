@@ -1,7 +1,9 @@
 ﻿using BitStreams;
+using System.ComponentModel;
 
 namespace ResourceTypes.Prefab.CrashObject
 {
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class S_GlobalInitData
     {
         private uint PrefabVersion;

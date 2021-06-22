@@ -4,6 +4,32 @@ using System.Diagnostics;
 
 namespace ResourceTypes.Prefab.CrashObject
 {
+    public class S_InitCollVolume_Nested
+    {
+        public float Unk0 { get; set; }
+        public float Unk1 { get; set; }
+        public float Unk2 { get; set; }
+        public int Unk3 { get; set; }
+        public float Unk4 { get; set; }
+
+        public void Load(BitStream MemStream)
+        {
+            Unk0 = MemStream.ReadSingle();
+            Unk1 = MemStream.ReadSingle();
+            Unk2 = MemStream.ReadSingle();
+            Unk3 = MemStream.ReadInt32();
+            Unk4 = MemStream.ReadSingle();
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            MemStream.WriteSingle(Unk0);
+            MemStream.WriteSingle(Unk1);
+            MemStream.WriteSingle(Unk2);
+            MemStream.WriteInt32(Unk3);
+            MemStream.WriteSingle(Unk4);
+        }
+    }
     public class S_InitCollVolume
     {
         public uint Unk0 { get; set; }
@@ -12,6 +38,15 @@ namespace ResourceTypes.Prefab.CrashObject
         public int[] Unk3 { get; set; } // Vector3?
         public ulong[] Unk4 { get; set; } // hashes?
         public byte Unk5 { get; set; } // if 1 - means something is available
+        public S_InitCollVolume_Nested Unk6 { get; set; }
+
+        public S_InitCollVolume()
+        {
+            Unk1 = new int[0];
+            Unk3 = new int[0];
+            Unk4 = new ulong[0];
+            Unk6 = new S_InitCollVolume_Nested();
+        }
 
         public void Load(BitStream MemStream)
         {
@@ -47,9 +82,12 @@ namespace ResourceTypes.Prefab.CrashObject
                 }
             }
 
-            // If one - means something is available.
+            // Read unknown nested data
             Unk5 = MemStream.ReadBit();
-            Debug.Assert(Unk5 == 0, "We expect one here. This has extra data!");
+            if(Unk5 == 1)
+            {
+                Unk6.Load(MemStream);
+            }
         }
 
         public void Save(BitStream MemStream)
@@ -83,7 +121,12 @@ namespace ResourceTypes.Prefab.CrashObject
                 }
             }
 
+            // Save unknown nested data
             MemStream.WriteBit(Unk5);
+            if(Unk5 == 1)
+            {
+                Unk6.Save(MemStream);
+            }
         }
     }
 }

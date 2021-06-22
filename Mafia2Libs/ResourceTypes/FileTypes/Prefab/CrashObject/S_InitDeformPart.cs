@@ -108,6 +108,7 @@ namespace ResourceTypes.Prefab.CrashObject
             // UInt16s - indexes?
             uint NumIndexes = MemStream.ReadUInt32();
             Unk14 = new ushort[NumIndexes];
+
             for (int i = 0; i < NumIndexes; i++)
             {
                 Unk14[i] = MemStream.ReadUInt16();

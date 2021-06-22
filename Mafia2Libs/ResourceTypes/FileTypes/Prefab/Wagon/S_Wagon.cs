@@ -9,6 +9,8 @@ namespace ResourceTypes.Prefab.Wagon
 
         public override void Load(BitStream MemStream)
         {
+            base.Load(MemStream);
+
             // Not present in any game
             uint NumData = MemStream.ReadUInt32();
             Data = new uint[NumData];
@@ -16,6 +18,8 @@ namespace ResourceTypes.Prefab.Wagon
 
         public override void Save(BitStream MemStream)
         {
+            base.Save(MemStream);
+
             // Not present in any game
             MemStream.WriteUInt32((uint)Data.Length);
         }

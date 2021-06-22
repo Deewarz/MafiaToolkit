@@ -6,6 +6,9 @@ using System.IO;
 using System.Windows;
 using ResourceTypes.Prefab.CrashObject;
 using ResourceTypes.Prefab.Vehicle;
+using ResourceTypes.Prefab.Door;
+using ResourceTypes.Prefab.Wagon;
+using System.Xml.Linq;
 
 namespace ResourceTypes.Prefab
 {
@@ -111,6 +114,7 @@ namespace ResourceTypes.Prefab
             public ulong Hash { get; set; }
             public string AssignedName { get; set; }
             public int PrefabType { get; set; }
+            public S_GlobalInitData InitData { get; set; }
             [ReadOnly(true)]
             public int Unk0 {get;set;}
             [ReadOnly(true)]
@@ -135,18 +139,36 @@ namespace ResourceTypes.Prefab
 
                 if (Debugger.IsAttached)
                 {
-                    reader.BaseStream.Position = CurrentPosition;
-
-                    BitStream MemStream = new BitStream(reader.BaseStream);
+                    BitStream MemStream = new BitStream(data);
 
                     if (PrefabType == 2)
                     {
-                        S_CarInitData VehInitData = new S_CarInitData();
-                        VehInitData.Load(MemStream);
+                        InitData = new S_CarInitData();
+                        InitData.Load(MemStream);
+
+                        //XElement Root = Utils.Helpers.Reflection.ReflectionHelpers.ConvertPropertyToXML(VehInitData);
+                        //Root.Save("Car.xml");
 
                         byte[] Storage = new byte[32768];
                         BitStream OutStream = new BitStream(Storage);
-                        VehInitData.Save(OutStream);
+                        InitData.Save(OutStream);
+
+                        OutStream.ChangeLength(OutStream.GetStream().Position + 1);
+                        data = OutStream.GetStreamData();
+
+                        Debug.Assert(OutStream.Length == PrefabSize, "Incorrect Size when doing the save test");
+                    }
+                    else if(PrefabType == 7)
+                    {
+                        InitData = new S_DoorInitData();
+                        InitData.Load(MemStream);
+
+                        //XElement Root = Utils.Helpers.Reflection.ReflectionHelpers.ConvertPropertyToXML(VehInitData);
+                        //Root.Save("Car.xml");
+
+                        byte[] Storage = new byte[32768];
+                        BitStream OutStream = new BitStream(Storage);
+                        InitData.Save(OutStream);
 
                         OutStream.ChangeLength(OutStream.GetStream().Position + 1);
                         data = OutStream.GetStreamData();
