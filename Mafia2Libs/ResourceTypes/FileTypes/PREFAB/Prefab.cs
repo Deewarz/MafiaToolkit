@@ -146,8 +146,8 @@ namespace ResourceTypes.Prefab
                         InitData = new S_CarInitData();
                         InitData.Load(MemStream);
 
-                        //XElement Root = Utils.Helpers.Reflection.ReflectionHelpers.ConvertPropertyToXML(VehInitData);
-                        //Root.Save("Car.xml");
+                        XElement Root = Utils.Helpers.Reflection.ReflectionHelpers.ConvertPropertyToXML(InitData);
+                        Root.Save("Car.xml");
 
                         byte[] Storage = new byte[32768];
                         BitStream OutStream = new BitStream(Storage);
@@ -163,7 +163,7 @@ namespace ResourceTypes.Prefab
                         InitData = new S_DoorInitData();
                         InitData.Load(MemStream);
 
-                        //XElement Root = Utils.Helpers.Reflection.ReflectionHelpers.ConvertPropertyToXML(VehInitData);
+                        //XElement Root = Utils.Helpers.Reflection.ReflectionHelpers.ConvertPropertyToXML(InitData);
                         //Root.Save("Car.xml");
 
                         byte[] Storage = new byte[32768];

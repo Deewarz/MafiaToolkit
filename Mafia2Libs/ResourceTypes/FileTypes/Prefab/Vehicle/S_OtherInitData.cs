@@ -1,7 +1,9 @@
 ﻿using BitStreams;
+using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.Vehicle
 {
+    [PropertyClassAllowReflection]
     public class S_OtherInitData
     {
         public ulong VehicleBodyName { get; set; }
@@ -15,15 +17,26 @@ namespace ResourceTypes.Prefab.Vehicle
         public ulong[] LocalWindEmitters { get; set; }
         public C_Vector3 BoneRange { get; set; }
         public float ReduceBBoxZ { get; set; }
-        public int[] Matrix { get; set; }
-        public int[] Matrix1 { get; set; }
-        public int[] Matrix2 { get; set; }
+        public C_Transform[] LightMatrices { get; set; }
         public S_InitDCBData[] DCBData { get; set; }
         public S_InitWindowData[] WindowData { get; set; }
         public ulong SnowRestName { get; set; }
         public ulong HeadlightModelName { get; set; }
         public ulong BacklightModelName { get; set; }
         public ulong ToplightModelName { get; set; }
+
+        public S_OtherInitData()
+        {
+            Hashes0 = new ulong[0];
+            DrivingWheels = new ulong[0];
+            Hashes2 = new ulong[0];
+            FuelTanks = new ulong[0];
+            ExhaustEmitters = new ulong[0];
+            LocalWindEmitters = new ulong[0];
+            LightMatrices = new C_Transform[3];
+            DCBData = new S_InitDCBData[0];
+            WindowData = new S_InitWindowData[0];
+        }
 
         public void Load(BitStream MemStream)
         {
@@ -43,23 +56,13 @@ namespace ResourceTypes.Prefab.Vehicle
             BoneRange = C_Vector3.Construct(MemStream);
             ReduceBBoxZ = MemStream.ReadSingle();
 
-            // Matrices
-            Matrix = new int[12];
-            for(uint i = 0; i < 12; i++) // LightMatrix[0]
+            // Read Light Matrices
+            LightMatrices = new C_Transform[3];
+            for(uint i = 0; i < LightMatrices.Length; i++)
             {
-                Matrix[i] = MemStream.ReadInt32(); // float
-            }
-
-            Matrix1 = new int[12];
-            for (uint i = 0; i < 12; i++) // LightMatrix[1]
-            {
-                Matrix1[i] = MemStream.ReadInt32(); // float
-            }
-
-            Matrix2 = new int[12];
-            for (uint i = 0; i < 12; i++) // LightMatrix[2]
-            {
-                Matrix2[i] = MemStream.ReadInt32(); // float
+                C_Transform NewMatrix = new C_Transform();
+                NewMatrix.Load(MemStream);
+                LightMatrices[i] = NewMatrix;
             }
 
             // Read InitDCBData
@@ -108,19 +111,9 @@ namespace ResourceTypes.Prefab.Vehicle
             MemStream.WriteSingle(ReduceBBoxZ);
 
             // Write Light matrices
-            foreach(int Value in Matrix)
+            foreach(C_Transform LightTransform in LightMatrices)
             {
-                MemStream.WriteInt32(Value);
-            }
-
-            foreach (int Value in Matrix1)
-            {
-                MemStream.WriteInt32(Value);
-            }
-
-            foreach (int Value in Matrix2)
-            {
-                MemStream.WriteInt32(Value);
+                LightTransform.Save(MemStream);
             }
 
             // Write InitDCBData

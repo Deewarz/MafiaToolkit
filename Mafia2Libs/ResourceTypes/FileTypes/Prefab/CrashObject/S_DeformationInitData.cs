@@ -17,6 +17,15 @@ namespace ResourceTypes.Prefab.CrashObject
         public byte Unk2 { get; set; }
         public byte Unk3 { get; set; }
 
+        public S_DeformationInitData() : base()
+        {
+            DeformParts = new S_InitDeformPart[0];
+            InitJoints = new S_InitJoint[0];
+            Unk1_Hashes = new ulong[0];
+            Unk1_Indexes = new ushort[0];
+            OwnerDeforms = new S_InitOwnerDeform[0];
+        }
+
         public override void Load(BitStream MemStream)
         {
             base.Load(MemStream);

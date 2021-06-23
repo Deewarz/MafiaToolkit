@@ -9,6 +9,11 @@ namespace ResourceTypes.Prefab.Vehicle
         public float Depth { get; set; }
         public bool bIsOpenable { get; set; }
 
+        public S_InitWindowData()
+        {
+            CheckBoneFrameName = new ulong[0];
+        }
+
         public void Load(BitStream MemStream)
         {
             WindowFrameName = MemStream.ReadUInt64();

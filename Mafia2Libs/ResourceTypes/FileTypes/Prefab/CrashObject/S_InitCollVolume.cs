@@ -1,9 +1,11 @@
 ﻿using BitStreams;
 using System;
 using System.Diagnostics;
+using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.CrashObject
 {
+    [PropertyClassAllowReflection]
     public class S_InitCollVolume_Nested
     {
         public float Unk0 { get; set; }
@@ -33,7 +35,7 @@ namespace ResourceTypes.Prefab.CrashObject
     public class S_InitCollVolume
     {
         public uint Unk0 { get; set; }
-        public int[] Unk1 { get; set; } // transform?
+        public C_Transform Unk1 { get; set; } // transform?
         public byte Unk2 { get; set; } // if 1 - means something is available
         public int[] Unk3 { get; set; } // Vector3?
         public ulong[] Unk4 { get; set; } // hashes?
@@ -42,7 +44,7 @@ namespace ResourceTypes.Prefab.CrashObject
 
         public S_InitCollVolume()
         {
-            Unk1 = new int[0];
+            Unk1 = new C_Transform();
             Unk3 = new int[0];
             Unk4 = new ulong[0];
             Unk6 = new S_InitCollVolume_Nested();
@@ -54,11 +56,7 @@ namespace ResourceTypes.Prefab.CrashObject
 
             // BitStream type of something
             // I think its transform (floats)
-            Unk1 = new int[12];
-            for(int i = 0; i < Unk1.Length; i++)
-            {
-                Unk1[i] = MemStream.ReadInt32();
-            }
+            Unk1.Load(MemStream);
 
             // If one - means something is available.
             Unk2 = MemStream.ReadBit();
@@ -95,10 +93,7 @@ namespace ResourceTypes.Prefab.CrashObject
             MemStream.WriteUInt32(Unk0);
 
             // Transform?
-            foreach(int Value in Unk1)
-            {
-                MemStream.WriteInt32(Value);
-            }
+            Unk1.Save(MemStream);
 
             MemStream.WriteBit(Unk2);
 

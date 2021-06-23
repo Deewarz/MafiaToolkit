@@ -11,6 +11,13 @@ namespace ResourceTypes.Prefab.CrashObject
         public float Intensity { get; set; }
         public float CRadius { get; set; }
 
+        public S_InitSMDeformBone()
+        {
+            OriginalPosition = new C_Vector3();
+            Range = new C_Vector3();
+            MoveAccumulator = new C_Vector3();
+        }
+
         public void Load(BitStream MemStream)
         {
             SMJointName = MemStream.ReadUInt64();

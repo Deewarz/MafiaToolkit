@@ -11,11 +11,19 @@ namespace ResourceTypes.Prefab.CrashObject
         public ushort Unk2 { get; set; }
         public ushort Unk3 { get; set; }
         public S_InitJointSet[] JointSets { get; set; }
-        public int[] Unk4 { get; set; } // transform 0
-        public int[] Unk5 { get; set; } // transform 1
+        public C_Transform Unk4 { get; set; } // transform 0
+        public C_Transform Unk5 { get; set; } // transform 1
         public byte Unk6 { get; set; }
         public int[] Unk7 { get; set; } // Vector3?
         public uint Unk8 { get; set; }
+
+        public S_InitJoint()
+        {
+            JointSets = new S_InitJointSet[0];
+            Unk4 = new C_Transform();
+            Unk5 = new C_Transform();
+            Unk7 = new int[0];
+        }
 
         public void Load(BitStream MemStream)
         {
@@ -33,21 +41,9 @@ namespace ResourceTypes.Prefab.CrashObject
                 JointSets[i] = NewSet;
             }
 
-            // BitStream type of something
-            // I think its transform (floats)
-            Unk4 = new int[12];
-            for (int i = 0; i < Unk4.Length; i++)
-            {
-                Unk4[i] = MemStream.ReadInt32();
-            }
-
-            // BitStream type of something
-            // I think its transform (floats)
-            Unk5 = new int[12];
-            for (int i = 0; i < Unk5.Length; i++)
-            {
-                Unk5[i] = MemStream.ReadInt32();
-            }
+            // Read Matrices
+            Unk4.Load(MemStream);
+            Unk5.Load(MemStream);
 
             // If one - means something is available.
             Unk6 = MemStream.ReadBit();
@@ -79,19 +75,9 @@ namespace ResourceTypes.Prefab.CrashObject
                 JointSet.Save(MemStream);
             }
 
-            // BitStream type of something
-            // I think its transform (floats)
-            foreach (int Value in Unk4)
-            {
-                MemStream.WriteInt32(Value);
-            }
-
-            // BitStream type of something
-            // I think its transform (floats)
-            foreach (int Value in Unk5)
-            {
-                MemStream.WriteInt32(Value);
-            }
+            // Write Matrices
+            Unk4.Save(MemStream);
+            Unk5.Save(MemStream);
 
             MemStream.WriteBit(Unk6);
 

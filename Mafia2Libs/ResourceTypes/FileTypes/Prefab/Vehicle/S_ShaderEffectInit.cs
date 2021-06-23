@@ -1,9 +1,5 @@
 ﻿using BitStreams;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.Vehicle
 {
@@ -50,36 +46,36 @@ namespace ResourceTypes.Prefab.Vehicle
         }
     }
 
-    public class S_InitUnknownType
+    public class S_InitLight
     {
-        public ulong Unk0 { get; set; }
+        public ulong FrameName { get; set; }
         public int Unk1 { get; set; }
         public int Unk2 { get; set; }
         public uint Unk3 { get; set; }
         public uint Unk4 { get; set; }
-        public int Unk5 { get; set; } // float
-        public int Unk6 { get; set; } // float
-        public int Unk7 { get; set; } // float
-        public int Unk8 { get; set; } // float
-        public ulong[] Unk9 { get; set; }
+        public float Unk5 { get; set; }
+        public float Unk6 { get; set; }
+        public float Unk7 { get; set; }
+        public float Unk8 { get; set; }
+        public ulong[] CheckBoneName { get; set; }
         public ulong Unk10 { get; set; }
         public uint Unk11 { get; set; }
         public uint Unk12 { get; set; }
 
         public void Load(BitStream MemStream)
         {
-            Unk0 = MemStream.ReadUInt64();
+            FrameName = MemStream.ReadUInt64();
             Unk1 = MemStream.ReadInt32();
             Unk2 = MemStream.ReadInt32();
             Unk3 = MemStream.ReadUInt32();
             Unk4 = MemStream.ReadUInt32();
-            Unk5 = MemStream.ReadInt32(); // float
-            Unk6 = MemStream.ReadInt32(); // float
-            Unk7 = MemStream.ReadInt32(); // float
-            Unk8 = MemStream.ReadInt32(); // float
+            Unk5 = MemStream.ReadSingle();
+            Unk6 = MemStream.ReadSingle();
+            Unk7 = MemStream.ReadSingle();
+            Unk8 = MemStream.ReadSingle();
 
             // Read array
-            Unk9 = PrefabUtils.ReadHashArray(MemStream);
+            CheckBoneName = PrefabUtils.ReadHashArray(MemStream);
 
             Unk10 = MemStream.ReadUInt64();
             Unk11 = MemStream.ReadUInt32();
@@ -88,17 +84,17 @@ namespace ResourceTypes.Prefab.Vehicle
 
         public void Save(BitStream MemStream)
         {
-            MemStream.WriteUInt64(Unk0);
+            MemStream.WriteUInt64(FrameName);
             MemStream.WriteInt32(Unk1);
             MemStream.WriteInt32(Unk2);
             MemStream.WriteUInt32(Unk3);
             MemStream.WriteUInt32(Unk4);
-            MemStream.WriteInt32(Unk5);
-            MemStream.WriteInt32(Unk6);
-            MemStream.WriteInt32(Unk7);
-            MemStream.WriteInt32(Unk8);
+            MemStream.WriteSingle(Unk5);
+            MemStream.WriteSingle(Unk6);
+            MemStream.WriteSingle(Unk7);
+            MemStream.WriteSingle(Unk8);
 
-            PrefabUtils.WriteHashArray(MemStream, Unk9);
+            PrefabUtils.WriteHashArray(MemStream, CheckBoneName);
 
             MemStream.WriteUInt64(Unk10);
             MemStream.WriteUInt32(Unk11);
@@ -127,12 +123,13 @@ namespace ResourceTypes.Prefab.Vehicle
         }
     }
 
+    [PropertyClassAllowReflection]
     public class S_ShaderEffectInit
     {
         public ulong[] FGSCloneVisuals { get; set; }
         public S_InitDeformMaterial[] DeformMaterial { get; set; }
         public S_InitColorAndDirty[] ColorAndDirty { get; set; }
-        public S_InitUnknownType[] LightInit { get; set; }
+        public S_InitLight[] LightInit { get; set; }
         public S_InitSZDefaultRangeOnMatrGroup[] SZDefaultRangeOnMatrGroup { get; set; }
         public S_InitSkinZoneRange[] SkinZoneRanges { get; set; }
         public S_InitSkinZonePartData[] SkinZonePartData { get; set; }
@@ -168,10 +165,10 @@ namespace ResourceTypes.Prefab.Vehicle
 
             // Read Unknown
             uint NumUnknown = MemStream.ReadUInt32();
-            LightInit = new S_InitUnknownType[NumUnknown];
+            LightInit = new S_InitLight[NumUnknown];
             for (uint i = 0; i < NumUnknown; i++)
             {
-                S_InitUnknownType NewUnknown = new S_InitUnknownType();
+                S_InitLight NewUnknown = new S_InitLight();
                 NewUnknown.Load(MemStream);
 
                 LightInit[i] = NewUnknown;
@@ -245,7 +242,7 @@ namespace ResourceTypes.Prefab.Vehicle
 
             // Write Lights
             MemStream.WriteUInt32((uint)LightInit.Length);
-            foreach (S_InitUnknownType UnknownType in LightInit)
+            foreach (S_InitLight UnknownType in LightInit)
             {
                 UnknownType.Save(MemStream);
             }

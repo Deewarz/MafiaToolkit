@@ -41,7 +41,7 @@ namespace ResourceTypes.Prefab.CrashObject
         public S_InitCollVolume[] CollisionVolumes { get; set; }
         public S_InitSMDeformBone[] SMDeformBones { get; set; }
         public ushort[] Unk14 { get; set; } // indexes?
-        public int[] Unk15 { get; set; } // transform?
+        public C_Transform Unk15 { get; set; } // transform?
         public ulong Unk16 { get; set; }
         public ushort Unk17 { get; set; }
         public byte Unk18 { get; set; }
@@ -52,6 +52,18 @@ namespace ResourceTypes.Prefab.CrashObject
         public uint Unk23 { get; set; }
         public uint Unk24 { get; set; }
         public S_InitDeformPartCommon CommonData { get; set; }
+
+        public S_InitDeformPart()
+        {
+            Unk3 = new ulong[0];
+            Unk12 = new S_InitDeformPart_Unk12Pack[0];
+            CollisionVolumes = new S_InitCollVolume[0];
+            SMDeformBones = new S_InitSMDeformBone[0];
+            Unk14 = new ushort[0];
+            Unk15 = new C_Transform();
+            Unk20 = new ushort[0];
+            CommonData = new S_InitDeformPartCommon();
+        }
 
         public void Load(BitStream MemStream)
         {
@@ -114,13 +126,8 @@ namespace ResourceTypes.Prefab.CrashObject
                 Unk14[i] = MemStream.ReadUInt16();
             }
 
-            // BitStream type of something
-            // I think its transform (floats)
-            Unk15 = new int[12];
-            for (int i = 0; i < Unk15.Length; i++)
-            {
-                Unk15[i] = MemStream.ReadInt32();
-            }
+            // Read matrix
+            Unk15.Load(MemStream);
 
             Unk16 = MemStream.ReadUInt64();
             Unk17 = MemStream.ReadUInt16();
@@ -198,12 +205,8 @@ namespace ResourceTypes.Prefab.CrashObject
                 MemStream.WriteUInt16(Value);
             }
 
-            // BitStream type of something
-            // I think its transform (floats)
-            foreach (int Value in Unk15)
-            {
-                MemStream.WriteInt32(Value);
-            }
+            // Write Matrix
+            Unk15.Save(MemStream);
 
             MemStream.WriteUInt64(Unk16);
             MemStream.WriteUInt16(Unk17);

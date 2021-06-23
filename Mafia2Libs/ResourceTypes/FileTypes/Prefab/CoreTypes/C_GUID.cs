@@ -1,10 +1,14 @@
 ﻿using BitStreams;
+using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.Vehicle
 {
+    [PropertyClassAllowReflection]
     public class C_GUID
     {
+        [PropertyForceAsAttribute]
         public uint Part0 { get; set; }
+        [PropertyForceAsAttribute]
         public uint Part1 { get; set; }
 
         public void Load(BitStream MemStream)

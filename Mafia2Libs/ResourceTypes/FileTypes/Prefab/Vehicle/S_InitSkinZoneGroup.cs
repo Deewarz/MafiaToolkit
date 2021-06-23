@@ -1,11 +1,15 @@
 ﻿using BitStreams;
+using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.Vehicle
 {
     public class S_InitSkinZoneGroup
     {
+        [PropertyForceAsAttribute]
         public ushort MaterialGroup { get; set; }
+        [PropertyForceAsAttribute]
         public ushort SkinZoneRange { get; set; }
+        [PropertyForceAsAttribute]
         public ushort SkinZoneGroupIndex { get; set; }
 
         public void Load(BitStream MemStream)

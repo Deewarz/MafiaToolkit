@@ -1,12 +1,14 @@
 ﻿using BitStreams;
+using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.Vehicle
 {
+    [PropertyClassAllowReflection]
     public class S_InitWheel
     {
         public float DeformAngleMax { get; set; }
         public float DeformEnergyMax { get; set; }
-        public int[] PosLocalOrigMtr { get; set; }
+        public C_Transform PosLocalOrigMtr { get; set; }
         public float ArmLength { get; set; }
         public C_Vector3 WheelPosOnBrakeDrum { get; set; }
         public float BrakeDrumRadius { get; set; }
@@ -14,6 +16,12 @@ namespace ResourceTypes.Prefab.Vehicle
         public float BrakeDrumMass { get; set; }
         public float BrakeDrumInteria { get; set; }
         public float AxleMass { get; set; }
+
+        public S_InitWheel()
+        {
+            PosLocalOrigMtr = new C_Transform();
+            WheelPosOnBrakeDrum = new C_Vector3();
+        }
 
         public void Load(BitStream MemStream)
         {
@@ -27,11 +35,7 @@ namespace ResourceTypes.Prefab.Vehicle
                 int z = 0;
             }
 
-            PosLocalOrigMtr = new int[12];
-            for(uint i = 0; i < PosLocalOrigMtr.Length; i++)
-            {
-                PosLocalOrigMtr[i] = MemStream.ReadInt32();
-            }
+            PosLocalOrigMtr.Load(MemStream);
 
             ArmLength = MemStream.ReadSingle();
             WheelPosOnBrakeDrum = C_Vector3.Construct(MemStream);
@@ -52,10 +56,7 @@ namespace ResourceTypes.Prefab.Vehicle
             MemStream.WriteUInt32(0);
 
             // Write Matrix
-            foreach (int Value in PosLocalOrigMtr)
-            {
-                MemStream.WriteInt32(Value);
-            }
+            PosLocalOrigMtr.Save(MemStream);
 
             MemStream.WriteSingle(ArmLength);
             WheelPosOnBrakeDrum.Save(MemStream);

@@ -1,11 +1,15 @@
 ﻿using BitStreams;
+using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.Vehicle
 {
     public class S_InitSkinZoneSettings
     {
+        [PropertyForceAsAttribute]
         public ushort SkinZoneIndex { get; set; }
+        [PropertyForceAsAttribute]
         public ushort MaterialGroupIndex { get; set; }
+        [PropertyForceAsAttribute]
         public float Intensity { get; set; }
 
         public void Load(BitStream MemStream)
@@ -25,6 +29,7 @@ namespace ResourceTypes.Prefab.Vehicle
 
     public class S_InitSkinZoneFrameData
     {
+        [PropertyForceAsAttribute]
         public ulong FrameName { get; set; }
         public S_InitSkinZoneSettings[] SZSettings { get; set; }
 
@@ -57,6 +62,7 @@ namespace ResourceTypes.Prefab.Vehicle
 
     public class S_InitSkinZonePartData
     {
+        [PropertyForceAsAttribute]
         public ulong MainPartFrameName { get; set; }
         public S_InitSkinZoneFrameData[] SkinZoneFrameData { get; set; }
 

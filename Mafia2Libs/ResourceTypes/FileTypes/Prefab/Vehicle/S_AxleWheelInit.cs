@@ -1,7 +1,9 @@
 ﻿using BitStreams;
+using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.Vehicle
 {
+    [PropertyClassAllowReflection]
     public class S_AxleWheelInit
     {
         // TODO: Determine if NumAxle is always be Result * 2
