@@ -137,59 +137,67 @@ namespace ResourceTypes.Prefab
                 long CurrentPosition = reader.BaseStream.Position;
                 data = reader.ReadBytes(PrefabSize);
 
-                if (Debugger.IsAttached)
+                BitStream MemStream = new BitStream(data);
+
+                if (PrefabType == 2)
                 {
-                    BitStream MemStream = new BitStream(data);
+                    InitData = new S_CarInitData();
+                    InitData.Load(MemStream);
 
-                    if (PrefabType == 2)
-                    {
-                        InitData = new S_CarInitData();
-                        InitData.Load(MemStream);
-
-                        XElement Root = Utils.Helpers.Reflection.ReflectionHelpers.ConvertPropertyToXML(InitData);
-                        Root.Save("Car.xml");
-
-                        byte[] Storage = new byte[32768];
-                        BitStream OutStream = new BitStream(Storage);
-                        InitData.Save(OutStream);
-
-                        OutStream.ChangeLength(OutStream.GetStream().Position + 1);
-                        data = OutStream.GetStreamData();
-
-                        Debug.Assert(OutStream.Length == PrefabSize, "Incorrect Size when doing the save test");
-                    }
-                    else if(PrefabType == 7)
-                    {
-                        InitData = new S_DoorInitData();
-                        InitData.Load(MemStream);
-
-                        //XElement Root = Utils.Helpers.Reflection.ReflectionHelpers.ConvertPropertyToXML(InitData);
-                        //Root.Save("Car.xml");
-
-                        byte[] Storage = new byte[32768];
-                        BitStream OutStream = new BitStream(Storage);
-                        InitData.Save(OutStream);
-
-                        OutStream.ChangeLength(OutStream.GetStream().Position + 1);
-                        data = OutStream.GetStreamData();
-
-                        Debug.Assert(OutStream.Length == PrefabSize, "Incorrect Size when doing the save test");
-                    }
+                    XElement Root = Utils.Helpers.Reflection.ReflectionHelpers.ConvertPropertyToXML(InitData);
+                    Root.Save("Car.xml");
                 }
+                else if (PrefabType == 3)
+                {
+                    InitData = new S_COInitData();
+                    InitData.Load(MemStream);
+                }
+                else if (PrefabType == 7)
+                {
+                    InitData = new S_DoorInitData();
+                    InitData.Load(MemStream);
+                }
+
+                MemoryStream Clone = MemStream.CloneAsMemoryStream();
             }
 
             public void WriteToFile(BinaryWriter writer)
             {
+                byte[] NewData = GetLatestData();
+
                 writer.Write(Hash);
                 writer.Write(PrefabType);
                 writer.Write(Unk0);
                 writer.Write(PrefabSize);
-                writer.Write(data);
+                writer.Write(NewData);
             }
 
             public int GetSize()
             {
                 return PrefabSize + 20;
+            }
+
+            private byte[] GetLatestData()
+            {
+                if (PrefabType != 2 || PrefabType != 7)
+                {
+                    // Write prefab data to stream
+                    byte[] Storage = new byte[32768];
+                    BitStream OutStream = new BitStream(Storage);
+                    InitData.Save(OutStream);
+
+                    OutStream.ChangeLength(OutStream.GetStream().Position + 1);
+                    byte[] NewData = OutStream.GetStreamData();
+
+                    // Sanity check size
+                    Debug.Assert(OutStream.Length == PrefabSize, "Incorrect Size when doing the save test");
+
+                    PrefabSize = data.Length;
+
+                    return NewData;
+                }
+
+                return data;
             }
         }
     }

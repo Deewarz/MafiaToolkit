@@ -1,4 +1,5 @@
 ﻿using BitStreams;
+using System.ComponentModel;
 using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.Vehicle
@@ -123,7 +124,7 @@ namespace ResourceTypes.Prefab.Vehicle
         }
     }
 
-    [PropertyClassAllowReflection]
+    [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class S_ShaderEffectInit
     {
         public ulong[] FGSCloneVisuals { get; set; }

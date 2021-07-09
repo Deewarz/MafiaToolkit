@@ -531,6 +531,7 @@
     <Compile Include="ResourceTypes\FileTypes\Prefab\CoreTypes\C_Transform.cs" />
     <Compile Include="ResourceTypes\FileTypes\Prefab\CoreTypes\C_Vector3.cs" />
     <Compile Include="ResourceTypes\FileTypes\Prefab\CrashObject\S_ActorDeform.cs" />
+    <Compile Include="ResourceTypes\FileTypes\Prefab\CrashObject\S_COInitData.cs" />
     <Compile Include="ResourceTypes\FileTypes\Prefab\Door\S_DoorInitData.cs" />
     <Compile Include="ResourceTypes\FileTypes\Prefab\Door\S_InitHingeData.cs" />
     <Compile Include="ResourceTypes\FileTypes\Prefab\Vehicle\S_AxleWheelInit.cs" />
