@@ -11,9 +11,11 @@ namespace ResourceTypes.Prefab.CrashObject
         public int[] Unk1 { get; set; } // 6 Floats, could be two Vec3s?
         public int[] Unk2 { get; set; } // Dynamic array of floats
         public byte Unk3 { get; set; } // flag to acknowledge extra data
+        public C_Transform Unk3_Transform { get; set; }
         public uint Unk4 { get; set; } // count of unknown data.
         public byte Unk5 { get; set; } // flag to acknowledge extra data
         public byte Unk6 { get; set; } // flag to acknowledge extra data
+        public string Unk6_Value { get; set; }
         public int Unk7 { get; set; } // float
         public uint Unk8 { get; set; } // count of unknown data
         public S_InitDeformPartEffects PartEffects { get; set; }
@@ -23,6 +25,15 @@ namespace ResourceTypes.Prefab.CrashObject
         private int Nested_Unk03; // float
         private uint Nested_Unk04; // int
         private int Nested_Unk05; // float
+
+        public S_InitDeformPartCommon()
+        {
+            Unk1 = new int[0];
+            Unk2 = new int[0];
+            Unk3_Transform = new C_Transform();
+            Unk6_Value = String.Empty;
+            PartEffects = new S_InitDeformPartEffects();
+        }
 
         public void Load(BitStream MemStream)
         {
@@ -42,7 +53,11 @@ namespace ResourceTypes.Prefab.CrashObject
             }
 
             Unk3 = MemStream.ReadBit(); // flag for extra data
-            Debug.Assert(Unk3 == 0, "We expect one here. This has extra data!");
+            if(Unk3 == 1)
+            {
+                Unk3_Transform = new C_Transform();
+                Unk3_Transform.Load(MemStream);
+            }
 
             Unk4 = MemStream.ReadUInt32(); // count of unknown data
             Debug.Assert(Unk4 == 0, "We expect one here. This has extra data!");
@@ -60,7 +75,10 @@ namespace ResourceTypes.Prefab.CrashObject
             }
 
             Unk6 = MemStream.ReadBit(); // flag for extra data
-            Debug.Assert(Unk6 == 0, "We expect one here. This has extra data!");
+            if(Unk6 == 1)
+            {
+                Unk6_Value = MemStream.ReadString32();
+            }
 
             Unk7 = MemStream.ReadInt32();
 
@@ -98,6 +116,11 @@ namespace ResourceTypes.Prefab.CrashObject
             }
 
             MemStream.WriteBit(Unk6);
+            if(Unk6 == 1)
+            {
+                MemStream.WriteString32(Unk6_Value);
+            }
+
             MemStream.WriteInt32(Unk7);
             MemStream.WriteUInt32(Unk8);
 

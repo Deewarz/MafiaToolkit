@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace ResourceTypes.Prefab.CrashObject
 {
-    public class S_InitDeformPart_Unk12Pack
+    public class S_InitDrainEnergy
     {
         public uint Unk01 { get; set; } // numeric
         public int Unk02 { get; set; } // float
@@ -22,6 +22,49 @@ namespace ResourceTypes.Prefab.CrashObject
         }
     }
 
+    public class S_InitDeformPart_Packet
+    {
+        public C_Vector3 Unk0 { get; set; }
+        public C_Vector3 Unk1 { get; set; }
+        public C_Vector3 Unk2 { get; set; }
+        public float Unk3 { get; set; }
+        public float Unk4 { get; set; }
+        public float Unk5 { get; set; }
+        public float Unk6 { get; set; }
+        public float Unk7 { get; set; }
+
+        public S_InitDeformPart_Packet()
+        {
+            Unk0 = new C_Vector3();
+            Unk1 = new C_Vector3();
+            Unk2 = new C_Vector3();
+        }
+
+        public void Load(BitStream MemStream)
+        {
+            Unk0.Load(MemStream);
+            Unk1.Load(MemStream);
+            Unk2.Load(MemStream);
+            Unk3 = MemStream.ReadSingle();
+            Unk4 = MemStream.ReadSingle();
+            Unk5 = MemStream.ReadSingle();
+            Unk6 = MemStream.ReadSingle();
+            Unk7 = MemStream.ReadSingle();
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            Unk0.Save(MemStream);
+            Unk1.Save(MemStream);
+            Unk2.Save(MemStream);
+            MemStream.WriteSingle(Unk3);
+            MemStream.WriteSingle(Unk4);
+            MemStream.WriteSingle(Unk5);
+            MemStream.WriteSingle(Unk6);
+            MemStream.WriteSingle(Unk7);
+        }
+    }
+
     public class S_InitDeformPart
     {
         public uint Unk0 { get; set; }
@@ -34,9 +77,9 @@ namespace ResourceTypes.Prefab.CrashObject
         public int Unk7 { get; set; }
         public int Unk8 { get; set; }
         public int Unk9 { get; set; }
-        public uint Unk10 { get; set; }
+        public S_InitDeformPart_Packet[] Unk10 { get; set; }
         public uint Unk11 { get; set; }
-        public S_InitDeformPart_Unk12Pack[] Unk12 { get; set; }
+        public S_InitDrainEnergy[] DPDrainEnergy { get; set; }
         public uint Unk13 { get; set; }
         public S_InitCollVolume[] CollisionVolumes { get; set; }
         public S_InitSMDeformBone[] SMDeformBones { get; set; }
@@ -56,7 +99,7 @@ namespace ResourceTypes.Prefab.CrashObject
         public S_InitDeformPart()
         {
             Unk3 = new ulong[0];
-            Unk12 = new S_InitDeformPart_Unk12Pack[0];
+            DPDrainEnergy = new S_InitDrainEnergy[0];
             CollisionVolumes = new S_InitCollVolume[0];
             SMDeformBones = new S_InitSMDeformBone[0];
             Unk14 = new ushort[0];
@@ -81,24 +124,31 @@ namespace ResourceTypes.Prefab.CrashObject
             Unk8 = MemStream.ReadInt32(); // float
             Unk9 = MemStream.ReadInt32(); // float
 
-            Unk10 = MemStream.ReadUInt32(); // Count
-            Unk11 = MemStream.ReadUInt32(); // Count
-
-            // Read unknown data
-            uint Unk12Count = MemStream.ReadUInt32(); // Count
-            Unk12 = new S_InitDeformPart_Unk12Pack[Unk12Count];
-            for (int i = 0; i < Unk12Count; i++)
+            uint NumUnk10 = MemStream.ReadUInt32();
+            Debug.Assert(NumUnk10 == 0, "We expect one here. This has extra data!");
+            /*Unk10 = new S_InitDeformPart_Packet[NumUnk10];
+            for (int i = 0; i < NumUnk10; i++)
             {
-                S_InitDeformPart_Unk12Pack NewPack = new S_InitDeformPart_Unk12Pack();
-                NewPack.Load(MemStream);
-                Unk12[i] = NewPack;
+                S_InitDeformPart_Packet Packet = new S_InitDeformPart_Packet();
+                Packet.Load(MemStream);
+                Unk10[i] = Packet;
+            }*/
+
+            Unk11 = MemStream.ReadUInt32(); // Count
+            Debug.Assert(Unk11 == 0, "We expect one here. This has extra data!");
+
+            // Read InitDrainEnergy data
+            uint NumInitDrainEnergy = MemStream.ReadUInt32(); // Count
+            DPDrainEnergy = new S_InitDrainEnergy[NumInitDrainEnergy];
+            for (int i = 0; i < NumInitDrainEnergy; i++)
+            {
+                S_InitDrainEnergy DrainEnergyEntry = new S_InitDrainEnergy();
+                DrainEnergyEntry.Load(MemStream);
+                DPDrainEnergy[i] = DrainEnergyEntry;
             }
-            
-            // NB: Could be related to collision volumes
-            Unk13 = MemStream.ReadUInt32(); // Count
 
             // Read collision volumes
-            uint NumCollisionVolumes = MemStream.ReadUInt32();
+            uint NumCollisionVolumes = MemStream.ReadUInt32(); // Count
             CollisionVolumes = new S_InitCollVolume[NumCollisionVolumes];
             for (int i = 0; i < NumCollisionVolumes; i++)
             {
@@ -172,17 +222,20 @@ namespace ResourceTypes.Prefab.CrashObject
             MemStream.WriteInt32(Unk8);
             MemStream.WriteInt32(Unk9);
 
-            MemStream.WriteUInt32(Unk10);
-            MemStream.WriteUInt32(Unk11);
-
-            // Write Unknown data
-            MemStream.WriteUInt32((uint)Unk12.Length);
-            foreach(S_InitDeformPart_Unk12Pack Value in Unk12)
+            MemStream.WriteUInt32((uint)Unk10.Length);
+            foreach (S_InitDeformPart_Packet Value in Unk10)
             {
                 Value.Save(MemStream);
             }
 
-            MemStream.WriteUInt32(Unk13);
+            MemStream.WriteUInt32(Unk11);
+
+            // Write S_InitDrainEnergy entries
+            MemStream.WriteUInt32((uint)DPDrainEnergy.Length);
+            foreach(S_InitDrainEnergy Value in DPDrainEnergy)
+            {
+                Value.Save(MemStream);
+            }
             
             // Write Collision Volumes
             MemStream.WriteUInt32((uint)CollisionVolumes.Length);

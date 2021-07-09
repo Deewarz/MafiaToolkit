@@ -1,10 +1,5 @@
 ﻿using BitStreams;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ResourceTypes.Prefab.CrashObject
 {
@@ -17,6 +12,7 @@ namespace ResourceTypes.Prefab.CrashObject
     public class S_COInitData : S_ActorDeformInitData
     {
         public ulong Hash0 { get; set; }
+        public S_InitHumanSupport[] HumanSupports { get; set; }
         public S_COInitData_Packet[] COInit_Data { get; set; }
 
         public S_COInitData() : base()
@@ -30,8 +26,15 @@ namespace ResourceTypes.Prefab.CrashObject
 
             Hash0 = MemStream.ReadUInt64();
 
+            // Read HumanSupports
             uint HumanSupportCount = MemStream.ReadUInt32();
-            Debug.Assert(HumanSupportCount == 0, "Extra data detected");
+            HumanSupports = new S_InitHumanSupport[HumanSupportCount];
+            for (uint i = 0; i < HumanSupportCount; i++)
+            {
+                S_InitHumanSupport HumanSupport = new S_InitHumanSupport();
+                HumanSupport.Load(MemStream);
+                HumanSupports[i] = HumanSupport;
+            }
 
             // Read array of unknown data
             uint UnknownCount = MemStream.ReadUInt32();
@@ -52,9 +55,14 @@ namespace ResourceTypes.Prefab.CrashObject
 
             MemStream.WriteUInt64(Hash0);
 
-            // Change when we know HumanSupport
-            MemStream.WriteUInt32(0);
+            // Write HumanSupport
+            MemStream.WriteUInt32((uint)HumanSupports.Length);
+            for (uint i = 0; i < HumanSupports.Length; i++)
+            {
+                HumanSupports[i].Save(MemStream);
+            }
 
+            // Write unknown data
             MemStream.WriteUInt32((uint)COInit_Data.Length);
             for(uint i = 0; i < COInit_Data.Length; i++)
             {

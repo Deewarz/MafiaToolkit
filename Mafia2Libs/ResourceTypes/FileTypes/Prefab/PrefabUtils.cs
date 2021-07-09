@@ -48,5 +48,17 @@ namespace ResourceTypes.Prefab
 
             MemStream.WriteInt32(ConvertedValue);
         }
+
+        public static string ReadString32(this BitStream MemStream)
+        {
+            int StringSize = MemStream.ReadInt32();
+            return MemStream.ReadString(StringSize);
+        }
+
+        public static void WriteString32(this BitStream MemStream, string Text)
+        {
+            MemStream.WriteInt32(Text.Length);
+            MemStream.WriteString(Text);
+        }
     }
 }

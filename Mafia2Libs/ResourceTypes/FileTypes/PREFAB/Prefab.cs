@@ -154,8 +154,8 @@ namespace ResourceTypes.Prefab
                 }
                 else if (PrefabType == 7)
                 {
-                    InitData = new S_DoorInitData();
-                    InitData.Load(MemStream);
+                    //InitData = new S_DoorInitData();
+                    //InitData.Load(MemStream);
                 }
 
                 MemoryStream Clone = MemStream.CloneAsMemoryStream();
