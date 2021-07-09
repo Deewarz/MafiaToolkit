@@ -1,13 +1,14 @@
 ﻿using Rendering.Input;
 using System;
 using System.Windows.Forms;
-using SharpDX;
 using System.Collections.Generic;
 using Rendering.Core;
 using Utils.Models;
 using ResourceTypes.Translokator;
 using Utils.Settings;
-using Utils.SharpDXExtensions;
+using Utils.VorticeUtils;
+using System.Numerics;
+using Vortice.Mathematics;
 
 namespace Rendering.Graphics
 {
@@ -140,9 +141,9 @@ namespace Rendering.Graphics
             WorldSettings = null;
             Camera = null;
 
-            foreach (KeyValuePair<int, IRenderer> model in Assets)
+            foreach (IRenderer RenderAsset in Assets.Values)
             {
-                model.Value?.Shutdown();
+                RenderAsset.Shutdown();
             }
 
             foreach (SpatialGrid grid in navigationGrids)
@@ -185,25 +186,25 @@ namespace Rendering.Graphics
 
             if (Input.IsKeyDown(Keys.A))
             {
-                Camera.Position -= Vector3Extenders.FromVector4(Vector4.Multiply(Camera.ViewMatrix.Column1, speed));
+                Camera.Position -= Vector3Utils.FromVector4(Vector4.Multiply(Camera.ViewMatrix.GetColumn(0), speed));
                 bCameraUpdated = true;
             }
 
             if (Input.IsKeyDown(Keys.D))
             {
-                Camera.Position += Vector3Extenders.FromVector4(Vector4.Multiply(Camera.ViewMatrix.Column1, speed));
+                Camera.Position += Vector3Utils.FromVector4(Vector4.Multiply(Camera.ViewMatrix.GetColumn(0), speed));
                 bCameraUpdated = true;
             }
 
             if (Input.IsKeyDown(Keys.W))
             {
-                Camera.Position -= Vector3Extenders.FromVector4(Vector4.Multiply(Camera.ViewMatrix.Column3, speed));
+                Camera.Position -= Vector3Utils.FromVector4(Vector4.Multiply(Camera.ViewMatrix.GetColumn(2), speed));
                 bCameraUpdated = true;
             }
 
             if (Input.IsKeyDown(Keys.S))
             {
-                Camera.Position += Vector3Extenders.FromVector4(Vector4.Multiply(Camera.ViewMatrix.Column3, speed));
+                Camera.Position += Vector3Utils.FromVector4(Vector4.Multiply(Camera.ViewMatrix.GetColumn(2), speed));
                 bCameraUpdated = true;
             }
 
@@ -227,15 +228,15 @@ namespace Rendering.Graphics
             D3D.BeginScene(0.0f, 0f, 0f, 1.0f);
             Camera.Render();
 
-            foreach (KeyValuePair<ulong, BaseShader> shader in RenderStorageSingleton.Instance.ShaderManager.shaders)
+            foreach (BaseShader Shader in RenderStorageSingleton.Instance.ShaderManager.shaders.Values)
             {
-                shader.Value.InitCBuffersFrame(D3D.DeviceContext, Camera, WorldSettings);
+                Shader.InitCBuffersFrame(D3D.DeviceContext, Camera, WorldSettings);
             }
 
-            foreach (KeyValuePair<int, IRenderer> entry in Assets)
+            foreach (IRenderer RenderEntry in Assets.Values)
             {
-                entry.Value.UpdateBuffers(D3D.Device, D3D.DeviceContext);
-                entry.Value.Render(D3D.Device, D3D.DeviceContext, Camera);
+                RenderEntry.UpdateBuffers(D3D.Device, D3D.DeviceContext);
+                RenderEntry.Render(D3D.Device, D3D.DeviceContext, Camera);
             }
 
             //navigationGrids[0].Render(D3D.Device, D3D.DeviceContext, Camera);

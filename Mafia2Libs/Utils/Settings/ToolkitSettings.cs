@@ -23,7 +23,6 @@ namespace Utils.Settings
         public static float ScreenDepth;
         public static float ScreenNear;
         public static float CameraSpeed;
-        public static string ShaderPath;
         public static string TexturePath;
         public static bool Experimental;
         public static bool UseMIPS;
@@ -36,7 +35,6 @@ namespace Utils.Settings
         //Misc vars;
         private static long ElapsedTime;
         private static DiscordController controller;
-        public const string DiscordLibLocation = "libs/discord-rpc";
         public static bool LoggingEnabled;
         public static int Language;
         public static int SerializeSDSOption;
@@ -51,7 +49,7 @@ namespace Utils.Settings
         public static bool CheckForUpdates;
         public static bool SkipGameSelector;
         public static int DefaultGame;
-        public static readonly float Version = 2.14f;
+        public static readonly float Version = 2.20f;
 
         public static void ReadINI()
         {
@@ -88,8 +86,6 @@ namespace Utils.Settings
             int.TryParse(ReadKey("VertexMemorySizePerBuffer", "SDS", "6000000 "), out VertexMemorySizePerBuffer);
             ExportPath = ReadKey("ModelExportPath", "Directories", Application.StartupPath);
 
-
-            ShaderPath = @"Shaders\";
             Log.LoggingEnabled = LoggingEnabled;
 
             if (DiscordEnabled)
