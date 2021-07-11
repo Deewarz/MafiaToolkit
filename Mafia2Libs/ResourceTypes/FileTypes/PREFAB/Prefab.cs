@@ -84,9 +84,15 @@ namespace ResourceTypes.Prefab
             writer.Write(Prefabs.Length);
             writer.Write(sizeOfFile2);
 
+            int index = 0;
             foreach(var prefab in Prefabs)
             {
-                prefab.WriteToFile(writer);
+                if(!prefab.WriteToFile(writer, true))
+                {
+                    break;
+                }
+
+                index++;
             }
         }
 
@@ -143,33 +149,43 @@ namespace ResourceTypes.Prefab
                 {
                     InitData = new S_CarInitData();
                     InitData.Load(MemStream);
-
-                    XElement Root = Utils.Helpers.Reflection.ReflectionHelpers.ConvertPropertyToXML(InitData);
-                    Root.Save("Car.xml");
                 }
                 else if (PrefabType == 3)
                 {
                     InitData = new S_COInitData();
                     InitData.Load(MemStream);
                 }
+                else if (PrefabType == 6)
+                {
+                    InitData = new S_PhThingActorBaseInitData();
+                    InitData.Load(MemStream);
+                }
                 else if (PrefabType == 7)
                 {
-                    //InitData = new S_DoorInitData();
-                    //InitData.Load(MemStream);
+                    InitData = new S_DoorInitData();
+                    InitData.Load(MemStream);
                 }
 
-                MemoryStream Clone = MemStream.CloneAsMemoryStream();
+                Debug.Assert(MemStream.Length == PrefabSize, "Didn't read everthing when loading");
             }
 
-            public void WriteToFile(BinaryWriter writer)
+            public bool WriteToFile(BinaryWriter writer, bool bMakeNew = false)
             {
-                byte[] NewData = GetLatestData();
+                bool bIsLengthTheSame = true;
 
+                if (bMakeNew)
+                {
+                    bIsLengthTheSame = false;
+                    data = GetLatestData(out bIsLengthTheSame);
+                }
+                
                 writer.Write(Hash);
                 writer.Write(PrefabType);
                 writer.Write(Unk0);
                 writer.Write(PrefabSize);
-                writer.Write(NewData);
+                writer.Write(data);
+
+                return bIsLengthTheSame;
             }
 
             public int GetSize()
@@ -177,27 +193,24 @@ namespace ResourceTypes.Prefab
                 return PrefabSize + 20;
             }
 
-            private byte[] GetLatestData()
+            private byte[] GetLatestData(out bool bIsLengthTheSame)
             {
-                if (PrefabType != 2 || PrefabType != 7)
-                {
-                    // Write prefab data to stream
-                    byte[] Storage = new byte[32768];
-                    BitStream OutStream = new BitStream(Storage);
-                    InitData.Save(OutStream);
+                // Write prefab data to stream
+                byte[] Storage = new byte[32768];
+                BitStream OutStream = new BitStream(Storage);
+                InitData.Save(OutStream);
 
-                    OutStream.ChangeLength(OutStream.GetStream().Position + 1);
-                    byte[] NewData = OutStream.GetStreamData();
+                OutStream.EndByte();
+                OutStream.ChangeLength(OutStream.GetStream().Position);
+                byte[] NewData = OutStream.GetStreamData();
 
-                    // Sanity check size
-                    Debug.Assert(OutStream.Length == PrefabSize, "Incorrect Size when doing the save test");
+                // Sanity check size
+                Debug.Assert(OutStream.Length == PrefabSize, "Incorrect Size when doing the save test");
+                bIsLengthTheSame = OutStream.Length == PrefabSize;
 
-                    PrefabSize = data.Length;
+                PrefabSize = data.Length;
 
-                    return NewData;
-                }
-
-                return data;
+                return NewData;
             }
         }
     }

@@ -89,7 +89,13 @@ namespace Mafia2Tool
                         using(BinaryWriter writer = new BinaryWriter(File.Open(FileName, FileMode.Create)))
                         {
                             writer.WriteString16(Prefab.AssignedName);
-                            Prefab.WriteToFile(writer);
+                            Prefab.WriteToFile(writer, false);
+                        }
+
+                        using (BinaryWriter writer = new BinaryWriter(File.Open(FileName + "EDT", FileMode.Create)))
+                        {
+                            writer.WriteString16(Prefab.AssignedName);
+                            Prefab.WriteToFile(writer, true);
                         }
                     }
                 }

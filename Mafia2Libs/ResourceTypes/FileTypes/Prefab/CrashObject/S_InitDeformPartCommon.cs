@@ -17,7 +17,7 @@ namespace ResourceTypes.Prefab.CrashObject
         public byte Unk6 { get; set; } // flag to acknowledge extra data
         public string Unk6_Value { get; set; }
         public int Unk7 { get; set; } // float
-        public uint Unk8 { get; set; } // count of unknown data
+        public uint[] Unk8 { get; set; } // unknown data
         public S_InitDeformPartEffects PartEffects { get; set; }
 
         private int Nested_Unk01; // float
@@ -82,8 +82,13 @@ namespace ResourceTypes.Prefab.CrashObject
 
             Unk7 = MemStream.ReadInt32();
 
-            Unk8 = MemStream.ReadUInt32(); // count of unknown data
-            Debug.Assert(Unk8 == 0, "We expect one here. This has extra data!");
+            // Unknown data. Could be indexes?
+            uint NumUnk8 = MemStream.ReadUInt32();
+            Unk8 = new uint[NumUnk8];
+            for(uint i = 0; i < NumUnk8; i++)
+            {
+                Unk8[i] = MemStream.ReadUInt32();
+            }
 
             PartEffects = new S_InitDeformPartEffects();
             PartEffects.Load(MemStream);
@@ -102,10 +107,17 @@ namespace ResourceTypes.Prefab.CrashObject
                 MemStream.WriteInt32(Value);
             }
 
+            // Unknown transform
             MemStream.WriteBit(Unk3);
-            MemStream.WriteUInt32(Unk4);
-            MemStream.WriteBit(Unk5);
+            if(Unk3 == 1)
+            {
+                Unk3_Transform.Save(MemStream);
+            }
 
+            MemStream.WriteUInt32(Unk4);
+
+            // Unknown data
+            MemStream.WriteBit(Unk5);
             if(Unk5 == 1)
             {
                 MemStream.WriteInt32(Nested_Unk01);
@@ -122,7 +134,13 @@ namespace ResourceTypes.Prefab.CrashObject
             }
 
             MemStream.WriteInt32(Unk7);
-            MemStream.WriteUInt32(Unk8);
+
+            // Unknown data. Could be indexes?
+            MemStream.WriteUInt32((uint)Unk8.Length);
+            foreach(uint Value in Unk8)
+            {
+                MemStream.WriteUInt32(Value);
+            }
 
             PartEffects.Save(MemStream);
         }

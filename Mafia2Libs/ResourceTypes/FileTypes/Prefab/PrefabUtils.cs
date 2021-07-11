@@ -60,5 +60,36 @@ namespace ResourceTypes.Prefab
             MemStream.WriteInt32(Text.Length);
             MemStream.WriteString(Text);
         }
+
+        public static void EndByte(this BitStream MemStream)
+        {
+            if (MemStream.BitPosition != 0)
+            {
+                int RemainingBits = (int)(8 - MemStream.BitPosition);
+                MemStream.WriteBits(PopulateBitArray(RemainingBits), RemainingBits);
+            }
+        }
+
+        public static Bit[] GetRemainingBytesFromBit(this BitStream MemStream)
+        {
+            if (MemStream.BitPosition != 0)
+            {
+                int RemainingBits = (int)(8 - MemStream.BitPosition);
+                return MemStream.ReadBits(RemainingBits);
+            }
+
+            return null;
+        }
+
+        private static Bit[] PopulateBitArray(int Length)
+        {
+            Bit[] NewArray = new Bit[Length];
+            for(int i = 0; i < Length; i++)
+            {
+                NewArray[i] = 0xFF;
+            }
+
+            return NewArray;
+        }
     }
 }

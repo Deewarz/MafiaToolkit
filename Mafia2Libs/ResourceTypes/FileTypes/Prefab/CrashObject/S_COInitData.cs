@@ -68,8 +68,8 @@ namespace ResourceTypes.Prefab.CrashObject
             {
                 S_COInitData_Packet DataPacket = COInit_Data[i];
                 MemStream.WriteUInt64(DataPacket.Hash0);
-                MemStream.WriteInt32(DataPacket.Unk0);
-                MemStream.WriteInt32(DataPacket.Unk1);
+                MemStream.WriteInt16(DataPacket.Unk0);
+                MemStream.WriteInt16(DataPacket.Unk1);
             }
         }
     }

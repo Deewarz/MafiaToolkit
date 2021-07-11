@@ -88,7 +88,7 @@ namespace ResourceTypes.Prefab.CrashObject
             {
                 DeformPart.Save(MemStream);
             }
-            
+
             MemStream.WriteUInt32((uint)InitJoints.Length);
             foreach (S_InitJoint InitJoint in InitJoints)
             {

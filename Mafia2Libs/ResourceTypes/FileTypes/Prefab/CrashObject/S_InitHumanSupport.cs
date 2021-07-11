@@ -41,7 +41,7 @@ namespace ResourceTypes.Prefab.CrashObject
 
             MemStream.WriteUInt32(Unk1);
             MemStream.WriteUInt32(Unk2);
-            MemStream.WriteUInt32(Unk3);
+            MemStream.WriteBit(Unk3);
         }
     }
 }

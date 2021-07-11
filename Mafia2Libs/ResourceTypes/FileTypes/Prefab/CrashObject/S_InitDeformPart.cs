@@ -1,5 +1,6 @@
 ﻿using BitStreams;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace ResourceTypes.Prefab.CrashObject
@@ -65,6 +66,38 @@ namespace ResourceTypes.Prefab.CrashObject
         }
     }
 
+    public class S_InitDeformPart_Packet2
+    {
+        public ulong Hash { get; set; }
+        public C_Transform Unk1 { get; set; }
+        public int Unk2 { get; set; }
+        public ushort Unk3 { get; set; }
+        public ushort Unk4 { get; set; }
+
+        public S_InitDeformPart_Packet2()
+        {
+            Unk1 = new C_Transform();
+        }
+
+        public void Load(BitStream MemStream)
+        {
+            Hash = MemStream.ReadUInt64();
+            Unk1.Load(MemStream);
+            Unk2 = MemStream.ReadInt32();
+            Unk3 = MemStream.ReadUInt16();
+            Unk4 = MemStream.ReadUInt16();
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            MemStream.WriteUInt64(Hash);
+            Unk1.Save(MemStream);
+            MemStream.WriteInt32(Unk2);
+            MemStream.WriteUInt16(Unk3);
+            MemStream.WriteUInt16(Unk4);
+        }
+    }
+
     public class S_InitDeformPart
     {
         public uint Unk0 { get; set; }
@@ -81,7 +114,7 @@ namespace ResourceTypes.Prefab.CrashObject
         public uint Unk11 { get; set; }
         public S_InitDrainEnergy[] DPDrainEnergy { get; set; }
         public uint Unk13 { get; set; }
-        public S_InitCollVolume[] CollisionVolumes { get; set; }
+        public List<S_InitCollVolume[]> CollisionVolumes { get; set; }
         public S_InitSMDeformBone[] SMDeformBones { get; set; }
         public ushort[] Unk14 { get; set; } // indexes?
         public C_Transform Unk15 { get; set; } // transform?
@@ -91,6 +124,7 @@ namespace ResourceTypes.Prefab.CrashObject
         public byte Unk19 { get; set; }
         public ushort[] Unk20 { get; set; } // indexes?
         public byte Unk21 { get; set; } // flag to check whether some data is available
+        public S_InitDeformPart_Packet2 Unk21Data { get; set; } // Only present if Unk21 is valid
         public byte Unk22 { get; set; } // flag to check whether some data is available
         public uint Unk23 { get; set; }
         public uint Unk24 { get; set; }
@@ -100,11 +134,13 @@ namespace ResourceTypes.Prefab.CrashObject
         {
             Unk3 = new ulong[0];
             DPDrainEnergy = new S_InitDrainEnergy[0];
-            CollisionVolumes = new S_InitCollVolume[0];
+            CollisionVolumes = new List<S_InitCollVolume[]>();
             SMDeformBones = new S_InitSMDeformBone[0];
+            Unk10 = new S_InitDeformPart_Packet[0];
             Unk14 = new ushort[0];
             Unk15 = new C_Transform();
             Unk20 = new ushort[0];
+            Unk21Data = new S_InitDeformPart_Packet2();
             CommonData = new S_InitDeformPartCommon();
         }
 
@@ -125,14 +161,13 @@ namespace ResourceTypes.Prefab.CrashObject
             Unk9 = MemStream.ReadInt32(); // float
 
             uint NumUnk10 = MemStream.ReadUInt32();
-            Debug.Assert(NumUnk10 == 0, "We expect one here. This has extra data!");
-            /*Unk10 = new S_InitDeformPart_Packet[NumUnk10];
+            Unk10 = new S_InitDeformPart_Packet[NumUnk10];
             for (int i = 0; i < NumUnk10; i++)
             {
                 S_InitDeformPart_Packet Packet = new S_InitDeformPart_Packet();
                 Packet.Load(MemStream);
                 Unk10[i] = Packet;
-            }*/
+            }
 
             Unk11 = MemStream.ReadUInt32(); // Count
             Debug.Assert(Unk11 == 0, "We expect one here. This has extra data!");
@@ -147,14 +182,20 @@ namespace ResourceTypes.Prefab.CrashObject
                 DPDrainEnergy[i] = DrainEnergyEntry;
             }
 
-            // Read collision volumes
-            uint NumCollisionVolumes = MemStream.ReadUInt32(); // Count
-            CollisionVolumes = new S_InitCollVolume[NumCollisionVolumes];
-            for (int i = 0; i < NumCollisionVolumes; i++)
+            uint NumCollisionArrays = MemStream.ReadUInt32();
+            for (uint i = 0; i < NumCollisionArrays; i++)
             {
-                S_InitCollVolume CollisionVolume = new S_InitCollVolume();
-                CollisionVolume.Load(MemStream);
-                CollisionVolumes[i] = CollisionVolume;
+                // Read collision volumes
+                uint NumCollisionVolumes = MemStream.ReadUInt32(); // Count
+                S_InitCollVolume[] CollisionArray = new S_InitCollVolume[NumCollisionVolumes];
+                for (int x = 0; x < NumCollisionVolumes; x++)
+                {
+                    S_InitCollVolume CollisionVolume = new S_InitCollVolume();
+                    CollisionVolume.Load(MemStream);
+                    CollisionArray[x] = CollisionVolume;
+                }
+
+                CollisionVolumes.Add(CollisionArray);
             }
 
             // Read SM Deform bones
@@ -194,7 +235,10 @@ namespace ResourceTypes.Prefab.CrashObject
 
             // If one - means something is available.
             Unk21 = MemStream.ReadBit();
-            Debug.Assert(Unk21 == 0, "We expect one here. This has extra data!");
+            if(Unk21 == 1)
+            {
+                Unk21Data.Load(MemStream);
+            }
 
             // If one - means something is available.
             Unk22 = MemStream.ReadBit();
@@ -238,10 +282,14 @@ namespace ResourceTypes.Prefab.CrashObject
             }
             
             // Write Collision Volumes
-            MemStream.WriteUInt32((uint)CollisionVolumes.Length);
-            foreach (S_InitCollVolume Value in CollisionVolumes)
+            MemStream.WriteUInt32((uint)CollisionVolumes.Count);
+            foreach (S_InitCollVolume[] Arrays in CollisionVolumes)
             {
-                Value.Save(MemStream);
+                MemStream.WriteUInt32((uint)Arrays.Length);
+                foreach (S_InitCollVolume Value in Arrays)
+                {
+                    Value.Save(MemStream);
+                }
             }
 
             // Write SM Deform bones
@@ -273,14 +321,18 @@ namespace ResourceTypes.Prefab.CrashObject
                 MemStream.WriteUInt16(Value);
             }
 
+            // Write unknown hash
             MemStream.WriteBit(Unk21);
+            if(Unk21 == 1)
+            {
+                Unk21Data.Save(MemStream);
+            }
+
             MemStream.WriteBit(Unk22);
             MemStream.WriteUInt32(Unk23);
             MemStream.WriteUInt32(Unk24);
 
             CommonData.Save(MemStream);
-
-            return;
         }
     }
 }
