@@ -155,6 +155,11 @@ namespace ResourceTypes.Prefab
                     InitData = new S_COInitData();
                     InitData.Load(MemStream);
                 }
+                else if(PrefabType == 4)
+                {
+                    InitData = new S_ActorDeformInitData();
+                    InitData.Load(MemStream);
+                }
                 else if (PrefabType == 6)
                 {
                     InitData = new S_PhThingActorBaseInitData();

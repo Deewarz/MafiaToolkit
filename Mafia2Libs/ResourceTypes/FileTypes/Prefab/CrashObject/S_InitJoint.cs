@@ -13,8 +13,8 @@ namespace ResourceTypes.Prefab.CrashObject
         public S_InitJointSet[] JointSets { get; set; }
         public C_Transform Unk4 { get; set; } // transform 0
         public C_Transform Unk5 { get; set; } // transform 1
-        public byte Unk6 { get; set; }
-        public int[] Unk7 { get; set; } // Vector3?
+        public string Unk6 { get; set; }
+        public C_Vector3 Unk7 { get; set; } // Vector3?
         public uint Unk8 { get; set; }
 
         public S_InitJoint()
@@ -22,7 +22,8 @@ namespace ResourceTypes.Prefab.CrashObject
             JointSets = new S_InitJointSet[0];
             Unk4 = new C_Transform();
             Unk5 = new C_Transform();
-            Unk7 = new int[0];
+            Unk6 = String.Empty;
+            Unk7 = new C_Vector3();
         }
 
         public void Load(BitStream MemStream)
@@ -46,15 +47,13 @@ namespace ResourceTypes.Prefab.CrashObject
             Unk5.Load(MemStream);
 
             // If one - means something is available.
-            Unk6 = MemStream.ReadBit();
-            Debug.Assert(Unk6 == 0, "We expect one here. This has extra data!");
-
-            // Vector3? - FLOATS
-            Unk7 = new int[3];
-            for (int i = 0; i < Unk7.Length; i++)
+            bool bIsValidString = MemStream.ReadBit();
+            if(bIsValidString)
             {
-                Unk7[i] = MemStream.ReadInt32();
+                Unk6 = MemStream.ReadString32();
             }
+
+            Unk7.Load(MemStream);
 
             // If one - means something is available.
             Unk8 = MemStream.ReadUInt32();
@@ -79,13 +78,15 @@ namespace ResourceTypes.Prefab.CrashObject
             Unk4.Save(MemStream);
             Unk5.Save(MemStream);
 
-            MemStream.WriteBit(Unk6);
-
-            // Vector3?
-            foreach (int Value in Unk7)
+            // Write string
+            bool bIsValidString = (Unk6 != String.Empty);
+            MemStream.WriteBit(bIsValidString);
+            if (bIsValidString)
             {
-                MemStream.WriteInt32(Value);
+                MemStream.WriteString32(Unk6);
             }
+
+            Unk7.Save(MemStream);
 
             MemStream.WriteUInt32(Unk8);
         }
