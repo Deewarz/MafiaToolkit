@@ -9,6 +9,13 @@ namespace ResourceTypes.Prefab.Vehicle
         public S_AxleWheelInit WheelAxle { get; set; }
         public S_ShaderEffectInit ShaderEffects { get; set; }
 
+        public S_VehicleInitData()
+        {
+            OtherInitData = new S_OtherInitData();
+            WheelAxle = new S_AxleWheelInit();
+            ShaderEffects = new S_ShaderEffectInit();
+        }
+
         public override void Load(BitStream MemStream)
         {
             base.Load(MemStream);

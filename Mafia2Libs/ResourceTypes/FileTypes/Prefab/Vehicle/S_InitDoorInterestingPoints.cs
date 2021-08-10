@@ -8,6 +8,12 @@ namespace ResourceTypes.Prefab.Vehicle
         public C_Vector3 CarDoorLockPos { get; set; }
         public ulong DoorFrameName { get; set; }
 
+        public S_InitDoorInterestingPoints()
+        {
+            CarDoorHandlePos = new C_Vector3();
+            CarDoorLockPos = new C_Vector3();
+        }
+
         public void Load(BitStream MemStream)
         {
             CarDoorHandlePos = C_Vector3.Construct(MemStream);

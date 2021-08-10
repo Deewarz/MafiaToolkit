@@ -9,6 +9,12 @@ namespace ResourceTypes.Prefab.Vehicle
         public ulong BoneFrameName { get; set; }
         public ulong DummyFrameName { get; set; }
 
+        public S_InitClimbBox()
+        {
+            BoxMin = new C_Vector3();
+            BoxMax = new C_Vector3();
+        }
+
         public void Load(BitStream MemStream)
         {
             BoxMin = C_Vector3.Construct(MemStream);

@@ -9,6 +9,11 @@ namespace ResourceTypes.Prefab.Vehicle
         public C_GUID Guid { get; set; }
         public uint Group { get; set; }
 
+        public S_InitDeformMaterial()
+        {
+            Guid = new C_GUID();
+        }
+
         public void Load(BitStream MemStream)
         {
             Guid = new C_GUID();
@@ -29,6 +34,11 @@ namespace ResourceTypes.Prefab.Vehicle
         public C_GUID Guid { get; set; }
         public ulong TextureName { get; set; }
         public uint Flags { get; set; }
+
+        public S_InitColorAndDirty()
+        {
+            Guid = new C_GUID();
+        }
 
         public void Load(BitStream MemStream)
         {
@@ -63,6 +73,10 @@ namespace ResourceTypes.Prefab.Vehicle
         public uint Unk11 { get; set; }
         public uint Unk12 { get; set; }
 
+        public S_InitLight()
+        {
+            CheckBoneName = new ulong[0];
+        }
         public void Load(BitStream MemStream)
         {
             FrameName = MemStream.ReadUInt64();
@@ -138,6 +152,16 @@ namespace ResourceTypes.Prefab.Vehicle
         public C_GUID SPZAndLightGUID { get; set; }
         public float BoneStiffness { get; set; }
 
+        public S_ShaderEffectInit()
+        {
+            DeformMaterial = new S_InitDeformMaterial[0];
+            ColorAndDirty = new S_InitColorAndDirty[0];
+            LightInit = new S_InitLight[0];
+            SZDefaultRangeOnMatrGroup = new S_InitSZDefaultRangeOnMatrGroup[0];
+            SkinZoneRanges = new S_InitSkinZoneRange[0];
+            SkinZoneGroups = new S_InitSkinZoneGroup[0];
+            SPZAndLightGUID = new C_GUID();
+        }
         public void Load(BitStream MemStream)
         {
             FGSCloneVisuals = PrefabUtils.ReadHashArray(MemStream);

@@ -16,6 +16,15 @@ namespace ResourceTypes.Prefab.Vehicle
         public uint SeatGroup { get; set; }
         public ulong FrameName { get; set; }
 
+        public S_InitSeat()
+        {
+            TargetAim = new C_Vector3();
+            TargetSeat = new C_Vector3();
+            LockPos = new C_Vector3();
+            Direction = new C_Vector3();
+            Position = new C_Vector3();
+        }
+
         public void Load(BitStream MemStream)
         {
             Flags = MemStream.ReadUInt32();
