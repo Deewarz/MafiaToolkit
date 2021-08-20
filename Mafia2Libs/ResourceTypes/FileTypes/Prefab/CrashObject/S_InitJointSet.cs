@@ -11,6 +11,11 @@ namespace ResourceTypes.Prefab.CrashObject
             // bunch of unknowns (possible all floats?)
             public int[] Unk0 { get; set; }
 
+            public DataPacket()
+            {
+                Unk0 = new int[9];
+            }
+
             public void Load(BitStream MemStream)
             {
                 // fixed size
@@ -33,6 +38,11 @@ namespace ResourceTypes.Prefab.CrashObject
         public uint Unk0 { get; set; } // fixed int
         public int Unk1 { get; set; } // float
         public DataPacket[] Unk2 { get; set; } // 6
+
+        public S_InitJointSet()
+        {
+            Unk2 = new DataPacket[6];
+        }
 
         public void Load(BitStream MemStream)
         {

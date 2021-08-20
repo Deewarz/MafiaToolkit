@@ -1,71 +1,75 @@
 ﻿using BitStreams;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace ResourceTypes.Prefab.CrashObject
 {
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class S_InitDrainEnergy
     {
-        public uint Unk01 { get; set; } // numeric
-        public int Unk02 { get; set; } // float
+        public uint DrainPart { get; set; }
+        public float DrainEnergyCoeff { get; set; }
 
         public void Load(BitStream MemStream)
         {
-            Unk01 = MemStream.ReadUInt32();
-            Unk02 = MemStream.ReadInt32();
+            DrainPart = MemStream.ReadUInt32();
+            DrainEnergyCoeff = MemStream.ReadInt32();
         }
 
         public void Save(BitStream MemStream)
         {
-            MemStream.WriteUInt32(Unk01);
-            MemStream.WriteInt32(Unk02);
+            MemStream.WriteUInt32(DrainPart);
+            MemStream.WriteSingle(DrainEnergyCoeff);
         }
     }
 
-    public class S_InitDeformPart_Packet
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    public class S_InitInternalImpulse
     {
-        public C_Vector3 Unk0 { get; set; }
-        public C_Vector3 Unk1 { get; set; }
-        public C_Vector3 Unk2 { get; set; }
-        public float Unk3 { get; set; }
-        public float Unk4 { get; set; }
-        public float Unk5 { get; set; }
-        public float Unk6 { get; set; }
-        public float Unk7 { get; set; }
+        public C_Vector3 Direction { get; set; }
+        public C_Vector3 DirectioNormal { get; set; }
+        public C_Vector3 Position { get; set; }
+        public float Gain { get; set; }
+        public float GainSpreadDown { get; set; }
+        public float DirectionSpread { get; set; }
+        public float VersionOrEnergy { get; set; }
+        public float Flags { get; set; }
 
-        public S_InitDeformPart_Packet()
+        public S_InitInternalImpulse()
         {
-            Unk0 = new C_Vector3();
-            Unk1 = new C_Vector3();
-            Unk2 = new C_Vector3();
+            Direction = new C_Vector3();
+            DirectioNormal = new C_Vector3();
+            Position = new C_Vector3();
         }
 
         public void Load(BitStream MemStream)
         {
-            Unk0.Load(MemStream);
-            Unk1.Load(MemStream);
-            Unk2.Load(MemStream);
-            Unk3 = MemStream.ReadSingle();
-            Unk4 = MemStream.ReadSingle();
-            Unk5 = MemStream.ReadSingle();
-            Unk6 = MemStream.ReadSingle();
-            Unk7 = MemStream.ReadSingle();
+            Direction.Load(MemStream);
+            DirectioNormal.Load(MemStream);
+            Position.Load(MemStream);
+            Gain = MemStream.ReadSingle();
+            GainSpreadDown = MemStream.ReadSingle();
+            DirectionSpread = MemStream.ReadSingle();
+            VersionOrEnergy = MemStream.ReadSingle();
+            Flags = MemStream.ReadSingle();
         }
 
         public void Save(BitStream MemStream)
         {
-            Unk0.Save(MemStream);
-            Unk1.Save(MemStream);
-            Unk2.Save(MemStream);
-            MemStream.WriteSingle(Unk3);
-            MemStream.WriteSingle(Unk4);
-            MemStream.WriteSingle(Unk5);
-            MemStream.WriteSingle(Unk6);
-            MemStream.WriteSingle(Unk7);
+            Direction.Save(MemStream);
+            DirectioNormal.Save(MemStream);
+            Position.Save(MemStream);
+            MemStream.WriteSingle(Gain);
+            MemStream.WriteSingle(GainSpreadDown);
+            MemStream.WriteSingle(DirectionSpread);
+            MemStream.WriteSingle(VersionOrEnergy);
+            MemStream.WriteSingle(Flags);
         }
     }
 
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class S_InitDeformPart_Packet2
     {
         public ulong Hash { get; set; }
@@ -98,19 +102,20 @@ namespace ResourceTypes.Prefab.CrashObject
         }
     }
 
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class S_InitDeformPart
     {
         public uint Unk0 { get; set; }
         public uint Unk1 { get; set; }
         public byte Unk2 { get; set; }
         public ulong[] Unk3 { get; set; }
-        public int Unk4 { get; set; }
-        public int Unk5 { get; set; }
-        public int Unk6 { get; set; }
-        public int Unk7 { get; set; }
-        public int Unk8 { get; set; }
-        public int Unk9 { get; set; }
-        public S_InitDeformPart_Packet[] Unk10 { get; set; }
+        public float Unk4 { get; set; }
+        public float Unk5 { get; set; }
+        public float Unk6 { get; set; }
+        public float Unk7 { get; set; }
+        public float Unk8 { get; set; }
+        public float Unk9 { get; set; }
+        public S_InitInternalImpulse[] DPInternalImpulses { get; set; }
         public uint Unk11 { get; set; }
         public S_InitDrainEnergy[] DPDrainEnergy { get; set; }
         public uint Unk13 { get; set; }
@@ -136,7 +141,7 @@ namespace ResourceTypes.Prefab.CrashObject
             DPDrainEnergy = new S_InitDrainEnergy[0];
             CollisionVolumes = new List<S_InitCollVolume[]>();
             SMDeformBones = new S_InitSMDeformBone[0];
-            Unk10 = new S_InitDeformPart_Packet[0];
+            DPInternalImpulses = new S_InitInternalImpulse[0];
             Unk14 = new ushort[0];
             Unk15 = new C_Transform();
             Unk20 = new ushort[0];
@@ -153,20 +158,20 @@ namespace ResourceTypes.Prefab.CrashObject
             // collect hashes
             Unk3 = PrefabUtils.ReadHashArray(MemStream);
 
-            Unk4 = MemStream.ReadInt32(); // float
-            Unk5 = MemStream.ReadInt32(); // float
-            Unk6 = MemStream.ReadInt32(); // float
-            Unk7 = MemStream.ReadInt32(); // float
-            Unk8 = MemStream.ReadInt32(); // float
-            Unk9 = MemStream.ReadInt32(); // float
+            Unk4 = MemStream.ReadSingle();
+            Unk5 = MemStream.ReadSingle();
+            Unk6 = MemStream.ReadSingle();
+            Unk7 = MemStream.ReadSingle();
+            Unk8 = MemStream.ReadSingle();
+            Unk9 = MemStream.ReadSingle();
 
-            uint NumUnk10 = MemStream.ReadUInt32();
-            Unk10 = new S_InitDeformPart_Packet[NumUnk10];
-            for (int i = 0; i < NumUnk10; i++)
+            uint NumDPInternalImpulses = MemStream.ReadUInt32();
+            DPInternalImpulses = new S_InitInternalImpulse[NumDPInternalImpulses];
+            for (int i = 0; i < NumDPInternalImpulses; i++)
             {
-                S_InitDeformPart_Packet Packet = new S_InitDeformPart_Packet();
+                S_InitInternalImpulse Packet = new S_InitInternalImpulse();
                 Packet.Load(MemStream);
-                Unk10[i] = Packet;
+                DPInternalImpulses[i] = Packet;
             }
 
             Unk11 = MemStream.ReadUInt32(); // Count
@@ -259,15 +264,15 @@ namespace ResourceTypes.Prefab.CrashObject
 
             PrefabUtils.WriteHashArray(MemStream, Unk3);
 
-            MemStream.WriteInt32(Unk4);
-            MemStream.WriteInt32(Unk5);
-            MemStream.WriteInt32(Unk6);
-            MemStream.WriteInt32(Unk7);
-            MemStream.WriteInt32(Unk8);
-            MemStream.WriteInt32(Unk9);
+            MemStream.WriteSingle(Unk4);
+            MemStream.WriteSingle(Unk5);
+            MemStream.WriteSingle(Unk6);
+            MemStream.WriteSingle(Unk7);
+            MemStream.WriteSingle(Unk8);
+            MemStream.WriteSingle(Unk9);
 
-            MemStream.WriteUInt32((uint)Unk10.Length);
-            foreach (S_InitDeformPart_Packet Value in Unk10)
+            MemStream.WriteUInt32((uint)DPInternalImpulses.Length);
+            foreach (S_InitInternalImpulse Value in DPInternalImpulses)
             {
                 Value.Save(MemStream);
             }

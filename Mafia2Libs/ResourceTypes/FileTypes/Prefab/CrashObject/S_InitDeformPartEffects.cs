@@ -1,8 +1,10 @@
 ﻿using BitStreams;
+using System.ComponentModel;
 using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.CrashObject
 {
+    [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class S_InitDeformPartEffect_Pack
     {
         public short Unk0 { get; set; }
@@ -36,7 +38,7 @@ namespace ResourceTypes.Prefab.CrashObject
         }
     }
 
-    [PropertyClassAllowReflection]
+    [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class S_InitDeformPartEffects
     {
         public C_Transform EffectMatrix { get; set; }

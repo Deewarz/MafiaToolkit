@@ -1,9 +1,10 @@
 ﻿using BitStreams;
+using System.ComponentModel;
 using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab
 {
-    [PropertyClassAllowReflection]
+    [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class C_Transform
     {
         public C_Vector3 Translation { get; set; }
@@ -13,10 +14,10 @@ namespace ResourceTypes.Prefab
 
         public C_Transform()
         {
+            Row0 = new C_Vector3(1.0f, 0.0f, 0.0f);
+            Row1 = new C_Vector3(0.0f, 1.0f, 0.0f);
+            Row2 = new C_Vector3(0.0f, 0.0f, 1.0f);
             Translation = new C_Vector3();
-            Row0 = new C_Vector3();
-            Row1 = new C_Vector3();
-            Row2 = new C_Vector3();
         }
 
         public void Load(BitStream MemStream)

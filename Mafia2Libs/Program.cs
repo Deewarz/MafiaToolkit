@@ -9,6 +9,7 @@ using Mafia2Tool.Forms;
 using Core.IO;
 using System.Text;
 using System.Runtime.Loader;
+using ResourceTypes.Misc;
 
 namespace Mafia2Tool
 {
@@ -17,9 +18,6 @@ namespace Mafia2Tool
         [STAThread]
         static void Main(string[] args)
         {
-            //ResourceTypes.EntityActivator.EntityActivator entity = new ResourceTypes.EntityActivator.EntityActivator();
-            //entity.ReadFromFile(new FileInfo("EntityActivator.bin"));
-
             if (args.Length > 0)
             {
                 CheckINIExists();

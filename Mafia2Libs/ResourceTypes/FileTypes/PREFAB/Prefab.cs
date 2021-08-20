@@ -160,6 +160,11 @@ namespace ResourceTypes.Prefab
                     InitData = new S_ActorDeformInitData();
                     InitData.Load(MemStream);
                 }
+                else if (PrefabType == 5)
+                {
+                    InitData = new S_WheelInitData();
+                    InitData.Load(MemStream);
+                }
                 else if (PrefabType == 6)
                 {
                     InitData = new S_PhThingActorBaseInitData();
@@ -213,7 +218,7 @@ namespace ResourceTypes.Prefab
                 Debug.Assert(OutStream.Length == PrefabSize, "Incorrect Size when doing the save test");
                 bIsLengthTheSame = OutStream.Length == PrefabSize;
 
-                PrefabSize = data.Length;
+                PrefabSize = (int)OutStream.Length;
 
                 return NewData;
             }

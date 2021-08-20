@@ -1,11 +1,12 @@
 ﻿using BitStreams;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.CrashObject
 {
-    [PropertyClassAllowReflection]
+    [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class S_InitDeformPartCommon
     {
         public int[] Unk1 { get; set; } // 6 Floats, could be two Vec3s?

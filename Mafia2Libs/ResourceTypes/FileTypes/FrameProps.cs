@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Utils.StringHelpers;
@@ -71,13 +72,6 @@ namespace ResourceTypes.Misc
         private FrameInfoChunk[] frameInfos;
 
         private Dictionary<ulong, FrameInfo> frameExtraData;
-
-        public Dictionary<ulong, FrameInfo> FrameExtraData {
-            get { return frameExtraData; }
-            set { frameExtraData = value; }
-        }
-
-
 
         public FrameProps(FileInfo info)
         {
@@ -169,6 +163,11 @@ namespace ResourceTypes.Misc
                 }
                 frameInfos[i] = chunk;
             }
+
+            if (Debugger.IsAttached)
+            {
+                WriteToText();
+            }
         }
 
         public void WriteToFile(string name)
@@ -181,6 +180,16 @@ namespace ResourceTypes.Misc
         public void WriteToFile(BinaryReader reader)
         {
             throw new System.NotImplementedException();
+        }
+
+        public FrameInfo GetFramePropsFor(ulong Hash)
+        {
+            if(!frameExtraData.ContainsKey(Hash))
+            {
+                return null;
+            }
+
+            return frameExtraData[Hash];
         }
 
         private void RebuildStringSection(ref string final)

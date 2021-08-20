@@ -5,6 +5,7 @@ using System.Linq;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Utils.Extensions;
+using ResourceTypes.Misc;
 
 namespace ResourceTypes.FrameResource
 {
@@ -18,6 +19,8 @@ namespace ResourceTypes.FrameResource
         Dictionary<int, FrameSkeleton> frameSkeletons = new Dictionary<int, FrameSkeleton>();
         Dictionary<int, FrameSkeletonHierachy> frameSkeletonHierachies = new Dictionary<int, FrameSkeletonHierachy>();
         Dictionary<int, object> frameObjects = new Dictionary<int, object>();
+
+        private FrameProps FramePropContents;
 
         public FrameHeader Header {
             get { return header; }
@@ -71,14 +74,6 @@ namespace ResourceTypes.FrameResource
             return (frameObjects.ElementAt(index).Value as FrameObjectBase);
         }
 
-        public FrameResource(string file, bool isBigEndian = false)
-        {
-            using (MemoryStream reader = new MemoryStream(File.ReadAllBytes(file), false))
-            {
-                ReadFromFile(reader, isBigEndian);
-            }
-        }
-
         public FrameResource()
         {
             header = new FrameHeader();
@@ -89,6 +84,19 @@ namespace ResourceTypes.FrameResource
             frameSkeletons = new Dictionary<int, FrameSkeleton>();
             frameSkeletonHierachies = new Dictionary<int, FrameSkeletonHierachy>();
             frameObjects = new Dictionary<int, object>();
+        }
+
+        public FrameResource(string file, bool isBigEndian = false) : this()
+        {
+            if (File.Exists("FrameProps.bin"))
+            {
+                FramePropContents = new FrameProps(new FileInfo("FrameProps.bin"));
+            }
+
+            using (MemoryStream reader = new MemoryStream(File.ReadAllBytes(file), false))
+            {
+                ReadFromFile(reader, isBigEndian);
+            }
         }
 
         public FrameHeaderScene AddSceneFolder(string name)
@@ -489,6 +497,11 @@ namespace ResourceTypes.FrameResource
                 if (obj == null)
                 {
                     continue;
+                }
+
+                if(FramePropContents != null)
+                {
+                    obj.OurFrameProps = FramePropContents.GetFramePropsFor(obj.Name.Hash);
                 }
 
                 if (obj is FrameObjectModel)

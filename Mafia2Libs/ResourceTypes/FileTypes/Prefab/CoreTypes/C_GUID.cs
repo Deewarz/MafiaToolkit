@@ -1,9 +1,10 @@
 ﻿using BitStreams;
+using System.ComponentModel;
 using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.Vehicle
 {
-    [PropertyClassAllowReflection]
+    [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class C_GUID
     {
         [PropertyForceAsAttribute]

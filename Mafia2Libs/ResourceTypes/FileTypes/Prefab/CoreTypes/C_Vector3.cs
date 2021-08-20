@@ -14,6 +14,18 @@ namespace ResourceTypes.Prefab
         [PropertyForceAsAttribute]
         public float Z { get; set; }
 
+        public C_Vector3()
+        {
+            X = Y = Z = 0.0f;
+        }
+
+        public C_Vector3(float InX, float InY, float InZ)
+        {
+            X = InX;
+            Y = InY;
+            Z = InZ;
+        }
+
         public void Load(BitStream MemStream)
         {
             X = MemStream.ReadSingle();
