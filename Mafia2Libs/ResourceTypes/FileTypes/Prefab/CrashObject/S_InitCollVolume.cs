@@ -1,11 +1,12 @@
 ﻿using BitStreams;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.CrashObject
 {
-    [PropertyClassAllowReflection]
+    [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class S_InitCollVolume_Nested
     {
         public float Unk0 { get; set; }

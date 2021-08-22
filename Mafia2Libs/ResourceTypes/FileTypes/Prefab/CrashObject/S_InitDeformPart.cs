@@ -70,15 +70,15 @@ namespace ResourceTypes.Prefab.CrashObject
     }
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    public class S_InitDeformPart_Packet2
+    public class S_InitDeformOrigData
     {
         public ulong Hash { get; set; }
         public C_Transform Unk1 { get; set; }
-        public int Unk2 { get; set; }
+        public ushort[] Unk2 { get; set; }
         public ushort Unk3 { get; set; }
         public ushort Unk4 { get; set; }
 
-        public S_InitDeformPart_Packet2()
+        public S_InitDeformOrigData()
         {
             Unk1 = new C_Transform();
         }
@@ -87,7 +87,15 @@ namespace ResourceTypes.Prefab.CrashObject
         {
             Hash = MemStream.ReadUInt64();
             Unk1.Load(MemStream);
-            Unk2 = MemStream.ReadInt32();
+
+            // Read array
+            uint NumUnk2 = MemStream.ReadUInt32();
+            Unk2 = new ushort[NumUnk2];
+            for(int i = 0; i < NumUnk2; i++)
+            {
+                Unk2[i] = MemStream.ReadUInt16();
+            }
+
             Unk3 = MemStream.ReadUInt16();
             Unk4 = MemStream.ReadUInt16();
         }
@@ -96,11 +104,44 @@ namespace ResourceTypes.Prefab.CrashObject
         {
             MemStream.WriteUInt64(Hash);
             Unk1.Save(MemStream);
-            MemStream.WriteInt32(Unk2);
+
+            // Write array
+            MemStream.WriteInt32(Unk2.Length);
+            foreach(ushort Value in Unk2)
+            {
+                MemStream.WriteUInt16(Value);
+            }
+
             MemStream.WriteUInt16(Unk3);
             MemStream.WriteUInt16(Unk4);
         }
     }
+
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    public class S_InitDeformRelData
+    { 
+        public C_Vector3 Unk0 { get; set; }
+        public C_Transform Transform { get; set; }
+
+        public S_InitDeformRelData()
+        {
+            Unk0 = new C_Vector3();
+            Transform = new C_Transform();
+        }
+
+        public void Load(BitStream MemStream)
+        {
+            Unk0.Load(MemStream);
+            Transform.Load(MemStream);
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            Unk0.Save(MemStream);
+            Transform.Save(MemStream);
+        }
+    }
+
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class S_InitDeformPart
@@ -129,8 +170,9 @@ namespace ResourceTypes.Prefab.CrashObject
         public byte Unk19 { get; set; }
         public ushort[] Unk20 { get; set; } // indexes?
         public byte Unk21 { get; set; } // flag to check whether some data is available
-        public S_InitDeformPart_Packet2 Unk21Data { get; set; } // Only present if Unk21 is valid
+        public S_InitDeformOrigData Unk21Data { get; set; } // Only present if Unk21 is valid
         public byte Unk22 { get; set; } // flag to check whether some data is available
+        public S_InitDeformRelData Unk22_RelData { get; set; } // Only present if Unk22 is valid.
         public uint Unk23 { get; set; }
         public uint Unk24 { get; set; }
         public S_InitDeformPartCommon CommonData { get; set; }
@@ -145,7 +187,7 @@ namespace ResourceTypes.Prefab.CrashObject
             Unk14 = new ushort[0];
             Unk15 = new C_Transform();
             Unk20 = new ushort[0];
-            Unk21Data = new S_InitDeformPart_Packet2();
+            Unk21Data = new S_InitDeformOrigData();
             CommonData = new S_InitDeformPartCommon();
         }
 
@@ -242,12 +284,17 @@ namespace ResourceTypes.Prefab.CrashObject
             Unk21 = MemStream.ReadBit();
             if(Unk21 == 1)
             {
+                Unk21Data = new S_InitDeformOrigData();
                 Unk21Data.Load(MemStream);
             }
 
             // If one - means something is available.
             Unk22 = MemStream.ReadBit();
-            Debug.Assert(Unk22 == 0, "We expect one here. This has extra data!");
+            if(Unk22 == 1)
+            {
+                Unk22_RelData = new S_InitDeformRelData();
+                Unk22_RelData.Load(MemStream);
+            }
 
             Unk23 = MemStream.ReadUInt32(); // 0?
             Unk24 = MemStream.ReadUInt32(); // 0?
@@ -334,6 +381,11 @@ namespace ResourceTypes.Prefab.CrashObject
             }
 
             MemStream.WriteBit(Unk22);
+            if(Unk22 == 1)
+            {
+                Unk22_RelData.Save(MemStream);
+            }
+
             MemStream.WriteUInt32(Unk23);
             MemStream.WriteUInt32(Unk24);
 
