@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System;
 using System.IO;
 using System.Windows.Forms;
 using ResourceTypes.Wwise;
@@ -35,7 +36,16 @@ namespace Mafia2Tool
             ReloadButton.Text = Language.GetString("$RELOAD");
             ExitButton.Text = Language.GetString("$EXIT");
             EditButton.Text = Language.GetString("$EDIT");
+            Button_ReplaceWem.Text = Language.GetString("$REPLACE_WEM");
             Button_ImportWem.Text = Language.GetString("$IMPORT_WEM");
+            Button_ExportWem.Text = Language.GetString("$EXPORT_WEM");
+            Button_ExportAll.Text = Language.GetString("$EXPORT_ALL_WEMS");
+            Button_DeleteWem.Text = Language.GetString("$DELETE_WEM");
+            ContextReplace.Text = Language.GetString("$REPLACE_WEM");
+            ContextEdit.Text = Language.GetString("$EDIT_HIRC");
+            ContextExport.Text = Language.GetString("$EXPORT_WEM");
+            ContextDelete.Text = Language.GetString("$DELETE_WEM");
+            Checkbox_Trim.Text = Language.GetString("$TRIM_WEMS");
         }
 
         private void BuildData()
@@ -102,8 +112,7 @@ namespace Mafia2Tool
 
             using (BinaryWriter bw = new BinaryWriter(new FileStream(name, FileMode.OpenOrCreate)))
             {
-                bw.Write(wem.file);
-                bw.Close();
+                bw.Write(wem.File);
             }
         }
 
@@ -140,25 +149,81 @@ namespace Mafia2Tool
                     {
                         if (wem.ID == newWem.ID) //Check if Wem exists
                         {
-                            MessageBox.Show("A Wem with the same ID already exists, it will be skipped.", "Import");
+                            MessageBox.Show(Language.GetString("$WEM_EXIST_SKIP"), "Toolkit");
                             hasConflict = true;
                             break;
                         }
                     }
 
                     if (hasConflict)
+                    {
                         continue;
+                    }
 
                     TreeNode node = new TreeNode(newWem.Name);
                     node.Name = newWem.ID.ToString();
                     node.Tag = newWem;
                     TreeView_Wems.Nodes.Add(node);
                     bnk.WemList.Add(newWem);
+
+                    Text = Language.GetString("$BNK_EDITOR_TITLE") + "*";
+                    bIsFileEdited = true;
                 }
             }
+        }
 
-            Text = Language.GetString("$BNK_EDITOR_TITLE") + "*";
-            bIsFileEdited = true;
+        private void Button_ReplaceWem_Click(object sender, System.EventArgs e)
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+
+            if (BnkFile.DirectoryName != null)
+            {
+                openFile.InitialDirectory = BnkFile.DirectoryName;
+            }
+
+            openFile.Multiselect = true;
+            openFile.Filter = "WWise Wem files (*.wem)|*.wem";
+
+            if (openFile.ShowDialog() == DialogResult.OK)
+            {
+                foreach (string fileName in openFile.FileNames)
+                {
+                    if (bnk != null)
+                    {
+                        int itemIndex = bnk.WemList.IndexOf((Wem)WemGrid.SelectedObject);
+                        Wem selWem = bnk.WemList[itemIndex];
+                        Wem newWem;
+
+                        using (BinaryReader br = new BinaryReader(File.Open(fileName, FileMode.Open)))
+                        {
+                            newWem = new Wem(fileName, "", br, selWem.Offset);
+                        }
+
+                        if (Checkbox_Trim.Checked)
+                        {
+                            byte[] tempArray = newWem.File;
+                            Array.Resize(ref tempArray, selWem.File.Length);
+                            newWem.File = tempArray;
+                        }
+
+                        newWem.ID = selWem.ID;
+                        newWem.LanguageEnum = selWem.LanguageEnum;
+
+                        if (!(selWem.Name == ("Imported_Wem_" + itemIndex)))
+                        {
+                            newWem.Name = selWem.Name;
+                        }
+
+                        bnk.WemList[itemIndex] = newWem;
+                        TreeView_Wems.SelectedNode.Name = newWem.ID.ToString();
+                        TreeView_Wems.SelectedNode.Tag = newWem;
+                        bnk.Wems.Data = new List<DIDXChunk>();
+
+                        Text = Language.GetString("$BNK_EDITOR_TITLE") + "*";
+                        bIsFileEdited = true;
+                    }
+                }
+            }
         }
 
         private void Button_ExportWem_Click(object sender, System.EventArgs e)
@@ -170,7 +235,7 @@ namespace Mafia2Tool
 
             if (exportFile.ShowDialog() == DialogResult.OK)
             {
-                DialogResult exportIds = MessageBox.Show("Export with name?", "Export Wem", MessageBoxButtons.YesNo);
+                DialogResult exportIds = MessageBox.Show(Language.GetString("$EXPORT_WEM_WITH_NAME"), "Toolkit", MessageBoxButtons.YesNo);
                 int itemIndex = bnk.WemList.IndexOf((Wem)WemGrid.SelectedObject);
 
                 if (itemIndex != -1)
@@ -190,12 +255,26 @@ namespace Mafia2Tool
 
             if (exportFile.ShowDialog() == DialogResult.OK)
             {
-                DialogResult exportIds = MessageBox.Show("Export with name?", "Export Wem", MessageBoxButtons.YesNo);
+                DialogResult exportIds = MessageBox.Show(Language.GetString("$EXPORT_WEM_WITH_NAME"), "Toolkit", MessageBoxButtons.YesNo);
                 foreach (Wem wem in bnk.WemList)
                 {
                     Export(exportFile, exportIds, wem);
                 }
             }
+        }
+
+        private void ContextEdit_Click(object sender, System.EventArgs e)
+        {
+            int itemIndex = bnk.WemList.IndexOf((Wem)WemGrid.SelectedObject);
+
+            if (itemIndex != -1)
+            {
+                HIRCEditor HircEditor = new HIRCEditor(bnk.Objects, bnk.WemList[itemIndex]);
+                HircEditor.Show();
+            }
+
+            Text = Language.GetString("$BNK_EDITOR_TITLE") + "*";
+            bIsFileEdited = true;
         }
 
         private void BnkTreeView_OnKeyUp(object sender, KeyEventArgs e)
@@ -210,7 +289,9 @@ namespace Mafia2Tool
         private void WemGrid_OnPropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             if (e.ChangedItem.Label == "Name")
+            {
                 TreeView_Wems.SelectedNode.Text = e.ChangedItem.Value.ToString();
+            }
 
             Text = Language.GetString("$BNK_EDITOR_TITLE") + "*";
             bIsFileEdited = true;

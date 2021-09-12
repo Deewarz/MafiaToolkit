@@ -45,7 +45,7 @@
   <String ID="$REFRESH">Refresh</String>
   <String ID="$FOLDER_PATH_TOOLTIP">Folder Path</String>
   <String ID="$UP_TOOLTIP">Up</String>
-  <String ID="$M1DE_OODLEERROR">The Oodle DLL is a non-free library by RAD Game Tools and is thus not included due to legal issues. Please copy 'oo2core_8_win64.dll' from the Mafia: Definitive Edition installation folder into the same folder as the Toolkit executable.</String>
+  <String ID="$M1DE_OODLEERROR">Could not find Oodle DLL which is required for compression/decompression. Please make sure 'oo2core_8_win64.dll' exists in game directory.</String>
   
   <!-- Game Selector -->
   <String ID="$START_TOOLKIT">Start Toolkit</String>
@@ -167,7 +167,12 @@
   <String ID="$FRADD_TYPE">Frame Type</String>
   <String ID="$FRADD_NAME_TABLE">Add Frame To Name Table?</String>
   <String ID="$QUESTION_FRADD">Enter the name and type of the frame.</String>
-
+  
+  <!-- Scene Outliner Dock Strings-->
+  <String ID="$SCENE_OUTLINER_FORMNAME">Scene Outliner</String>
+  <String ID="$SCENE_OUTLINER_EXPLORER">Explorer</String>
+  <String ID="$SCENE_OUTLINER_SEARCHER">Search</String>
+  
   <!-- Actor Editor -->
   <String ID="$ACTOR_EDITOR_TITLE">Actor Editor</String>
   <String ID="$ADD_ITEM">Add Item</String>
@@ -317,5 +322,19 @@
   <String ID="$XBIN_EDITOR_TITLE">XBIN Editor</String>
   <String ID="$IMPORT_XBIN">Import from .xml</String>
   <String ID="$EXPORT_XBIN">Export to .xml</String>
+
+  <!-- Wwise Editor Strings -->
+  <String ID="$PCK_EDITOR_TITLE">PCK Editor</String>
+  <String ID="$BNK_EDITOR_TITLE">BNK Editor</String>
+  <String ID="$REPLACE_WEM">Replace Wem</String>
+  <String ID="$IMPORT_WEM">Import Wem</String>
+  <String ID="$EXPORT_WEM">Export Wem</String>
+  <String ID="$DELETE_WEM">Delete Wem</String>
+  <String ID="$EXPORT_ALL_WEMS">Export All Wems</String>
+  <String ID="$LOAD_HIRC">Load HIRC</String>
+  <String ID="$EDIT_HIRC">Edit HIRC</String>
+  <String ID="$TRIM_WEMS">Trim Wems</String>
+  <String ID="$EXPORT_WEM_WITH_NAME">Export with name?</String>
+  <String ID="$WEM_EXIST_SKIP">A Wem with this ID already exists, it will be skipped.</String>
   
 </Localisation>

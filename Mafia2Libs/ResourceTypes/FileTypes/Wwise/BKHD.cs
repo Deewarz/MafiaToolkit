@@ -40,27 +40,27 @@ namespace ResourceTypes.Wwise
 
     public class DIDXChunk
     {
-        public uint chunkId { get; set; }
-        public uint chunkOffset { get; set; }
-        public uint chunkLength { get; set; }
+        public uint ChunkID { get; set; }
+        public uint ChunkOffset { get; set; }
+        public uint ChunkLength { get; set; }
         public DIDXChunk(uint iChunkID, uint iChunkOffset, uint iChunkLength)
         {
-            chunkId = iChunkID;
-            chunkOffset = iChunkOffset;
-            chunkLength = iChunkLength;
+            ChunkID = iChunkID;
+            ChunkOffset = iChunkOffset;
+            ChunkLength = iChunkLength;
         }
     }
 
-    public class DIDX
+    public class DidX
     {
-        public uint length { get; set; }
-        public long offset { get; set; }
-        public List<DIDXChunk> data { get; set; }
-        public DIDX(uint iLength)
+        public uint Length { get; set; }
+        public long Offset { get; set; }
+        public List<DIDXChunk> Data { get; set; }
+        public DidX(uint iLength)
         {
-            length = iLength;
-            offset = iLength;
-            data = new List<DIDXChunk>();
+            Length = iLength;
+            Offset = iLength;
+            Data = new List<DIDXChunk>();
         }
     }
 }

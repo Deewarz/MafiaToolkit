@@ -45,7 +45,7 @@
   <String ID="$REFRESH">Odśwież</String>
   <String ID="$FOLDER_PATH_TOOLTIP">Ścieżka do folderu</String>
   <String ID="$UP_TOOLTIP">Widok w górę</String>
-  <String ID="$M1DE_OODLEERROR">Biblioteka DLL Oodle jest płatną biblioteką RAD Game Tools objętą prawami autorskimi i w związku z tym nie została ona dołączona. Aby uruchomić Mafia Toolkit skopiuj tą bibliotekę o nazwie "oo2core_8_win64.dll" z folderu instalacyjnego gry Mafia: Edycja Ostateczna do folderu, gdzie znajduje się plik wykonywalny (.exe) Mafia Toolkit.</String>
+  <String ID="$M1DE_OODLEERROR">Could not find Oodle DLL which is required for compression/decompression. Please make sure 'oo2core_8_win64.dll' exists in game directory.</String>
 
   <!-- Game Selector -->
   <String ID="$START_TOOLKIT">Start Toolkit</String>
@@ -166,6 +166,11 @@
   <String ID="$FRADD_TYPE">Typ Frame</String>
   <String ID="$QUESTION_FRADD">Wpisz nazwę i typ frame.</String>
 
+  <!-- Scene Outliner Dock Strings-->
+  <String ID="$SCENE_OUTLINER_FORMNAME">Scene Outliner</String>
+  <String ID="$SCENE_OUTLINER_EXPLORER">Explorer</String>
+  <String ID="$SCENE_OUTLINER_SEARCHER">Search</String>
+  
   <!-- Actor Editor -->
   <String ID="$ACTOR_EDITOR_TITLE">Actor Editor</String>
   <String ID="$ADD_ITEM">Add Item</String>
@@ -311,5 +316,19 @@
   <String ID="$XBIN_EDITOR_TITLE">XBIN Editor</String>
   <String ID="$IMPORT_XBIN">Import from .xml</String>
   <String ID="$EXPORT_XBIN">Export to .xml</String>
+
+  <!-- Wwise Editor Strings -->
+  <String ID="$PCK_EDITOR_TITLE">Edytor plików PCK</String>
+  <String ID="$BNK_EDITOR_TITLE">Edytor plików BNK</String>
+  <String ID="$REPLACE_WEM">Zamień plik audio Wem</String>
+  <String ID="$IMPORT_WEM">Importuj plik audio Wem</String>
+  <String ID="$EXPORT_WEM">Eksportuj plik audio Wem</String>
+  <String ID="$DELETE_WEM">Usuń plik audio Wem</String>
+  <String ID="$EXPORT_ALL_WEMS">Eksportuj wszystkie pliki audio Wem</String>
+  <String ID="$LOAD_HIRC">Wczytaj HIRC</String>
+  <String ID="$EDIT_HIRC">Edytuj HIRC</String>
+  <String ID="$TRIM_WEMS">Przytnij Wemy</String>
+  <String ID="$EXPORT_WEM_WITH_NAME">Eksportować razem z nazwą?</String>
+  <String ID="$WEM_EXIST_SKIP">Wem z takim ID już istnieje, zostanie pominięty.</String>
 
 </Localisation>
