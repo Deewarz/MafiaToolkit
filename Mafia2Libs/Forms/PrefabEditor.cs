@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Gibbed.Illusion.FileFormats.Hashing;
 using ResourceTypes.Prefab;
 using Utils.Helpers;
+using Utils.Helpers.Reflection;
 using Utils.Language;
 using Utils.StringHelpers;
 
@@ -151,6 +153,39 @@ namespace Mafia2Tool
             File.Copy(prefabFile.FullName, prefabFile.FullName + "_old", true);
             prefabs.Prefabs = NewPrefabs.ToArray();
             prefabs.WriteToFile(prefabFile);
+        }
+
+        private void ContextStrip_Prefab_OnOpening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Cancel if nothing is selected
+            TreeNode SelectedNode = TreeView_Prefabs.SelectedNode;
+            if(SelectedNode == null)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void Button_ExportAsXML_Clicked(object sender, EventArgs e)
+        {
+            TreeNode SelectedNode = TreeView_Prefabs.SelectedNode;
+            if (SelectedNode != null)
+            {
+                PrefabLoader.PrefabStruct PrefabObject = (SelectedNode.Tag as PrefabLoader.PrefabStruct);
+                XElement ConvertedXML = ReflectionHelpers.ConvertPropertyToXML(PrefabObject.InitData);
+
+                string FileName = PrefabObject.Hash.ToString();
+                if (!string.IsNullOrEmpty(PrefabObject.AssignedName))
+                {
+                    FileName = PrefabObject.AssignedName;
+                }
+
+                ConvertedXML.Save(FileName + ".xml");
+            }
+        }
+
+        private void Button_ImportAsXML_Clicked(object sender, EventArgs e)
+        {
+
         }
     }
 }

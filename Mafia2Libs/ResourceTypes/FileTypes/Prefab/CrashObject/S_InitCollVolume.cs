@@ -33,6 +33,8 @@ namespace ResourceTypes.Prefab.CrashObject
             MemStream.WriteSingle(Unk4);
         }
     }
+
+    [PropertyClassAllowReflection]
     public class S_InitCollVolume
     {
         public uint Unk0 { get; set; }

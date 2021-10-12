@@ -175,6 +175,11 @@ namespace ResourceTypes.Prefab
                     InitData = new S_DoorInitData();
                     InitData.Load(MemStream);
                 }
+                else if(PrefabType == 10)
+                {
+                    InitData = new S_Wagon();
+                    InitData.Load(MemStream);
+                }
 
                 Debug.Assert(MemStream.Length == PrefabSize, "Didn't read everthing when loading");
             }

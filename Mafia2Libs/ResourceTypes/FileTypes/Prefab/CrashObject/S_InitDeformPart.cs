@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.CrashObject
 {
@@ -69,7 +70,7 @@ namespace ResourceTypes.Prefab.CrashObject
         }
     }
 
-    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class S_InitDeformOrigData
     {
         public ulong Hash { get; set; }
@@ -81,6 +82,7 @@ namespace ResourceTypes.Prefab.CrashObject
         public S_InitDeformOrigData()
         {
             Unk1 = new C_Transform();
+            Unk2 = new ushort[0];
         }
 
         public void Load(BitStream MemStream)

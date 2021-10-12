@@ -42,6 +42,10 @@ namespace ResourceTypes.Prefab.CrashObject
         public S_InitJointSet()
         {
             Unk2 = new DataPacket[6];
+            for (int i = 0; i < Unk2.Length; i++)
+            {
+                Unk2[i] = new DataPacket();
+            }
         }
 
         public void Load(BitStream MemStream)

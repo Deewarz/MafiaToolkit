@@ -28,9 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PrefabEditor));
             this.Grid_Prefabs = new System.Windows.Forms.PropertyGrid();
-            this.TreeView_Prefabs = new Controls.MTreeView();
+            this.TreeView_Prefabs = new Mafia2Tool.Controls.MTreeView();
+            this.ContextStrip_Prefab = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.Button_ExportAsXML = new System.Windows.Forms.ToolStripMenuItem();
+            this.Button_ImportAsXML = new System.Windows.Forms.ToolStripMenuItem();
             this.Browser_ImportPRB = new System.Windows.Forms.OpenFileDialog();
             this.ToolStrip_Main = new System.Windows.Forms.ToolStrip();
             this.Button_File = new System.Windows.Forms.ToolStripDropDownButton();
@@ -42,6 +46,7 @@
             this.Button_Export = new System.Windows.Forms.ToolStripMenuItem();
             this.Button_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.Browser_ExportPRB = new System.Windows.Forms.SaveFileDialog();
+            this.ContextStrip_Prefab.SuspendLayout();
             this.ToolStrip_Main.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,21 +55,49 @@
             this.Grid_Prefabs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Grid_Prefabs.Location = new System.Drawing.Point(402, 28);
+            this.Grid_Prefabs.Location = new System.Drawing.Point(469, 32);
+            this.Grid_Prefabs.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Grid_Prefabs.Name = "Grid_Prefabs";
             this.Grid_Prefabs.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.Grid_Prefabs.Size = new System.Drawing.Size(386, 410);
+            this.Grid_Prefabs.Size = new System.Drawing.Size(450, 473);
             this.Grid_Prefabs.TabIndex = 10;
             // 
             // TreeView_Prefabs
             // 
             this.TreeView_Prefabs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.TreeView_Prefabs.Location = new System.Drawing.Point(12, 28);
+            this.TreeView_Prefabs.ContextMenuStrip = this.ContextStrip_Prefab;
+            this.TreeView_Prefabs.Location = new System.Drawing.Point(14, 32);
+            this.TreeView_Prefabs.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.TreeView_Prefabs.Name = "TreeView_Prefabs";
-            this.TreeView_Prefabs.Size = new System.Drawing.Size(368, 410);
+            this.TreeView_Prefabs.Size = new System.Drawing.Size(429, 472);
             this.TreeView_Prefabs.TabIndex = 11;
             this.TreeView_Prefabs.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.OnNodeSelectSelect);
+            // 
+            // ContextStrip_Prefab
+            // 
+            this.ContextStrip_Prefab.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Button_ExportAsXML,
+            this.Button_ImportAsXML});
+            this.ContextStrip_Prefab.Name = "ContextStrip_Prefab";
+            this.ContextStrip_Prefab.Size = new System.Drawing.Size(181, 70);
+            this.ContextStrip_Prefab.Opening += new System.ComponentModel.CancelEventHandler(this.ContextStrip_Prefab_OnOpening);
+            // 
+            // Button_ExportAsXML
+            // 
+            this.Button_ExportAsXML.Enabled = false;
+            this.Button_ExportAsXML.Name = "Button_ExportAsXML";
+            this.Button_ExportAsXML.Size = new System.Drawing.Size(180, 22);
+            this.Button_ExportAsXML.Text = "$EXPORT_AS_XML";
+            this.Button_ExportAsXML.Click += new System.EventHandler(this.Button_ExportAsXML_Clicked);
+            // 
+            // Button_ImportAsXML
+            // 
+            this.Button_ImportAsXML.Enabled = false;
+            this.Button_ImportAsXML.Name = "Button_ImportAsXML";
+            this.Button_ImportAsXML.Size = new System.Drawing.Size(180, 22);
+            this.Button_ImportAsXML.Text = "$IMPORT_AS_XML";
+            this.Button_ImportAsXML.Click += new System.EventHandler(this.Button_ImportAsXML_Clicked);
             // 
             // Browser_ImportPRB
             // 
@@ -79,7 +112,7 @@
             this.Button_Tools});
             this.ToolStrip_Main.Location = new System.Drawing.Point(0, 0);
             this.ToolStrip_Main.Name = "ToolStrip_Main";
-            this.ToolStrip_Main.Size = new System.Drawing.Size(800, 25);
+            this.ToolStrip_Main.Size = new System.Drawing.Size(933, 25);
             this.ToolStrip_Main.TabIndex = 15;
             this.ToolStrip_Main.Text = "toolStrip1";
             // 
@@ -156,15 +189,17 @@
             // 
             // PrefabEditor
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(933, 519);
             this.Controls.Add(this.ToolStrip_Main);
             this.Controls.Add(this.Grid_Prefabs);
             this.Controls.Add(this.TreeView_Prefabs);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "PrefabEditor";
             this.Text = "$PREFAB_EDITOR_TITLE";
+            this.ContextStrip_Prefab.ResumeLayout(false);
             this.ToolStrip_Main.ResumeLayout(false);
             this.ToolStrip_Main.PerformLayout();
             this.ResumeLayout(false);
@@ -175,7 +210,6 @@
         #endregion
 
         private System.Windows.Forms.PropertyGrid Grid_Prefabs;
-        private System.Windows.Forms.TreeView TreeView_Prefabs;
         private System.Windows.Forms.OpenFileDialog Browser_ImportPRB;
         private System.Windows.Forms.ToolStrip ToolStrip_Main;
         private System.Windows.Forms.ToolStripDropDownButton Button_File;
@@ -187,5 +221,9 @@
         private System.Windows.Forms.ToolStripMenuItem Button_Export;
         private System.Windows.Forms.ToolStripMenuItem Button_Delete;
         private System.Windows.Forms.SaveFileDialog Browser_ExportPRB;
+        private System.Windows.Forms.ContextMenuStrip ContextStrip_Prefab;
+        private System.Windows.Forms.ToolStripMenuItem Button_ExportAsXML;
+        private System.Windows.Forms.ToolStripMenuItem Button_ImportAsXML;
+        private Controls.MTreeView TreeView_Prefabs;
     }
 }
