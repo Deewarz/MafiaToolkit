@@ -7,7 +7,9 @@ namespace ResourceTypes.Prefab.Vehicle
     [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class S_InitAxle
     {
+        [PropertyForceAsAttribute]
         public ulong AxleName { get; set; }
+        [PropertyForceAsAttribute]
         public ulong BrakeDrumName { get; set; }
         public ulong RotWingName { get; set; }
         public uint AxleType { get; set; }

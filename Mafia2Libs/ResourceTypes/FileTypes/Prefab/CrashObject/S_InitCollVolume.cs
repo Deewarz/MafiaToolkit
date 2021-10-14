@@ -35,6 +35,38 @@ namespace ResourceTypes.Prefab.CrashObject
     }
 
     [PropertyClassAllowReflection]
+    public class S_InitCollVolumeCollection
+    {
+        public S_InitCollVolume[] Volumes { get; set; }
+
+        public S_InitCollVolumeCollection()
+        {
+            Volumes = new S_InitCollVolume[0];
+        }
+
+        public void Read(BitStream MemStream)
+        {
+            uint NumCollisionVolumes = MemStream.ReadUInt32(); // Count
+            Volumes = new S_InitCollVolume[NumCollisionVolumes];
+            for (int x = 0; x < NumCollisionVolumes; x++)
+            {
+                S_InitCollVolume CollisionVolume = new S_InitCollVolume();
+                CollisionVolume.Load(MemStream);
+                Volumes[x] = CollisionVolume;
+            }
+        }
+
+        public void Save(BitStream MemStream)
+        {
+            MemStream.WriteUInt32((uint)Volumes.Length);
+            foreach (S_InitCollVolume Value in Volumes)
+            {
+                Value.Save(MemStream);
+            }
+        }
+    }
+
+    [PropertyClassAllowReflection]
     public class S_InitCollVolume
     {
         public uint Unk0 { get; set; }

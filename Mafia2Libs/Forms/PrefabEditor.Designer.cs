@@ -80,22 +80,20 @@
             this.Button_ExportAsXML,
             this.Button_ImportAsXML});
             this.ContextStrip_Prefab.Name = "ContextStrip_Prefab";
-            this.ContextStrip_Prefab.Size = new System.Drawing.Size(181, 70);
+            this.ContextStrip_Prefab.Size = new System.Drawing.Size(171, 48);
             this.ContextStrip_Prefab.Opening += new System.ComponentModel.CancelEventHandler(this.ContextStrip_Prefab_OnOpening);
             // 
             // Button_ExportAsXML
             // 
-            this.Button_ExportAsXML.Enabled = false;
             this.Button_ExportAsXML.Name = "Button_ExportAsXML";
-            this.Button_ExportAsXML.Size = new System.Drawing.Size(180, 22);
+            this.Button_ExportAsXML.Size = new System.Drawing.Size(170, 22);
             this.Button_ExportAsXML.Text = "$EXPORT_AS_XML";
             this.Button_ExportAsXML.Click += new System.EventHandler(this.Button_ExportAsXML_Clicked);
             // 
             // Button_ImportAsXML
             // 
-            this.Button_ImportAsXML.Enabled = false;
             this.Button_ImportAsXML.Name = "Button_ImportAsXML";
-            this.Button_ImportAsXML.Size = new System.Drawing.Size(180, 22);
+            this.Button_ImportAsXML.Size = new System.Drawing.Size(170, 22);
             this.Button_ImportAsXML.Text = "$IMPORT_AS_XML";
             this.Button_ImportAsXML.Click += new System.EventHandler(this.Button_ImportAsXML_Clicked);
             // 
@@ -104,6 +102,7 @@
             this.Browser_ImportPRB.FileName = "Select Singular Prefab file";
             this.Browser_ImportPRB.Filter = "Prefab File|*.prb|All Files|*.*";
             this.Browser_ImportPRB.Tag = "";
+            this.Browser_ImportPRB.Title = "Import Prefab";
             // 
             // ToolStrip_Main
             // 
@@ -132,20 +131,20 @@
             // Button_Save
             // 
             this.Button_Save.Name = "Button_Save";
-            this.Button_Save.Size = new System.Drawing.Size(180, 22);
+            this.Button_Save.Size = new System.Drawing.Size(124, 22);
             this.Button_Save.Text = "$SAVE";
             this.Button_Save.Click += new System.EventHandler(this.Button_Save_Click);
             // 
             // Button_Reload
             // 
             this.Button_Reload.Name = "Button_Reload";
-            this.Button_Reload.Size = new System.Drawing.Size(180, 22);
+            this.Button_Reload.Size = new System.Drawing.Size(124, 22);
             this.Button_Reload.Text = "$RELOAD";
             // 
             // Button_Exit
             // 
             this.Button_Exit.Name = "Button_Exit";
-            this.Button_Exit.Size = new System.Drawing.Size(180, 22);
+            this.Button_Exit.Size = new System.Drawing.Size(124, 22);
             this.Button_Exit.Text = "$EXIT";
             // 
             // Button_Tools
@@ -164,21 +163,21 @@
             // Button_Import
             // 
             this.Button_Import.Name = "Button_Import";
-            this.Button_Import.Size = new System.Drawing.Size(180, 22);
+            this.Button_Import.Size = new System.Drawing.Size(167, 22);
             this.Button_Import.Text = "$IMPORT_PREFAB";
             this.Button_Import.Click += new System.EventHandler(this.Button_Import_Click);
             // 
             // Button_Export
             // 
             this.Button_Export.Name = "Button_Export";
-            this.Button_Export.Size = new System.Drawing.Size(180, 22);
+            this.Button_Export.Size = new System.Drawing.Size(167, 22);
             this.Button_Export.Text = "$EXPORT_PREFAB";
             this.Button_Export.Click += new System.EventHandler(this.Button_Export_Click);
             // 
             // Button_Delete
             // 
             this.Button_Delete.Name = "Button_Delete";
-            this.Button_Delete.Size = new System.Drawing.Size(180, 22);
+            this.Button_Delete.Size = new System.Drawing.Size(167, 22);
             this.Button_Delete.Text = "$DELETE_PREFAB";
             this.Button_Delete.Click += new System.EventHandler(this.Button_Delete_Click);
             // 
@@ -186,6 +185,7 @@
             // 
             this.Browser_ExportPRB.FileName = "Save Singular Prefab file";
             this.Browser_ExportPRB.Filter = "Prefab File|*.prb|All Files|*.*";
+            this.Browser_ExportPRB.Title = "Export Prefab";
             // 
             // PrefabEditor
             // 

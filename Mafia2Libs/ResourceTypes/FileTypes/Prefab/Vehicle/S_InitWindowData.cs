@@ -1,12 +1,16 @@
 ﻿using BitStreams;
+using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.Vehicle
 {
     public class S_InitWindowData
     {
+        [PropertyForceAsAttribute]
         public ulong WindowFrameName { get; set; }
         public ulong[] CheckBoneFrameName { get; set; }
+        [PropertyForceAsAttribute]
         public float Depth { get; set; }
+        [PropertyForceAsAttribute]
         public bool bIsOpenable { get; set; }
 
         public S_InitWindowData()

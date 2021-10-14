@@ -4,7 +4,7 @@ using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.Vehicle
 {
-    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class S_InitDeformMaterial
     {
         public C_GUID Guid { get; set; }
@@ -30,7 +30,7 @@ namespace ResourceTypes.Prefab.Vehicle
         }
     }
 
-    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class S_InitColorAndDirty
     {
         public C_GUID Guid { get; set; }
@@ -59,7 +59,7 @@ namespace ResourceTypes.Prefab.Vehicle
         }
     }
 
-    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class S_InitLight
     {
         public ulong FrameName { get; set; }
@@ -120,7 +120,7 @@ namespace ResourceTypes.Prefab.Vehicle
         }
     }
 
-    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class S_InitSZDefaultRangeOnMatrGroup
     {
         public uint Group { get; set; }

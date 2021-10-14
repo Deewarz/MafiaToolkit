@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using Gibbed.Illusion.FileFormats.Hashing;
 using ResourceTypes.Prefab;
+using ResourceTypes.Prefab.CrashObject;
 using Utils.Helpers;
 using Utils.Helpers.Reflection;
 using Utils.Language;
@@ -39,12 +40,12 @@ namespace Mafia2Tool
 
             Show();
 
-            for(int i = 0; i < definitionNames.Count; i++)
+            for (int i = 0; i < definitionNames.Count; i++)
             {
                 var name = definitionNames[i];
                 var hash = FNV64.Hash(name);
 
-                foreach(var prefab in prefabs.Prefabs)
+                foreach (var prefab in prefabs.Prefabs)
                 {
                     if (hash == prefab.Hash)
                     {
@@ -57,7 +58,7 @@ namespace Mafia2Tool
                 }
             }
 
-            foreach(var prefab in prefabs.Prefabs)
+            foreach (var prefab in prefabs.Prefabs)
             {
                 var name = string.IsNullOrEmpty(prefab.AssignedName) ? "Not Found!" : prefab.AssignedName;
                 TreeNode node = new TreeNode();
@@ -66,7 +67,6 @@ namespace Mafia2Tool
                 node.Name = name;
                 TreeView_Prefabs.Nodes.Add(node);
             }
-
         }
 
         private void OnNodeSelectSelect(object sender, TreeViewEventArgs e)
@@ -168,9 +168,26 @@ namespace Mafia2Tool
         private void Button_ExportAsXML_Clicked(object sender, EventArgs e)
         {
             TreeNode SelectedNode = TreeView_Prefabs.SelectedNode;
-            if (SelectedNode != null)
+            if (SelectedNode == null)
             {
-                PrefabLoader.PrefabStruct PrefabObject = (SelectedNode.Tag as PrefabLoader.PrefabStruct);
+                // fail
+                return;
+            }
+
+            PrefabLoader.PrefabStruct PrefabObject = (SelectedNode.Tag as PrefabLoader.PrefabStruct);
+            if (PrefabObject == null)
+            {
+                // fail
+                return;
+            }
+
+            SaveFileDialog XMLExportDialog = new SaveFileDialog();
+            XMLExportDialog.Title = "Export Prefab XML";
+            XMLExportDialog.InitialDirectory = prefabFile.DirectoryName;
+            XMLExportDialog.Filter = "XML File | *.xml";
+
+            if (XMLExportDialog.ShowDialog() == DialogResult.OK)
+            {
                 XElement ConvertedXML = ReflectionHelpers.ConvertPropertyToXML(PrefabObject.InitData);
 
                 string FileName = PrefabObject.Hash.ToString();
@@ -179,13 +196,44 @@ namespace Mafia2Tool
                     FileName = PrefabObject.AssignedName;
                 }
 
-                ConvertedXML.Save(FileName + ".xml");
+                ConvertedXML.Save(XMLExportDialog.FileName);
             }
         }
 
         private void Button_ImportAsXML_Clicked(object sender, EventArgs e)
         {
+            TreeNode SelectedNode = TreeView_Prefabs.SelectedNode;
+            if (SelectedNode == null)
+            {
+                // fail
+                return;
+            }
 
+            PrefabLoader.PrefabStruct PrefabObject = (SelectedNode.Tag as PrefabLoader.PrefabStruct);
+            if (PrefabObject == null)
+            {
+                // fail
+                return;
+            }
+
+            // Create and open dialog
+            OpenFileDialog XMLImportDialog = new OpenFileDialog();
+            XMLImportDialog.Title = "Import Prefab XML";
+            XMLImportDialog.InitialDirectory = prefabFile.DirectoryName;
+            XMLImportDialog.Filter = "XML File | *.xml";
+
+            if(XMLImportDialog.ShowDialog() == DialogResult.OK)
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                string Name = XMLImportDialog.FileName;
+                XElement XMLContent = XElement.Load(Name);
+                S_GlobalInitData InitData = ReflectionHelpers.ConvertToPropertyFromXML<S_GlobalInitData>(XMLContent);
+                PrefabObject.InitData = InitData;
+
+                Grid_Prefabs.Refresh();
+
+                Cursor.Current = Cursors.Default;
+            }
         }
     }
 }

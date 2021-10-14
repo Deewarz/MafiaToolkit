@@ -162,7 +162,7 @@ namespace ResourceTypes.Prefab.CrashObject
         public uint Unk11 { get; set; }
         public S_InitDrainEnergy[] DPDrainEnergy { get; set; }
         public uint Unk13 { get; set; }
-        public List<S_InitCollVolume[]> CollisionVolumes { get; set; }
+        public S_InitCollVolumeCollection[] CollisionVolumesCollections { get; set; }
         public S_InitSMDeformBone[] SMDeformBones { get; set; }
         public ushort[] Unk14 { get; set; } // indexes?
         public C_Transform Unk15 { get; set; } // transform?
@@ -183,7 +183,7 @@ namespace ResourceTypes.Prefab.CrashObject
         {
             Unk3 = new ulong[0];
             DPDrainEnergy = new S_InitDrainEnergy[0];
-            CollisionVolumes = new List<S_InitCollVolume[]>();
+            CollisionVolumesCollections = new S_InitCollVolumeCollection[0];
             SMDeformBones = new S_InitSMDeformBone[0];
             DPInternalImpulses = new S_InitInternalImpulse[0];
             Unk14 = new ushort[0];
@@ -231,20 +231,14 @@ namespace ResourceTypes.Prefab.CrashObject
                 DPDrainEnergy[i] = DrainEnergyEntry;
             }
 
+            // Read CollVolume Collections
             uint NumCollisionArrays = MemStream.ReadUInt32();
+            CollisionVolumesCollections = new S_InitCollVolumeCollection[NumCollisionArrays];
             for (uint i = 0; i < NumCollisionArrays; i++)
             {
-                // Read collision volumes
-                uint NumCollisionVolumes = MemStream.ReadUInt32(); // Count
-                S_InitCollVolume[] CollisionArray = new S_InitCollVolume[NumCollisionVolumes];
-                for (int x = 0; x < NumCollisionVolumes; x++)
-                {
-                    S_InitCollVolume CollisionVolume = new S_InitCollVolume();
-                    CollisionVolume.Load(MemStream);
-                    CollisionArray[x] = CollisionVolume;
-                }
-
-                CollisionVolumes.Add(CollisionArray);
+                S_InitCollVolumeCollection NewCollection = new S_InitCollVolumeCollection();
+                NewCollection.Read(MemStream);
+                CollisionVolumesCollections[i] = NewCollection;
             }
 
             // Read SM Deform bones
@@ -336,14 +330,10 @@ namespace ResourceTypes.Prefab.CrashObject
             }
             
             // Write Collision Volumes
-            MemStream.WriteUInt32((uint)CollisionVolumes.Count);
-            foreach (S_InitCollVolume[] Arrays in CollisionVolumes)
+            MemStream.WriteUInt32((uint)CollisionVolumesCollections.Length);
+            foreach (S_InitCollVolumeCollection ColVolume in CollisionVolumesCollections)
             {
-                MemStream.WriteUInt32((uint)Arrays.Length);
-                foreach (S_InitCollVolume Value in Arrays)
-                {
-                    Value.Save(MemStream);
-                }
+                ColVolume.Save(MemStream);
             }
 
             // Write SM Deform bones
