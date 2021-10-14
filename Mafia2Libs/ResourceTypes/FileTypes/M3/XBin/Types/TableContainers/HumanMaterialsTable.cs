@@ -13,8 +13,13 @@ namespace ResourceTypes.M3.XBin.TableContainers
             public uint ID { get; set; }
             public string MaterialName { get; set; }
             public EHumanMaterialsTableItemFlags Flags { get; set; }
-            public uint SoundMaterialSwitch { get; set; } // Actually C_AKHashName
+            public XBinAkHashName SoundMaterialSwitch { get; set; }
             public uint StepParticles { get; set; }
+
+            public HumanMaterialsItem()
+            {
+                SoundMaterialSwitch = new XBinAkHashName();
+            }
 
             public override string ToString()
             {
@@ -39,7 +44,7 @@ namespace ResourceTypes.M3.XBin.TableContainers
                 Item.ID = reader.ReadUInt32();
                 Item.MaterialName = StringHelpers.ReadStringBuffer(reader, 32);
                 Item.Flags = (EHumanMaterialsTableItemFlags)reader.ReadUInt32();
-                Item.SoundMaterialSwitch = reader.ReadUInt32();
+                Item.SoundMaterialSwitch = XBinAkHashName.ConstructAndReadFromFile(reader);
                 Item.StepParticles = reader.ReadUInt32();
                 Items[i] = Item;
             }
@@ -56,7 +61,7 @@ namespace ResourceTypes.M3.XBin.TableContainers
                 writer.Write(Item.ID);
                 StringHelpers.WriteStringBuffer(writer, 32, Item.MaterialName);
                 writer.Write((uint)Item.Flags);
-                writer.Write(Item.SoundMaterialSwitch);
+                Item.SoundMaterialSwitch.WriteToFile(writer);
                 writer.Write(Item.StepParticles);
             }
         }

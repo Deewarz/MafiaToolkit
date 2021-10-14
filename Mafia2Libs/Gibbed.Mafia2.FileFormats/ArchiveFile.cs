@@ -36,6 +36,9 @@ using System.Xml.XPath;
 using Utils.Language;
 using Utils.Logging;
 using Utils.Settings;
+using Utils.Types;
+using System.Diagnostics;
+using Mafia2Tool.Utils;
 
 namespace Gibbed.Mafia2.FileFormats
 {
@@ -132,7 +135,10 @@ namespace Gibbed.Mafia2.FileFormats
         #region Functions
         public void Serialize(Stream output, ArchiveSerializeOptions options)
         {
+            // If ratio isn't 0.0f, we'll try to compress.
+            // If the user sets it to 0.0f, then we should skip any attempt to compress.
             var compress = (options & ArchiveSerializeOptions.Compress) > 0;
+            compress &= ToolkitSettings.CompressionRatio != 0.0f;
 
             var basePosition = output.Position;
             var endian = this._Endian;
@@ -219,7 +225,7 @@ namespace Gibbed.Mafia2.FileFormats
 
             if (IsGameType(GamesEnumerator.MafiaI_DE))
             {
-                if (!File.Exists("libs/oo2core_8_win64.dll"))
+                if (!OodleDllResolver.TryResolveFrom(GameStorage.Instance.GetSelectedGame().Directory))
                 {
                     MessageBox.Show(Language.GetString("$M1DE_OODLEERROR"), "Toolkit");
                     return;
@@ -343,7 +349,6 @@ namespace Gibbed.Mafia2.FileFormats
             string sdsFolder = folder;
             XmlDocument document = null;
 
-            // Open a FileStream which contains the SDSContent data.
             string SDSContentPath = Path.Combine(sdsFolder, "SDSContent.xml");
 
             // First check if it actually exists
@@ -354,6 +359,17 @@ namespace Gibbed.Mafia2.FileFormats
             }
 
             // Then attempt to read
+            // Attempt to sort the file.
+            // Only works for M2 and M2DE.
+            if (ChosenGameType == GamesEnumerator.MafiaII || ChosenGameType == GamesEnumerator.MafiaII_DE)
+            {
+                // Loading then saving automatically sorts.
+                SDSContentFile SDSContent = new SDSContentFile();
+                SDSContent.ReadFromFile(new FileInfo(SDSContentPath));
+                SDSContent.WriteToFile();
+            }
+
+            // Open a FileStream which contains the SDSContent data.
             using (FileStream XMLStream = new FileStream(SDSContentPath, FileMode.Open))
             {
                 try

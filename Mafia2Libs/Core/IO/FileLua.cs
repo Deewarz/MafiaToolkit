@@ -28,6 +28,14 @@ namespace Core.IO
             return false;
         }
 
+        public void TryDecompileBytecode()
+        {
+            if(IsBytecode())
+            {
+                LuaHelper.ReadFile(file);
+            }
+        }
+
         public override bool Open()
         {
             if(IsBytecode())
@@ -36,7 +44,8 @@ namespace Core.IO
             }
             else
             {
-                Process.Start(file.FullName);
+                // base class *should* open as process
+                return base.Open();
             }
 
             return true;

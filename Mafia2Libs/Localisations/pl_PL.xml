@@ -45,7 +45,7 @@
   <String ID="$REFRESH">Odśwież</String>
   <String ID="$FOLDER_PATH_TOOLTIP">Ścieżka do folderu</String>
   <String ID="$UP_TOOLTIP">Widok w górę</String>
-  <String ID="$M1DE_OODLEERROR">Biblioteka DLL Oodle jest płatną biblioteką RAD Game Tools objętą prawami autorskimi i w związku z tym nie została ona dołączona. Aby uruchomić Mafia Toolkit skopiuj tą bibliotekę o nazwie "oo2core_8_win64.dll" z folderu instalacyjnego gry Mafia: Edycja Ostateczna do folderu, gdzie znajduje się plik wykonywalny (.exe) Mafia Toolkit.</String>
+  <String ID="$M1DE_OODLEERROR">Could not find Oodle DLL which is required for compression/decompression. Please make sure 'oo2core_8_win64.dll' exists in game directory.</String>
 
   <!-- Game Selector -->
   <String ID="$START_TOOLKIT">Start Toolkit</String>
@@ -76,6 +76,7 @@
   <String ID="$LANGUAGE_OPTION">Język intefejsu</String>
   <String ID="$DISCORD_STATE_CUSTOM">Użycie specjalnego opisu na Discordzie</String>
   <String ID="$CHECK_FOR_UPDATES">Sprawdź, czy są aktualizacje</String>
+  <String ID="$SAVE_PROMPT">Zapisać przed zamknięciem?</String>
 
   <!-- Map Editor -->
   <String ID="$NO_COL_FILE_CREATE_NEW">No Collision file is present. Create new Collision File?</String>
@@ -100,10 +101,9 @@
   <String ID="$SEARCH">Szukaj</String>
   
   <!-- SDS Options -->
-  <String ID="$SDS_COMPRESSION_TYPE">Typ kompresji archiwum</String>
-  <String ID="$SDS_UNCOMPRESSED">Nieskompresowane</String>
-  <String ID="$SDS_COMPRESSED">Z kompresją</String>
-  <String ID="$SDS_ONEBLOCK">Jeden blok</String>
+  <String ID="$SDS_COMPRESSION_RATIO">Współczynnik kompresji</String>
+  <String ID="$SDS_TOOLTIP_COMPRESSION_RATIO">0.0 oznacza brak kompresji, 1.0 oznacza pełną kompresję. 0.9 jest domyślnym współczynnikiem kompresji (bezpieczna wartość).</String>
+  <String ID="$SDS_TOOLTIP_USE_OODLE">Jeżeli kompresujesz archiwa z gry Mafia: Definitive Edition użyj kompresji Oodle.</String>
   <String ID="$ADD_TIME_DATE_BACKUP">Dodaj godzinę i datę do nazw kopii zapasowych</String>
   <String ID="$DECOMPILE_LUA_UNPACK">Dekompiluj skrypty lua podczas rozpakowywania.</String>
   <String ID="$USE_SDS_TOOL_FORMAT">Podczas rozpakowywania używaj formatu narzędzia SDS Tool Gui (stare)</String>
@@ -165,6 +165,11 @@
   <String ID="$FRADD_TYPE">Typ Frame</String>
   <String ID="$QUESTION_FRADD">Wpisz nazwę i typ frame.</String>
 
+  <!-- Scene Outliner Dock Strings-->
+  <String ID="$SCENE_OUTLINER_FORMNAME">Scene Outliner</String>
+  <String ID="$SCENE_OUTLINER_EXPLORER">Explorer</String>
+  <String ID="$SCENE_OUTLINER_SEARCHER">Search</String>
+  
   <!-- Actor Editor -->
   <String ID="$ACTOR_EDITOR_TITLE">Actor Editor</String>
   <String ID="$ADD_ITEM">Add Item</String>

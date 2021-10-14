@@ -56,6 +56,14 @@ namespace Core.IO
                     return new FileNavigation_NAV(info);
                 case "NOV":
                     return new FileNavigation_OBJ(info);
+                case "FXA":
+                    return new FileFxActor(info);
+                case "FAS":
+                    return new FileFxAnimSet(info);
+                case "PCK":
+                    return new FilePCK(info);
+                case "BNK":
+                    return new FileBNK(info);
                 default:
                     return new FileBase(info);
             }

@@ -32,9 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PrefabEditor));
             this.Grid_Prefabs = new System.Windows.Forms.PropertyGrid();
             this.TreeView_Prefabs = new Mafia2Tool.Controls.MTreeView();
-            this.ContextStrip_Prefab = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.Button_ExportAsXML = new System.Windows.Forms.ToolStripMenuItem();
-            this.Button_ImportAsXML = new System.Windows.Forms.ToolStripMenuItem();
+            this.Context_Menu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.Context_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.Browser_ImportPRB = new System.Windows.Forms.OpenFileDialog();
             this.ToolStrip_Main = new System.Windows.Forms.ToolStrip();
             this.Button_File = new System.Windows.Forms.ToolStripDropDownButton();
@@ -46,7 +45,7 @@
             this.Button_Export = new System.Windows.Forms.ToolStripMenuItem();
             this.Button_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.Browser_ExportPRB = new System.Windows.Forms.SaveFileDialog();
-            this.ContextStrip_Prefab.SuspendLayout();
+            this.Context_Menu.SuspendLayout();
             this.ToolStrip_Main.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -66,7 +65,7 @@
             // 
             this.TreeView_Prefabs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.TreeView_Prefabs.ContextMenuStrip = this.ContextStrip_Prefab;
+            this.TreeView_Prefabs.ContextMenuStrip = this.Context_Menu;
             this.TreeView_Prefabs.Location = new System.Drawing.Point(14, 32);
             this.TreeView_Prefabs.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.TreeView_Prefabs.Name = "TreeView_Prefabs";
@@ -74,35 +73,26 @@
             this.TreeView_Prefabs.TabIndex = 11;
             this.TreeView_Prefabs.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.OnNodeSelectSelect);
             // 
-            // ContextStrip_Prefab
+            // Context_Menu
             // 
-            this.ContextStrip_Prefab.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Button_ExportAsXML,
-            this.Button_ImportAsXML});
-            this.ContextStrip_Prefab.Name = "ContextStrip_Prefab";
-            this.ContextStrip_Prefab.Size = new System.Drawing.Size(171, 48);
-            this.ContextStrip_Prefab.Opening += new System.ComponentModel.CancelEventHandler(this.ContextStrip_Prefab_OnOpening);
+            this.Context_Menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Context_Delete});
+            this.Context_Menu.Name = "Context_Menu";
+            this.Context_Menu.Size = new System.Drawing.Size(170, 26);
             // 
-            // Button_ExportAsXML
+            // Context_Delete
             // 
-            this.Button_ExportAsXML.Name = "Button_ExportAsXML";
-            this.Button_ExportAsXML.Size = new System.Drawing.Size(170, 22);
-            this.Button_ExportAsXML.Text = "$EXPORT_AS_XML";
-            this.Button_ExportAsXML.Click += new System.EventHandler(this.Button_ExportAsXML_Clicked);
-            // 
-            // Button_ImportAsXML
-            // 
-            this.Button_ImportAsXML.Name = "Button_ImportAsXML";
-            this.Button_ImportAsXML.Size = new System.Drawing.Size(170, 22);
-            this.Button_ImportAsXML.Text = "$IMPORT_AS_XML";
-            this.Button_ImportAsXML.Click += new System.EventHandler(this.Button_ImportAsXML_Clicked);
+            this.Context_Delete.Name = "Context_Delete";
+            this.Context_Delete.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Delete)));
+            this.Context_Delete.Size = new System.Drawing.Size(169, 22);
+            this.Context_Delete.Text = "$DELETE";
+            this.Context_Delete.Click += new System.EventHandler(this.Context_Delete_Click);
             // 
             // Browser_ImportPRB
             // 
             this.Browser_ImportPRB.FileName = "Select Singular Prefab file";
             this.Browser_ImportPRB.Filter = "Prefab File|*.prb|All Files|*.*";
             this.Browser_ImportPRB.Tag = "";
-            this.Browser_ImportPRB.Title = "Import Prefab";
             // 
             // ToolStrip_Main
             // 
@@ -131,20 +121,21 @@
             // Button_Save
             // 
             this.Button_Save.Name = "Button_Save";
-            this.Button_Save.Size = new System.Drawing.Size(124, 22);
+            this.Button_Save.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.Button_Save.Size = new System.Drawing.Size(146, 22);
             this.Button_Save.Text = "$SAVE";
             this.Button_Save.Click += new System.EventHandler(this.Button_Save_Click);
             // 
             // Button_Reload
             // 
             this.Button_Reload.Name = "Button_Reload";
-            this.Button_Reload.Size = new System.Drawing.Size(124, 22);
+            this.Button_Reload.Size = new System.Drawing.Size(146, 22);
             this.Button_Reload.Text = "$RELOAD";
             // 
             // Button_Exit
             // 
             this.Button_Exit.Name = "Button_Exit";
-            this.Button_Exit.Size = new System.Drawing.Size(124, 22);
+            this.Button_Exit.Size = new System.Drawing.Size(146, 22);
             this.Button_Exit.Text = "$EXIT";
             // 
             // Button_Tools
@@ -163,21 +154,22 @@
             // Button_Import
             // 
             this.Button_Import.Name = "Button_Import";
-            this.Button_Import.Size = new System.Drawing.Size(167, 22);
+            this.Button_Import.Size = new System.Drawing.Size(214, 22);
             this.Button_Import.Text = "$IMPORT_PREFAB";
             this.Button_Import.Click += new System.EventHandler(this.Button_Import_Click);
             // 
             // Button_Export
             // 
             this.Button_Export.Name = "Button_Export";
-            this.Button_Export.Size = new System.Drawing.Size(167, 22);
+            this.Button_Export.Size = new System.Drawing.Size(214, 22);
             this.Button_Export.Text = "$EXPORT_PREFAB";
             this.Button_Export.Click += new System.EventHandler(this.Button_Export_Click);
             // 
             // Button_Delete
             // 
             this.Button_Delete.Name = "Button_Delete";
-            this.Button_Delete.Size = new System.Drawing.Size(167, 22);
+            this.Button_Delete.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Delete)));
+            this.Button_Delete.Size = new System.Drawing.Size(214, 22);
             this.Button_Delete.Text = "$DELETE_PREFAB";
             this.Button_Delete.Click += new System.EventHandler(this.Button_Delete_Click);
             // 
@@ -185,7 +177,6 @@
             // 
             this.Browser_ExportPRB.FileName = "Save Singular Prefab file";
             this.Browser_ExportPRB.Filter = "Prefab File|*.prb|All Files|*.*";
-            this.Browser_ExportPRB.Title = "Export Prefab";
             // 
             // PrefabEditor
             // 
@@ -196,10 +187,13 @@
             this.Controls.Add(this.Grid_Prefabs);
             this.Controls.Add(this.TreeView_Prefabs);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "PrefabEditor";
             this.Text = "$PREFAB_EDITOR_TITLE";
-            this.ContextStrip_Prefab.ResumeLayout(false);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PrefabEditor_Closing);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PrefabEditor_OnKeyUp);
+            this.Context_Menu.ResumeLayout(false);
             this.ToolStrip_Main.ResumeLayout(false);
             this.ToolStrip_Main.PerformLayout();
             this.ResumeLayout(false);
@@ -221,9 +215,8 @@
         private System.Windows.Forms.ToolStripMenuItem Button_Export;
         private System.Windows.Forms.ToolStripMenuItem Button_Delete;
         private System.Windows.Forms.SaveFileDialog Browser_ExportPRB;
-        private System.Windows.Forms.ContextMenuStrip ContextStrip_Prefab;
-        private System.Windows.Forms.ToolStripMenuItem Button_ExportAsXML;
-        private System.Windows.Forms.ToolStripMenuItem Button_ImportAsXML;
+        private System.Windows.Forms.ContextMenuStrip Context_Menu;
+        private System.Windows.Forms.ToolStripMenuItem Context_Delete;
         private Controls.MTreeView TreeView_Prefabs;
     }
 }

@@ -22,6 +22,7 @@ using System.Windows.Forms;
 using Toolkit.Core;
 using Utils.Extensions;
 using Utils.Language;
+using Utils.Logging;
 using Utils.Models;
 using Utils.Settings;
 using Utils.VorticeUtils;
@@ -142,7 +143,13 @@ namespace Mafia2Tool
 
         private void RenderPanel_Resize(object sender, EventArgs e)
         {
-            Graphics.OnResize(RenderPanel.Width, RenderPanel.Height);
+            // TODO: Do we need to restructure the initialisation order for this form?
+
+            // On some PCs this resized before graphics has initialised.
+            if (Graphics != null)
+            {
+                Graphics.OnResize(RenderPanel.Width, RenderPanel.Height);
+            }
         }
         
         private void LinkToActor_Click(object sender, EventArgs e)
@@ -1247,7 +1254,7 @@ namespace Mafia2Tool
                             if (SceneData.FrameResource.FrameObjects.ContainsKey(model.Key))
                             {
                                 var frame = (SceneData.FrameResource.FrameObjects[model.Key] as FrameObjectBase);
-                                Utils.Logging.Log.WriteLine(string.Format("The toolkit has failed to analyse a model: {0} {1}", frame.Name, t));
+                                Log.WriteLine(string.Format("The toolkit has failed to analyse a model: {0} {1}", frame.Name, t));
                             }
                         }
 

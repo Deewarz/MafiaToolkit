@@ -3,27 +3,22 @@
 namespace ResourceTypes.M3.XBin
 {
     [Flags]
-    public enum ETrafficCommonFlags : uint
+    public enum ETrafficCommonFlags_M1 : uint
     {
         // Time Periods
-        E_TCF_TIME_PREREVOLUTION = 0x1,
-        E_TCF_TIME_REVOLUTION = 0x2,
-        E_TCF_TIME_FIFTIES = 0x4,
-        E_TCF_TIME_SIXTIES = 0x8,
+        E_TCF_TIME_1930 = 0x1,
+        E_TCF_TIME_1932 = 0x2,
+        E_TCF_TIME_1933 = 0x4,
+        E_TCF_TIME_1935 = 0x8,
+        E_TCF_TIME_1938 = 0x10,
 
         // Locations
-        E_TCF_LOC_BOURBONCITY = 0x10,
-        E_TCF_LOC_PUERTOLIBRE = 0x20,
-        E_TCF_LOC_EMPIREBAY = 0x40,
-        E_TCF_LOC_SAIGON = 0x80,
-
         E_TCF_TIME_FREERIDE = 0x1000,
-
         E_TCF_LOC_LOSTHEAVEN = 0x10000
     }
 
     [Flags]
-    public enum ETrafficVehicleFlags : uint
+    public enum ETrafficVehicleFlags_M1 : uint
     {
         E_TVF_TRUCK = 0x1,
         E_TVF_DELIVERY = 0x2,
@@ -55,13 +50,11 @@ namespace ResourceTypes.M3.XBin
         E_TVF_CIVILIAN = 0x200000,
         E_TVF_CAR = 0x400000,
         E_TVF_POLICE_STATE = 0x800000,
-
         E_TVF_TRAIN = 0x1000000,
-        E_TVF_CONVERTIBLE_CLOSED = 0x2000000,
     }
 
     [Flags]
-    public enum ETrafficVehicleLookFlags : uint
+    public enum ETrafficVehicleLookFlags_M1 : uint
     {
         E_TVFL_CONVERTIBLE_CLOSED = 0x1,
         E_TVFL_CONVERTIBLE_OPENED = 0x2,
