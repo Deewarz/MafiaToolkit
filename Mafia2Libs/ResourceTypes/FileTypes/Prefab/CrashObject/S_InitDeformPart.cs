@@ -11,7 +11,7 @@ namespace ResourceTypes.Prefab.CrashObject
     public class S_InitDrainEnergy
     {
         public uint DrainPart { get; set; }
-        public float DrainEnergyCoeff { get; set; }
+        public int DrainEnergyCoeff { get; set; }
 
         public void Load(BitStream MemStream)
         {
@@ -22,7 +22,7 @@ namespace ResourceTypes.Prefab.CrashObject
         public void Save(BitStream MemStream)
         {
             MemStream.WriteUInt32(DrainPart);
-            MemStream.WriteSingle(DrainEnergyCoeff);
+            MemStream.WriteInt32(DrainEnergyCoeff);
         }
     }
 

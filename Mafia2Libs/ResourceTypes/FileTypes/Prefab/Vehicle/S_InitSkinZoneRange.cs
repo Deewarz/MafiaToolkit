@@ -1,7 +1,10 @@
 ﻿using BitStreams;
+using System.ComponentModel;
+using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.Vehicle
 {
+    [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class S_InitSkinZoneRange
     {
         public uint Group { get; set; }

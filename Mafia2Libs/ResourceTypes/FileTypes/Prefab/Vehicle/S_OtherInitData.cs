@@ -37,6 +37,11 @@ namespace ResourceTypes.Prefab.Vehicle
             LightMatrices = new C_Transform[3];
             DCBData = new S_InitDCBData[0];
             WindowData = new S_InitWindowData[0];
+
+            for(int i = 0; i < LightMatrices.Length; i++)
+            {
+                LightMatrices[i] = new C_Transform();
+            }
         }
 
         public void Load(BitStream MemStream)

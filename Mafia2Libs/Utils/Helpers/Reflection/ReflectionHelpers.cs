@@ -173,6 +173,25 @@ namespace Utils.Helpers.Reflection
                     Info.SetValue(TypedObject, ClassObject);
                     continue;
                 }
+                else if (Info.PropertyType.IsArray)
+                {
+                    // Get Element.
+                    XElement Element = Node.Element(Info.Name);
+
+                    // Create an Array using the element type of the array, with the number of elements to set the length.
+                    Array ArrayObject = Array.CreateInstance(Info.PropertyType.GetElementType(), Element.Elements().Count());
+
+                    // Iterate through the elements, construct the object using our reflection system and push them into the array.
+                    for (int i = 0; i < ArrayObject.Length; i++)
+                    {
+                        object ElementObject = InternalConvertProperty(Element.Elements().ElementAt(i), Info.PropertyType.GetElementType());
+                        ArrayObject.SetValue(ElementObject, i);
+                    }
+
+                    // Finally, replace the array on our TypedObject.
+                    TypedObject.GetType().GetProperty(Info.Name).SetValue(TypedObject, ArrayObject);
+                    continue;
+                }
 
                 string NodeContent = bForceAsAttribute ? Node.Attribute(Info.Name).Value : Node.Element(Info.Name).Value;
 
@@ -182,25 +201,6 @@ namespace Utils.Helpers.Reflection
                     {
                         object Value = Enum.Parse(Info.PropertyType, NodeContent);
                         Info.SetValue(TypedObject, Value);
-                        continue;
-                    }
-                    else if(Info.PropertyType.IsArray)
-                    {
-                        // Get Element.
-                        XElement Element = Node.Element(Info.Name);
-
-                        // Create an Array using the element type of the array, with the number of elements to set the length.
-                        Array ArrayObject = Array.CreateInstance(Info.PropertyType.GetElementType(), Element.Elements().Count());
-
-                        // Iterate through the elements, construct the object using our reflection system and push them into the array.
-                        for (int i = 0; i < ArrayObject.Length; i++)
-                        {
-                            object ElementObject = InternalConvertProperty(Element.Elements().ElementAt(i), Info.PropertyType.GetElementType());
-                            ArrayObject.SetValue(ElementObject, i);
-                        }
-
-                        // Finally, replace the array on our TypedObject.
-                        TypedObject.GetType().GetProperty(Info.Name).SetValue(TypedObject, ArrayObject);
                         continue;
                     }
                     else if(Info.PropertyType.IsClass && AllowClassReflection(Info.PropertyType))

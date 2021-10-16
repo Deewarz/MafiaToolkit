@@ -163,6 +163,7 @@ namespace ResourceTypes.Prefab.Vehicle
             LightInit = new S_InitLight[0];
             SZDefaultRangeOnMatrGroup = new S_InitSZDefaultRangeOnMatrGroup[0];
             SkinZoneRanges = new S_InitSkinZoneRange[0];
+            SkinZonePartData = new S_InitSkinZonePartData[0];
             SkinZoneGroups = new S_InitSkinZoneGroup[0];
             SPZAndLightGUID = new C_GUID();
         }

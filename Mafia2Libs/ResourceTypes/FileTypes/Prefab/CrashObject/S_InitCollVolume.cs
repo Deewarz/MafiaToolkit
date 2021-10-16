@@ -13,7 +13,7 @@ namespace ResourceTypes.Prefab.CrashObject
         public float Unk1 { get; set; }
         public float Unk2 { get; set; }
         public int Unk3 { get; set; }
-        public float Unk4 { get; set; }
+        public int Unk4 { get; set; }
 
         public void Load(BitStream MemStream)
         {
@@ -21,7 +21,7 @@ namespace ResourceTypes.Prefab.CrashObject
             Unk1 = MemStream.ReadSingle();
             Unk2 = MemStream.ReadSingle();
             Unk3 = MemStream.ReadInt32();
-            Unk4 = MemStream.ReadSingle();
+            Unk4 = MemStream.ReadInt32();
         }
 
         public void Save(BitStream MemStream)
@@ -30,7 +30,7 @@ namespace ResourceTypes.Prefab.CrashObject
             MemStream.WriteSingle(Unk1);
             MemStream.WriteSingle(Unk2);
             MemStream.WriteInt32(Unk3);
-            MemStream.WriteSingle(Unk4);
+            MemStream.WriteInt32(Unk4);
         }
     }
 
@@ -72,7 +72,7 @@ namespace ResourceTypes.Prefab.CrashObject
         public uint Unk0 { get; set; }
         public C_Transform Unk1 { get; set; } // transform?
         public byte Unk2 { get; set; } // if 1 - means something is available
-        public int[] Unk3 { get; set; } // Vector3?
+        public C_Vector3 Unk3 { get; set; }
         public ulong[] Unk4 { get; set; } // hashes?
         public byte Unk5 { get; set; } // if 1 - means something is available
         public S_InitCollVolume_Nested Unk6 { get; set; }
@@ -80,7 +80,7 @@ namespace ResourceTypes.Prefab.CrashObject
         public S_InitCollVolume()
         {
             Unk1 = new C_Transform();
-            Unk3 = new int[0];
+            Unk3 = new C_Vector3();
             Unk4 = new ulong[0];
             Unk6 = new S_InitCollVolume_Nested();
         }
@@ -88,21 +88,13 @@ namespace ResourceTypes.Prefab.CrashObject
         public void Load(BitStream MemStream)
         {
             Unk0 = MemStream.ReadUInt32();
-
-            // BitStream type of something
-            // I think its transform (floats)
             Unk1.Load(MemStream);
 
             // If one - means something is available.
             Unk2 = MemStream.ReadBit();
             Debug.Assert(Unk2 == 0, "We expect one here. This has extra data!");
 
-            // Vector3? - FLOATS
-            Unk3 = new int[3];
-            for (int i = 0; i < Unk3.Length; i++)
-            {
-                Unk3[i] = MemStream.ReadInt32();
-            }
+            Unk3 = C_Vector3.Construct(MemStream);
 
             // Read Hashes. Fixed number of 2.
             bool bUnk4HashesAvailable = MemStream.ReadBit();
@@ -126,19 +118,11 @@ namespace ResourceTypes.Prefab.CrashObject
         public void Save(BitStream MemStream)
         {
             MemStream.WriteUInt32(Unk0);
-
-            // Transform?
             Unk1.Save(MemStream);
-
             MemStream.WriteBit(Unk2);
+            Unk3.Save(MemStream);
 
-            // Vector3?
-            foreach (int Value in Unk3)
-            {
-                MemStream.WriteInt32(Value);
-            }
-
-            // Only saveable if we have some present
+            // Only save-able if we have some present
             bool bUnk4HashesAvailable = (Unk4 != null  && Unk4.Length > 0);
             MemStream.WriteBit(bUnk4HashesAvailable);
 

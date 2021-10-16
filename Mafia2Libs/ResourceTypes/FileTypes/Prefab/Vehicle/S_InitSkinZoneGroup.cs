@@ -1,8 +1,10 @@
 ﻿using BitStreams;
+using System.ComponentModel;
 using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.Vehicle
 {
+    [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class S_InitSkinZoneGroup
     {
         [PropertyForceAsAttribute]
@@ -11,6 +13,8 @@ namespace ResourceTypes.Prefab.Vehicle
         public ushort SkinZoneRange { get; set; }
         [PropertyForceAsAttribute]
         public ushort SkinZoneGroupIndex { get; set; }
+
+        public S_InitSkinZoneGroup() { }
 
         public void Load(BitStream MemStream)
         {

@@ -198,7 +198,7 @@ namespace Mafia2Tool
             }
         }
 
-        private void ContextStrip_Prefab_OnOpening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Context_Menu_OnOpening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             // Cancel if nothing is selected
             TreeNode SelectedNode = TreeView_Prefabs.SelectedNode;
@@ -208,7 +208,7 @@ namespace Mafia2Tool
             }
         }
 
-        private void Button_ExportAsXML_Clicked(object sender, EventArgs e)
+        private void Context_ExportAsXML_Clicked(object sender, EventArgs e)
         {
             TreeNode SelectedNode = TreeView_Prefabs.SelectedNode;
             if (SelectedNode == null)
@@ -243,7 +243,7 @@ namespace Mafia2Tool
             }
         }
 
-        private void Button_ImportAsXML_Clicked(object sender, EventArgs e)
+        private void Context_ImportAsXML_Clicked(object sender, EventArgs e)
         {
             TreeNode SelectedNode = TreeView_Prefabs.SelectedNode;
             if (SelectedNode == null)

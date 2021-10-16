@@ -15,17 +15,12 @@ namespace ResourceTypes.Prefab.CrashObject
         public C_Transform Unk3_Transform { get; set; }
         public uint Unk4 { get; set; } // count of unknown data.
         public byte Unk5 { get; set; } // flag to acknowledge extra data
+        public S_InitCollVolume_Nested Unk5_Data { get; set; } // NOT ACTUALLY COLLISION DATA..
         public byte Unk6 { get; set; } // flag to acknowledge extra data
         public string Unk6_Value { get; set; }
         public int Unk7 { get; set; } // float
         public uint[] Unk8 { get; set; } // unknown data
         public S_InitDeformPartEffects PartEffects { get; set; }
-
-        private int Nested_Unk01; // float
-        private int Nested_Unk02; // float
-        private int Nested_Unk03; // float
-        private uint Nested_Unk04; // int
-        private int Nested_Unk05; // float
 
         public S_InitDeformPartCommon()
         {
@@ -69,11 +64,8 @@ namespace ResourceTypes.Prefab.CrashObject
             {
                 // in M2DE exe - sub_1402D1CF0
                 // in logs - INITCOLLVOLUMENESTED
-                Nested_Unk01 = MemStream.ReadInt32(); // float
-                Nested_Unk02 = MemStream.ReadInt32(); // float
-                Nested_Unk03 = MemStream.ReadInt32(); // float
-                Nested_Unk04 = MemStream.ReadUInt32(); // int
-                Nested_Unk05 = MemStream.ReadInt32(); // float
+                Unk5_Data = new S_InitCollVolume_Nested();
+                Unk5_Data.Load(MemStream);
             }
 
             Unk6 = MemStream.ReadBit(); // flag for extra data
@@ -122,11 +114,7 @@ namespace ResourceTypes.Prefab.CrashObject
             MemStream.WriteBit(Unk5);
             if(Unk5 == 1)
             {
-                MemStream.WriteInt32(Nested_Unk01);
-                MemStream.WriteInt32(Nested_Unk02);
-                MemStream.WriteInt32(Nested_Unk03);
-                MemStream.WriteUInt32(Nested_Unk04);
-                MemStream.WriteInt32(Nested_Unk05);
+                Unk5_Data.Save(MemStream);
             }
 
             MemStream.WriteBit(Unk6);
