@@ -6,14 +6,25 @@ using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.CrashObject
 {
+    public class S_InitDeformPartCommon_Unk4
+    {
+        public int Unk0 { get; set; }
+        public int Unk1 { get; set; }
+    }
+
     [TypeConverter(typeof(ExpandableObjectConverter)), PropertyClassAllowReflection]
     public class S_InitDeformPartCommon
     {
-        public int[] Unk1 { get; set; } // 6 Floats, could be two Vec3s?
+        public float SpeedMin { get; set; } // [Value * 3.6f]
+        public float SpeedMax { get; set; } // [Value * 3.6f]
+        public float Resistance { get; set; } // [Value * 100.0f]
+        public float Mass { get; set; } // [Value]
+        public float EnergyStart { get; set; } // [Value / 0.01f]
+        public float EnergyDrop { get; set; } // [Value / 0.01f]
         public int[] Unk2 { get; set; } // Dynamic array of floats
         public byte Unk3 { get; set; } // flag to acknowledge extra data
         public C_Transform Unk3_Transform { get; set; }
-        public uint Unk4 { get; set; } // count of unknown data.
+        public S_InitDeformPartCommon_Unk4[] Unk4 { get; set; }
         public byte Unk5 { get; set; } // flag to acknowledge extra data
         public S_InitCollVolume_Nested Unk5_Data { get; set; } // NOT ACTUALLY COLLISION DATA..
         public byte Unk6 { get; set; } // flag to acknowledge extra data
@@ -24,9 +35,9 @@ namespace ResourceTypes.Prefab.CrashObject
 
         public S_InitDeformPartCommon()
         {
-            Unk1 = new int[0];
             Unk2 = new int[0];
             Unk3_Transform = new C_Transform();
+            Unk4 = new S_InitDeformPartCommon_Unk4[0];
             Unk6_Value = String.Empty;
             Unk8 = new uint[0];
             PartEffects = new S_InitDeformPartEffects();
@@ -34,12 +45,12 @@ namespace ResourceTypes.Prefab.CrashObject
 
         public void Load(BitStream MemStream)
         {
-            // 6 floats - could be two Vec3s
-            Unk1 = new int[6];
-            for(int i = 0; i < Unk1.Length; i++)
-            {
-                Unk1[i] = MemStream.ReadInt32();
-            }
+            SpeedMin = MemStream.ReadSingle() * 3.6f;
+            SpeedMax = MemStream.ReadSingle() * 3.6f;
+            Resistance = MemStream.ReadSingle() * 100.0f;
+            Mass = MemStream.ReadSingle();
+            EnergyStart = MemStream.ReadSingle() / 0.01f;
+            EnergyDrop = MemStream.ReadSingle() / 0.01f;
 
             // Count - list of floats
             uint Unk2Count = MemStream.ReadUInt32();
@@ -56,8 +67,15 @@ namespace ResourceTypes.Prefab.CrashObject
                 Unk3_Transform.Load(MemStream);
             }
 
-            Unk4 = MemStream.ReadUInt32(); // count of unknown data
-            Debug.Assert(Unk4 == 0, "We expect one here. This has extra data!");
+            uint Unk4_Count = MemStream.ReadUInt32(); // count of unknown data
+            Unk4 = new S_InitDeformPartCommon_Unk4[Unk4_Count];
+            for(int i = 0; i < Unk4.Length; i++)
+            {
+                S_InitDeformPartCommon_Unk4 NewUnknown = new S_InitDeformPartCommon_Unk4();
+                NewUnknown.Unk0 = MemStream.ReadInt32();
+                NewUnknown.Unk1 = MemStream.ReadInt32();
+                Unk4[i] = NewUnknown;
+            }
 
             Unk5 = MemStream.ReadBit(); // flag for extra data
             if(Unk5 == 1)
@@ -90,10 +108,12 @@ namespace ResourceTypes.Prefab.CrashObject
 
         public void Save(BitStream MemStream)
         {
-            foreach (int Value in Unk1)
-            {
-                MemStream.WriteInt32(Value);
-            }
+            MemStream.WriteSingle(SpeedMin / 3.6f);
+            MemStream.WriteSingle(SpeedMax / 3.6f);
+            MemStream.WriteSingle(Resistance / 100.0f);
+            MemStream.WriteSingle(Mass);
+            MemStream.WriteSingle(EnergyStart * 0.01f);
+            MemStream.WriteSingle(EnergyDrop * 0.01f);
 
             MemStream.WriteUInt32((uint)Unk2.Length);
             foreach (int Value in Unk2)
@@ -108,7 +128,12 @@ namespace ResourceTypes.Prefab.CrashObject
                 Unk3_Transform.Save(MemStream);
             }
 
-            MemStream.WriteUInt32(Unk4);
+            MemStream.WriteInt32(Unk4.Length);
+            foreach(S_InitDeformPartCommon_Unk4 Unk4Data in Unk4)
+            {
+                MemStream.WriteInt32(Unk4Data.Unk0);
+                MemStream.WriteInt32(Unk4Data.Unk1);
+            }
 
             // Unknown data
             MemStream.WriteBit(Unk5);

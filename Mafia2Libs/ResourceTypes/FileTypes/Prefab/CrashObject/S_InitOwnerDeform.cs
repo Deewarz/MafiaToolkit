@@ -36,9 +36,7 @@ namespace ResourceTypes.Prefab.CrashObject
         [Description("Could be Intertia Factor")]
         public C_Vector3 Unk12 { get; set; }
         public ushort[] Unk4 { get; set; } // array of index?
-        public ushort Unk5 { get; set; }
-        public uint Unk6 { get; set; }
-        public ushort Unk7 { get; set; }
+        public ushort[] Unk6 { get; set; }
         public DataPacket[] Unk9 { get; set; }
         public C_Transform Unk10 { get; set; } // transform?
 
@@ -73,8 +71,13 @@ namespace ResourceTypes.Prefab.CrashObject
                 Unk4[i] = MemStream.ReadUInt16();
             }
 
-            Unk6 = MemStream.ReadUInt32();
-            Unk7 = MemStream.ReadUInt16();
+            // More unknown
+            uint Unk6Count = MemStream.ReadUInt32();
+            Unk6 = new ushort[Unk6Count];
+            for (int i = 0; i < Unk6Count; i++)
+            {
+                Unk6[i] = MemStream.ReadUInt16();
+            }
 
             // Read unknown data
             uint NumDataPackets = MemStream.ReadUInt32();
@@ -108,8 +111,11 @@ namespace ResourceTypes.Prefab.CrashObject
                 MemStream.WriteUInt16(Value);
             }
 
-            MemStream.WriteUInt32(Unk6);
-            MemStream.WriteUInt16(Unk7);
+            MemStream.WriteUInt32((uint)Unk6.Length);
+            foreach (ushort Value in Unk6)
+            {
+                MemStream.WriteUInt16(Value);
+            }
 
             // Write unknown data
             MemStream.WriteUInt32((uint)Unk9.Length);

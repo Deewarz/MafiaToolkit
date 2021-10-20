@@ -67,19 +67,24 @@ namespace ResourceTypes.Prefab.Vehicle
         public int Unk2 { get; set; }
         public uint Unk3 { get; set; }
         public uint Unk4 { get; set; }
-        public float Unk5 { get; set; }
-        public float Unk6 { get; set; }
-        public float Unk7 { get; set; }
-        public float Unk8 { get; set; }
+        public float EmissivePower { get; set; }
+        public float EmissiveMiddle { get; set; }
+        public float EmissiveSpeed_0 { get; set; }
+        public float EmissiveSpeed_1 { get; set; }
         public ulong[] CheckBoneName { get; set; }
-        public ulong Unk10 { get; set; }
-        public uint Unk11 { get; set; }
+        public ulong LightModelHash { get; set; }
+        public uint ParticleBreakID { get; set; }
         public uint Unk12 { get; set; }
 
         public S_InitLight()
         {
+            EmissivePower = 2.0f;
+            EmissiveMiddle = 0.6f;
+            EmissiveSpeed_0 = 8.0f;
+            EmissiveSpeed_1 = 3.0f;
             CheckBoneName = new ulong[0];
         }
+
         public void Load(BitStream MemStream)
         {
             FrameName = MemStream.ReadUInt64();
@@ -87,16 +92,16 @@ namespace ResourceTypes.Prefab.Vehicle
             Unk2 = MemStream.ReadInt32();
             Unk3 = MemStream.ReadUInt32();
             Unk4 = MemStream.ReadUInt32();
-            Unk5 = MemStream.ReadSingle();
-            Unk6 = MemStream.ReadSingle();
-            Unk7 = MemStream.ReadSingle();
-            Unk8 = MemStream.ReadSingle();
+            EmissivePower = MemStream.ReadSingle();
+            EmissiveMiddle = MemStream.ReadSingle();
+            EmissiveSpeed_0 = MemStream.ReadSingle();
+            EmissiveSpeed_1 = MemStream.ReadSingle();
 
             // Read array
             CheckBoneName = PrefabUtils.ReadHashArray(MemStream);
 
-            Unk10 = MemStream.ReadUInt64();
-            Unk11 = MemStream.ReadUInt32();
+            LightModelHash = MemStream.ReadUInt64();
+            ParticleBreakID = MemStream.ReadUInt32();
             Unk12 = MemStream.ReadUInt32();
         }
 
@@ -107,15 +112,15 @@ namespace ResourceTypes.Prefab.Vehicle
             MemStream.WriteInt32(Unk2);
             MemStream.WriteUInt32(Unk3);
             MemStream.WriteUInt32(Unk4);
-            MemStream.WriteSingle(Unk5);
-            MemStream.WriteSingle(Unk6);
-            MemStream.WriteSingle(Unk7);
-            MemStream.WriteSingle(Unk8);
+            MemStream.WriteSingle(EmissivePower);
+            MemStream.WriteSingle(EmissiveMiddle);
+            MemStream.WriteSingle(EmissiveSpeed_0);
+            MemStream.WriteSingle(EmissiveSpeed_1);
 
             PrefabUtils.WriteHashArray(MemStream, CheckBoneName);
 
-            MemStream.WriteUInt64(Unk10);
-            MemStream.WriteUInt32(Unk11);
+            MemStream.WriteUInt64(LightModelHash);
+            MemStream.WriteUInt32(ParticleBreakID);
             MemStream.WriteUInt32(Unk12);
         }
     }

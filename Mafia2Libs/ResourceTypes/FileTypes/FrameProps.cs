@@ -150,23 +150,21 @@ namespace ResourceTypes.Misc
                         info.Integers[x] = reader.ReadUInt16();
                     }
 
-                    if (!frameExtraData.ContainsKey(info.Hash))
-                    {
-                        frameExtraData.Add(info.Hash, info);
-                        info.Data = new string[info.NumIntegers];
+                    info.Data = new string[info.NumIntegers];
 
-                        for (int z = 0; z < info.NumIntegers; z++)
-                        {
-                            info.Data[z] = properties[info.Integers[z]];
-                        }
+                    for (int z = 0; z < info.NumIntegers; z++)
+                    {
+                        info.Data[z] = properties[info.Integers[z]];
                     }
                 }
+
                 frameInfos[i] = chunk;
             }
 
             if (Debugger.IsAttached)
             {
                 WriteToText();
+                WriteFramePropActors();
             }
         }
 
@@ -229,6 +227,7 @@ namespace ResourceTypes.Misc
                 FrameInfoChunk chunk = frameInfos[i];
 
                 file.AddRange(new string[] { "", "Infos:", "" });
+
                 for(int x = 0; x < chunk.FrameInfos.Length; x++)
                 {
                     file.Add(chunk.FrameInfos[x].Hash.ToString());
@@ -241,7 +240,52 @@ namespace ResourceTypes.Misc
                 }
             }
 
+            file.AddRange(new string[] { "", "Dictionary:" });
+            foreach(var Pair in frameExtraData)
+            {
+                FrameInfo Info = Pair.Value;
+                file.Add(Info.Hash.ToString());
+
+                foreach(string Value in Info.Data)
+                {
+                    file.Add(Value);
+                }
+
+                file.Add("");
+            }
+
             File.WriteAllLines("FrameProps.txt", file.ToArray());
+        }
+
+        private void WriteFramePropActors()
+        {
+            List<string> file = new List<string>();
+            for(int i = 0; i < actorHashes.Length; i++)
+            {
+                file.Add("==========================================================");
+                file.Add(string.Format("Actor Hash: {0}", actorHashes[i]));
+
+                FrameInfoChunk Chunk = frameInfos[i];
+                file.Add("Num: " + Chunk.Size);
+                file.Add("");
+
+                for (int x = 0; x < Chunk.FrameInfos.Length; x++)
+                {
+                    file.Add("Idx: " + x);
+                    FrameInfo SubChunk = Chunk.FrameInfos[x];
+                    file.Add(string.Format("Chunk Hash: {0}", SubChunk.Hash));
+
+                    foreach (string Info in SubChunk.Data)
+                    {
+                        file.Add(Info);
+                    }
+
+                    file.Add("");
+                }
+                file.Add("==========================================================");
+            }
+
+            File.WriteAllLines("FrameProps_Entries.txt", file.ToArray());
         }
     }
 }

@@ -1,11 +1,15 @@
 ﻿using BitStreams;
+using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.Vehicle
 {
     public class S_InitDCBData
     {
+        [PropertyForceAsAttribute]
         public ulong DoorFrameName { get; set; }
+        [PropertyForceAsAttribute]
         public float Resistance { get; set; }
+        [PropertyForceAsAttribute]
         public float Hitpoints { get; set; }
 
         public void Load(BitStream MemStream)

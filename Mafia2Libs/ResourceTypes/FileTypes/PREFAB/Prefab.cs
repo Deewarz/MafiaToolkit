@@ -84,15 +84,13 @@ namespace ResourceTypes.Prefab
             writer.Write(Prefabs.Length);
             writer.Write(sizeOfFile2);
 
-            int index = 0;
             foreach(var prefab in Prefabs)
             {
-                if(!prefab.WriteToFile(writer, true))
+                bool bWasTheSameSize = prefab.WriteToFile(writer, true);
+                if (Debugger.IsAttached && bWasTheSameSize)
                 {
-                    break;
+                    //break;
                 }
-
-                index++;
             }
         }
 
@@ -175,9 +173,19 @@ namespace ResourceTypes.Prefab
                     InitData = new S_DoorInitData();
                     InitData.Load(MemStream);
                 }
+                else if (PrefabType == 8)
+                {
+                    InitData = new S_LiftInitData();
+                    InitData.Load(MemStream);
+                }
                 else if(PrefabType == 10)
                 {
                     InitData = new S_Wagon();
+                    InitData.Load(MemStream);
+                }
+                else if(PrefabType == 9)
+                {
+                    InitData = new S_BoatInitData();
                     InitData.Load(MemStream);
                 }
 

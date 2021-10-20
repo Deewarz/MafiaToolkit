@@ -10,19 +10,19 @@ namespace ResourceTypes.Prefab.CrashObject
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class S_InitDrainEnergy
     {
-        public uint DrainPart { get; set; }
-        public int DrainEnergyCoeff { get; set; }
+        public uint DrainPart { get; set; } // ID to part
+        public float DrainEnergyCoeff { get; set; } // Game multiplies this by 100.
 
         public void Load(BitStream MemStream)
         {
             DrainPart = MemStream.ReadUInt32();
-            DrainEnergyCoeff = MemStream.ReadInt32();
+            DrainEnergyCoeff = MemStream.ReadSingle() * 100.0f;
         }
 
         public void Save(BitStream MemStream)
         {
             MemStream.WriteUInt32(DrainPart);
-            MemStream.WriteInt32(DrainEnergyCoeff);
+            MemStream.WriteSingle(DrainEnergyCoeff / 100.0f);
         }
     }
 
@@ -148,7 +148,7 @@ namespace ResourceTypes.Prefab.CrashObject
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class S_InitDeformPart
     {
-        public uint Unk0 { get; set; }
+        public uint Unk0 { get; set; } // [13 = MOTOR] [15 = SNOW] [12 = EXHAUST] [16 = PLOW] [7 = BUMPER] [5 = WINDOW] [6 = COVER] [3 = LID] [14 = TYRE] [2 = WHEEL] [1 = BODY]
         public uint Unk1 { get; set; }
         public byte Unk2 { get; set; }
         public ulong[] Unk3 { get; set; }

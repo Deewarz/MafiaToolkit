@@ -69,9 +69,10 @@ namespace ResourceTypes.Prefab.CrashObject
     [PropertyClassAllowReflection]
     public class S_InitCollVolume
     {
-        public uint Unk0 { get; set; }
+        public uint Unk0 { get; set; } // Coll Type? [6 = NONE] [5 = BOX?]
         public C_Transform Unk1 { get; set; } // transform?
         public byte Unk2 { get; set; } // if 1 - means something is available
+        public C_Transform Unk2_Transform { get; set; } // transform?
         public C_Vector3 Unk3 { get; set; }
         public ulong[] Unk4 { get; set; } // hashes?
         public byte Unk5 { get; set; } // if 1 - means something is available
@@ -80,6 +81,7 @@ namespace ResourceTypes.Prefab.CrashObject
         public S_InitCollVolume()
         {
             Unk1 = new C_Transform();
+            Unk2_Transform = new C_Transform();
             Unk3 = new C_Vector3();
             Unk4 = new ulong[0];
             Unk6 = new S_InitCollVolume_Nested();
@@ -92,7 +94,10 @@ namespace ResourceTypes.Prefab.CrashObject
 
             // If one - means something is available.
             Unk2 = MemStream.ReadBit();
-            Debug.Assert(Unk2 == 0, "We expect one here. This has extra data!");
+            if(Unk2 == 1)
+            {
+                Unk2_Transform.Load(MemStream);
+            }
 
             Unk3 = C_Vector3.Construct(MemStream);
 
@@ -119,7 +124,13 @@ namespace ResourceTypes.Prefab.CrashObject
         {
             MemStream.WriteUInt32(Unk0);
             Unk1.Save(MemStream);
+
             MemStream.WriteBit(Unk2);
+            if(Unk2 == 1)
+            {
+                Unk2_Transform.Save(MemStream);
+            }
+
             Unk3.Save(MemStream);
 
             // Only save-able if we have some present

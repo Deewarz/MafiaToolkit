@@ -63,17 +63,17 @@ namespace ResourceTypes.Prefab.CrashObject
         public short Unk19 { get; set; }
         public short Unk20 { get; set; }
         public short Unk21 { get; set; }
-        public short Unk22 { get; set; }
-        public short Unk23 { get; set; }
+        public short ParticleBreakID { get; set; }
+        public short ParticleHingeVersionID { get; set; }
         public short Unk24 { get; set; }
         public short Unk25 { get; set; }
         public short Unk26 { get; set; }
         public short Unk27 { get; set; }
         public short Unk28 { get; set; }
-        public short Unk29 { get; set; }
-        public short Unk30 { get; set; }
-        public short Unk31 { get; set; }
-        public short Unk32 { get; set; }
+        public short SnowParticleID_0 { get; set; }
+        public short SnowParticleID_1 { get; set; }
+        public short SnowParticleID_2 { get; set; }
+        public short SnowParticleID_3 { get; set; }
         public short Unk33 { get; set; }
         public byte Unk34 { get; set; }
         public float Unk35 { get; set; }
@@ -85,7 +85,11 @@ namespace ResourceTypes.Prefab.CrashObject
         public S_InitDeformPartEffects()
         {
             EffectMatrix = new C_Transform();
-            Unk1 = new S_InitDeformPartEffect_Pack[0];
+            Unk1 = new S_InitDeformPartEffect_Pack[3];
+            for(int i = 0; i < Unk1.Length; i++)
+            {
+                Unk1[i] = new S_InitDeformPartEffect_Pack();
+            }
         }
 
         public void Load(BitStream MemStream)
@@ -121,17 +125,17 @@ namespace ResourceTypes.Prefab.CrashObject
             Unk19 = MemStream.ReadInt16();
             Unk20 = MemStream.ReadInt16();
             Unk21 = MemStream.ReadInt16();
-            Unk22 = MemStream.ReadInt16();
-            Unk23 = MemStream.ReadInt16();
+            ParticleBreakID = MemStream.ReadInt16();
+            ParticleHingeVersionID = MemStream.ReadInt16();
             Unk24 = MemStream.ReadInt16();
             Unk25 = MemStream.ReadInt16();
             Unk26 = MemStream.ReadInt16();
             Unk27 = MemStream.ReadInt16();
             Unk28 = MemStream.ReadInt16();
-            Unk29 = MemStream.ReadInt16();
-            Unk30 = MemStream.ReadInt16();
-            Unk31 = MemStream.ReadInt16();
-            Unk32 = MemStream.ReadInt16();
+            SnowParticleID_0 = MemStream.ReadInt16();
+            SnowParticleID_1 = MemStream.ReadInt16();
+            SnowParticleID_2 = MemStream.ReadInt16();
+            SnowParticleID_3 = MemStream.ReadInt16();
             Unk33 = MemStream.ReadInt16();
             Unk34 = MemStream.ReadBit();
             Unk35 = MemStream.ReadSingle();
@@ -171,17 +175,17 @@ namespace ResourceTypes.Prefab.CrashObject
             MemStream.WriteInt16(Unk19);
             MemStream.WriteInt16(Unk20);
             MemStream.WriteInt16(Unk21);
-            MemStream.WriteInt16(Unk22);
-            MemStream.WriteInt16(Unk23);
+            MemStream.WriteInt16(ParticleBreakID);
+            MemStream.WriteInt16(ParticleHingeVersionID);
             MemStream.WriteInt16(Unk24);
             MemStream.WriteInt16(Unk25);
             MemStream.WriteInt16(Unk26);
             MemStream.WriteInt16(Unk27);
             MemStream.WriteInt16(Unk28);
-            MemStream.WriteInt16(Unk29);
-            MemStream.WriteInt16(Unk30);
-            MemStream.WriteInt16(Unk31);
-            MemStream.WriteInt16(Unk32);
+            MemStream.WriteInt16(SnowParticleID_0);
+            MemStream.WriteInt16(SnowParticleID_1);
+            MemStream.WriteInt16(SnowParticleID_2);
+            MemStream.WriteInt16(SnowParticleID_3);
             MemStream.WriteInt16(Unk33);
             MemStream.WriteBit(Unk34);
             MemStream.WriteSingle(Unk35);
