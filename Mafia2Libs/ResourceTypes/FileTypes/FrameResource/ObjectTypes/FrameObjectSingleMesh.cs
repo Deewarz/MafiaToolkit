@@ -4,10 +4,10 @@ using System.ComponentModel;
 using System.IO;
 using System.Numerics;
 using Utils.Extensions;
-using Utils.Types;
-using Rendering.Factories;
-using Rendering.Graphics;
 using Utils.Models;
+using Utils.Types;
+using Utils.VorticeUtils;
+using Vortice.Mathematics;
 
 namespace ResourceTypes.FrameResource
 {

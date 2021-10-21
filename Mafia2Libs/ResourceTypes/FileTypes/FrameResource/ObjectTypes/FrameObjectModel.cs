@@ -2,6 +2,7 @@
 using System.IO;
 using System.Numerics;
 using Utils.Extensions;
+using Utils.Models;
 using Utils.Types;
 using Utils.VorticeUtils;
 
