@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Windows;
 using Utils.Helpers.Reflection;
 
 namespace ResourceTypes.Prefab.CrashObject
@@ -195,9 +196,31 @@ namespace ResourceTypes.Prefab.CrashObject
 
         public void Load(BitStream MemStream)
         {
+            // [13 = MOTOR] [15 = SNOW] [12 = EXHAUST] [16 = PLOW] [7 = BUMPER] [5 = WINDOW] [6 = COVER] [3 = LID] [14 = TYRE] [2 = WHEEL] [1 = BODY] [4 = DOOR] [0 = NORMAL?]
             Unk0 = MemStream.ReadUInt32();
             Unk1 = MemStream.ReadUInt32();
             Unk2 = MemStream.ReadBit();
+
+            switch(Unk0)
+            {
+                case 13:
+                case 15:
+                case 12:
+                case 16:
+                case 7:
+                case 5:
+                case 6:
+                case 3:
+                case 14:
+                case 2:
+                case 4:
+                case 1:
+                case 0:
+                    break;
+                default:
+                    MessageBox.Show("Unknown DeformPart Type", "Toolkit");
+                    break;
+            }
 
             // collect hashes
             Unk3 = PrefabUtils.ReadHashArray(MemStream);

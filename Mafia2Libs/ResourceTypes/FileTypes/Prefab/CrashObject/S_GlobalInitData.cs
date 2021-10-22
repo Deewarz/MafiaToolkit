@@ -19,7 +19,7 @@ namespace ResourceTypes.Prefab.CrashObject
         public virtual void Save(BitStream MemStream)
         {
             // Should store 4
-            MemStream.WriteUInt32(PrefabVersion);
+            MemStream.WriteUInt32(4);
         }
     }
 }

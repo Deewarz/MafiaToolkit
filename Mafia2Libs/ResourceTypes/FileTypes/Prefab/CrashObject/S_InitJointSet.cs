@@ -1,6 +1,8 @@
 ﻿using BitStreams;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using Utils.Extensions;
 using Vortice.Mathematics;
 
 namespace ResourceTypes.Prefab.CrashObject
@@ -21,6 +23,7 @@ namespace ResourceTypes.Prefab.CrashObject
 
     public class S_InitJointSet
     {
+        [Editor(typeof(FlagEnumUIEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public S_InitJointSet_Flags Flags { get; set; } // Flag Types - [NO IB = 0xFFFFEFFF, PRECISION = 0x2000] [ANGULAR FREE Z = 0x4, ANGULAR FREE Y = 0x2 , ANGULAR FREE X = 0x1] [LINEAR FREE Z = 0x20, LINEAR FREE Y = 0x10 , LINEAR FREE X = 0x8]
         public float EnergyDeform { get; set; } // Game does [v12 * 0.0099999998]
         public C_Vector3 LinearLimit_0 { get; set; }
@@ -222,11 +225,14 @@ namespace ResourceTypes.Prefab.CrashObject
             {
                 for (int x = 0; x < 9; x++)
                 {
-                    float Original = OriginalFloats[i, x];
-                    float Final = LinearAndAngularData[i, x];
-                    if (Math.Abs(Original - Final) > 0.01f)
+                    if (OriginalFloats != null && OriginalFloats.Length == LinearAndAngularData.Length)
                     {
-                        int z = 0;
+                        float Original = OriginalFloats[i, x];
+                        float Final = LinearAndAngularData[i, x];
+                        if (Math.Abs(Original - Final) > 0.01f)
+                        {
+                            int z = 0;
+                        }
                     }
 
                     MemStream.WriteSingle(LinearAndAngularData[i, x]);
