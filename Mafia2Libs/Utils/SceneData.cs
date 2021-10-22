@@ -138,19 +138,21 @@ namespace Mafia2Tool
                 Collisions = new Collision(name);
             }
 
+            //~ENABLE THIS SECTION AT YOUR OWN RISK
             //AnimalTrafficPaths
-            if (!isBigEndian && sdsContent.HasResource("AnimalTrafficPaths"))
-            {
-                var name = sdsContent.GetResourceFiles("AnimalTrafficPaths", true)[0];
-                try
-                {
-                    ATLoader = new AnimalTrafficLoader(new FileInfo(name));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Failed to read AnimalTrafficPaths {0}", ex.Message);
-                }
-            }
+            //if (!isBigEndian && sdsContent.HasResource("AnimalTrafficPaths"))
+            //{
+            //    var name = sdsContent.GetResourceFiles("AnimalTrafficPaths", true)[0];
+            //    try
+            //    {
+            //        ATLoader = new AnimalTrafficLoader(new FileInfo(name));
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine("Failed to read AnimalTrafficPaths {0}", ex.Message);
+            //    }
+            //}
+            //~ENABLE THIS SECTION AT YOUR OWN RISK
 
             if (!isBigEndian && sdsContent.HasResource("PREFAB"))
             {
@@ -172,40 +174,58 @@ namespace Mafia2Tool
                 }
             }
 
+            //~ENABLE THIS SECTION AT YOUR OWN RISK
             //Translokator
             //if (!isBigEndian && sdsContent.HasResource("Translokator"))
             //{
             //    var name = sdsContent.GetResourceFiles("Translokator", true)[0];
             //    Translokator = new TranslokatorLoader(new FileInfo(name));
             //}
+            //~ENABLE THIS SECTION AT YOUR OWN RISK
 
-            //Kynapse OBJ_DATA
-            //if (!isBigEndian)
-            //{
-            //    //tis' broken for now
-            //    paths = sdsContent.GetResourceFiles("NAV_OBJ_DATA", true);
-            //    foreach (var item in paths)
-            //    {
-            //        obj.Add(new NAVData(new FileInfo(item)));
-            //    }
+            //~ENABLE THIS SECTION AT YOUR OWN RISK
+            /* Kynapse OBJ_DATA
+            if (!isBigEndian)
+            {
+                tis' broken for now
+                paths = sdsContent.GetResourceFiles("NAV_OBJ_DATA", true);
+                foreach (var item in paths)
+                {
+                    obj.Add(new NAVData(new FileInfo(item)));
+                }
 
-            //    //for (int i = 0; i < obj.Count; i++)
-            //    //{
-            //    //    obj[i].WriteToFile();
-            //    //}
-            //}
-            //if (!isBigEndian && sdsContent.HasResource("NAV_HPD_DATA"))
-            //{
-            //    var name = sdsContent.GetResourceFiles("NAV_HPD_DATA", true)[0];
-            //    var data = new NAVData(new FileInfo(name));
-            //    HPDData = (data.data as HPDData);
-            //    data.WriteToFile();
-            //}
+                for (int i = 0; i < obj.Count; i++)
+                {
+                    obj[i].WriteToFile();
+                }
+            }
+
+            AI WORLD
+            if (!isBigEndian)
+            {
+                paths = sdsContent.GetResourceFiles("NAV_AIWORLD_DATA", true);
+                foreach (var Item in paths)
+                {
+                    aiw.Add(new NAVData(new FileInfo(Item)));
+                }
+            }
+
+            if (!isBigEndian && sdsContent.HasResource("NAV_HPD_DATA"))
+            {
+                var name = sdsContent.GetResourceFiles("NAV_HPD_DATA", true)[0];
+                var data = new NAVData(new FileInfo(name));
+                HPDData = (data.data as HPDData);
+                data.WriteToFile();
+            }
+            */
+            //~ENABLE THIS SECTION AT YOUR OWN RISK
+
             IndexBufferPool = new IndexBufferManager(ibps, dirInfo, isBigEndian);
             VertexBufferPool = new VertexBufferManager(vbps, dirInfo, isBigEndian);
             ItemDescs = ids.ToArray();
             Actors = act.ToArray();
             OBJData = obj.ToArray();
+            AIWorlds = aiw.ToArray();
         }
 
         public static void UpdateResourceType()
