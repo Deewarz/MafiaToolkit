@@ -93,16 +93,16 @@ namespace ResourceTypes.Prefab.CrashObject
             LinearSpring_0 = new C_Vector3(LinearAndAngularData[2, 4], LinearAndAngularData[1, 4], LinearAndAngularData[0, 4]);
             LinearSpring_1 = new C_Vector3(LinearAndAngularData[2, 5], LinearAndAngularData[1, 5], LinearAndAngularData[0, 5]);
             LinearDamper = new C_Vector3(LinearAndAngularData[2, 6], LinearAndAngularData[1, 6], LinearAndAngularData[0, 6]);
-            LinearMotor_0 = new C_Vector3(LinearAndAngularData[2, 7], LinearAndAngularData[1, 7], LinearAndAngularData[0, 7]);
+            C_Vector3 TempLinearMotor_0 = new C_Vector3(LinearAndAngularData[2, 7], LinearAndAngularData[1, 7], LinearAndAngularData[0, 7]);
             LinearMotor_1 = new C_Vector3(LinearAndAngularData[2, 8], LinearAndAngularData[1, 8], LinearAndAngularData[0, 8]);
 
             // Do Angular variables
-            AngularLimit_0 = new C_Vector3(LinearAndAngularData[5, 0], LinearAndAngularData[4, 0], LinearAndAngularData[3, 0]);
-            AngularLimit_1 = new C_Vector3(LinearAndAngularData[5, 1], LinearAndAngularData[4, 1], LinearAndAngularData[3, 1]);
+            C_Vector3 TempAngularLimit_0 = new C_Vector3(LinearAndAngularData[5, 0], LinearAndAngularData[4, 0], LinearAndAngularData[3, 0]);
+            C_Vector3 TempAngularLimit_1 = new C_Vector3(LinearAndAngularData[5, 1], LinearAndAngularData[4, 1], LinearAndAngularData[3, 1]);
             AngularBreak_0 = new C_Vector3(LinearAndAngularData[5, 2], LinearAndAngularData[4, 2], LinearAndAngularData[3, 2]);
             AngularBreak_1 = new C_Vector3(LinearAndAngularData[5, 3], LinearAndAngularData[4, 3], LinearAndAngularData[3, 3]);
-            AngularSpring_0 = new C_Vector3(LinearAndAngularData[5, 4], LinearAndAngularData[4, 4], LinearAndAngularData[3, 4]);
-            AngularSpring_1 = new C_Vector3(LinearAndAngularData[5, 5], LinearAndAngularData[4, 5], LinearAndAngularData[3, 5]);
+            C_Vector3 TempAngularSpring_0 = new C_Vector3(LinearAndAngularData[5, 4], LinearAndAngularData[4, 4], LinearAndAngularData[3, 4]);
+            C_Vector3 TempAngularSpring_1 = new C_Vector3(LinearAndAngularData[5, 5], LinearAndAngularData[4, 5], LinearAndAngularData[3, 5]);
             AngularDamper = new C_Vector3(LinearAndAngularData[5, 6], LinearAndAngularData[4, 6], LinearAndAngularData[3, 6]);
             AngularMotor_0 = new C_Vector3(LinearAndAngularData[5, 7], LinearAndAngularData[4, 7], LinearAndAngularData[3, 7]);
             AngularMotor_1 = new C_Vector3(LinearAndAngularData[5, 8], LinearAndAngularData[4, 8], LinearAndAngularData[3, 8]);
@@ -188,13 +188,19 @@ namespace ResourceTypes.Prefab.CrashObject
             MemStream.WriteUInt32((uint)Flags);
             MemStream.WriteSingle(EnergyDeform * 0.0099999998f);
 
-            // Convert back to format we save in
-            ConvertToRadians(AngularLimit_0);
-            ConvertToRadians(AngularLimit_1);
-            ConvertToRadians(AngularMotor_0);
-            AngularSpring_0.Multiply(57.295776f);
-            AngularSpring_1.Multiply(0.017453292f);
-            LinearMotor_0.Divide(3.6f);
+            // Convert back to format we save in (Copying is a must here)
+            C_Vector3 SaveableAngularLimit_0 = ConvertToRadians(AngularLimit_0);
+            C_Vector3 SaveableAngularLimit_1 = ConvertToRadians(AngularLimit_1);
+            C_Vector3 SaveableAngularMotor_0 = ConvertToRadians(AngularMotor_0);
+
+            C_Vector3 SaveableAngularSpring_0 = AngularSpring_0.Clone();
+            SaveableAngularSpring_0.Multiply(57.295776f);
+
+            C_Vector3 SaveableAngularSpring_1 = AngularSpring_1.Clone();
+            SaveableAngularSpring_1.Multiply(0.017453292f);
+
+            C_Vector3 SaveableLinearMotor_0 = LinearMotor_0.Clone();
+            SaveableLinearMotor_0.Divide(3.6f);
 
             // Create float array
             // Do linear
@@ -206,18 +212,18 @@ namespace ResourceTypes.Prefab.CrashObject
             LinearAndAngularData[2, 4] = LinearSpring_0.X; LinearAndAngularData[1, 4] = LinearSpring_0.Y; LinearAndAngularData[0, 4] = LinearSpring_0.Z;
             LinearAndAngularData[2, 5] = LinearSpring_1.X; LinearAndAngularData[1, 5] = LinearSpring_1.Y; LinearAndAngularData[0, 5] = LinearSpring_1.Z;
             LinearAndAngularData[2, 6] = LinearDamper.X; LinearAndAngularData[1, 6] = LinearDamper.Y; LinearAndAngularData[0, 6] = LinearDamper.Z;
-            LinearAndAngularData[2, 7] = LinearMotor_0.X; LinearAndAngularData[1, 7] = LinearMotor_0.Y; LinearAndAngularData[0, 7] = LinearMotor_0.Z;
+            LinearAndAngularData[2, 7] = SaveableLinearMotor_0.X; LinearAndAngularData[1, 7] = SaveableLinearMotor_0.Y; LinearAndAngularData[0, 7] = SaveableLinearMotor_0.Z;
             LinearAndAngularData[2, 8] = LinearMotor_1.X; LinearAndAngularData[1, 8] = LinearMotor_1.Y; LinearAndAngularData[0, 8] = LinearMotor_1.Z;
 
             // Do Angular
-            LinearAndAngularData[5, 0] = AngularLimit_0.X; LinearAndAngularData[4, 0] = AngularLimit_0.Y; LinearAndAngularData[3, 0] = AngularLimit_0.Z;
-            LinearAndAngularData[5, 1] = AngularLimit_1.X; LinearAndAngularData[4, 1] = AngularLimit_1.Y; LinearAndAngularData[3, 1] = AngularLimit_1.Z;
+            LinearAndAngularData[5, 0] = SaveableAngularLimit_0.X; LinearAndAngularData[4, 0] = SaveableAngularLimit_0.Y; LinearAndAngularData[3, 0] = SaveableAngularLimit_0.Z;
+            LinearAndAngularData[5, 1] = SaveableAngularLimit_1.X; LinearAndAngularData[4, 1] = SaveableAngularLimit_1.Y; LinearAndAngularData[3, 1] = SaveableAngularLimit_1.Z;
             LinearAndAngularData[5, 2] = AngularBreak_0.X; LinearAndAngularData[4, 2] = AngularBreak_0.Y; LinearAndAngularData[3, 2] = AngularBreak_0.Z;
             LinearAndAngularData[5, 3] = AngularBreak_1.X; LinearAndAngularData[4, 3] = AngularBreak_1.Y; LinearAndAngularData[3, 3] = AngularBreak_1.Z;
-            LinearAndAngularData[5, 4] = AngularSpring_0.X; LinearAndAngularData[4, 4] = AngularSpring_0.Y; LinearAndAngularData[3, 4] = AngularSpring_0.Z;
-            LinearAndAngularData[5, 5] = AngularSpring_1.X; LinearAndAngularData[4, 5] = AngularSpring_1.Y; LinearAndAngularData[3, 5] = AngularSpring_1.Z;
+            LinearAndAngularData[5, 4] = SaveableAngularSpring_0.X; LinearAndAngularData[4, 4] = SaveableAngularSpring_0.Y; LinearAndAngularData[3, 4] = SaveableAngularSpring_0.Z;
+            LinearAndAngularData[5, 5] = SaveableAngularSpring_1.X; LinearAndAngularData[4, 5] = SaveableAngularSpring_1.Y; LinearAndAngularData[3, 5] = SaveableAngularSpring_1.Z;
             LinearAndAngularData[5, 6] = AngularDamper.X; LinearAndAngularData[4, 6] = AngularDamper.Y; LinearAndAngularData[3, 6] = AngularDamper.Z;
-            LinearAndAngularData[5, 7] = AngularMotor_0.X; LinearAndAngularData[4, 7] = AngularMotor_0.Y; LinearAndAngularData[3, 7] = AngularMotor_0.Z;
+            LinearAndAngularData[5, 7] = SaveableAngularMotor_0.X; LinearAndAngularData[4, 7] = SaveableAngularMotor_0.Y; LinearAndAngularData[3, 7] = SaveableAngularMotor_0.Z;
             LinearAndAngularData[5, 8] = AngularMotor_1.X; LinearAndAngularData[4, 8] = AngularMotor_1.Y; LinearAndAngularData[3, 8] = AngularMotor_1.Z;
 
             // And then finally write the new values.
@@ -240,18 +246,24 @@ namespace ResourceTypes.Prefab.CrashObject
             }
         }
 
-        private void ConvertToDegrees(C_Vector3 InVector)
+        private C_Vector3 ConvertToDegrees(C_Vector3 InVector)
         {
-            InVector.X = MathHelper.ToDegrees(InVector.X);
-            InVector.Y = MathHelper.ToDegrees(InVector.Y);
-            InVector.Z = MathHelper.ToDegrees(InVector.Z);
+            C_Vector3 NewVector = new C_Vector3();
+            NewVector.X = MathHelper.ToDegrees(InVector.X);
+            NewVector.Y = MathHelper.ToDegrees(InVector.Y);
+            NewVector.Z = MathHelper.ToDegrees(InVector.Z);
+
+            return NewVector;
         }
 
-        private void ConvertToRadians(C_Vector3 InVector)
+        private C_Vector3 ConvertToRadians(C_Vector3 InVector)
         {
-            InVector.X = MathHelper.ToRadians(InVector.X);
-            InVector.Y = MathHelper.ToRadians(InVector.Y);
-            InVector.Z = MathHelper.ToRadians(InVector.Z);
+            C_Vector3 NewVector = new C_Vector3();
+            NewVector.X = MathHelper.ToRadians(InVector.X);
+            NewVector.Y = MathHelper.ToRadians(InVector.Y);
+            NewVector.Z = MathHelper.ToRadians(InVector.Z);
+
+            return NewVector;
         }
     }
 }

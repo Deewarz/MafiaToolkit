@@ -57,6 +57,16 @@ namespace ResourceTypes.Prefab
             Z /= InScalar;
         }
 
+        public C_Vector3 Clone()
+        {
+            C_Vector3 NewVector = new C_Vector3();
+            NewVector.X = X;
+            NewVector.Y = Y;
+            NewVector.Z = Z;
+
+            return NewVector;
+        }
+
         public static C_Vector3 Construct(BitStream MemStream)
         {
             C_Vector3 Vector = new C_Vector3();

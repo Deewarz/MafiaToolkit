@@ -228,9 +228,13 @@ namespace ResourceTypes.Prefab
                 byte[] NewData = OutStream.GetStreamData();
 
                 // Sanity check size
-                Debug.Assert(OutStream.Length == PrefabSize, "Incorrect Size when doing the save test");
-                bIsLengthTheSame = OutStream.Length == PrefabSize;
+                // (Debugger only)
+                if (Debugger.IsAttached)
+                {
+                    Debug.Assert(OutStream.Length == PrefabSize, "Incorrect Size when doing the save test");
+                }
 
+                bIsLengthTheSame = OutStream.Length == PrefabSize;
                 PrefabSize = (int)OutStream.Length;
 
                 return NewData;
