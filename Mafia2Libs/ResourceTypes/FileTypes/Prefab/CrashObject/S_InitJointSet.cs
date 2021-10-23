@@ -93,23 +93,23 @@ namespace ResourceTypes.Prefab.CrashObject
             LinearSpring_0 = new C_Vector3(LinearAndAngularData[2, 4], LinearAndAngularData[1, 4], LinearAndAngularData[0, 4]);
             LinearSpring_1 = new C_Vector3(LinearAndAngularData[2, 5], LinearAndAngularData[1, 5], LinearAndAngularData[0, 5]);
             LinearDamper = new C_Vector3(LinearAndAngularData[2, 6], LinearAndAngularData[1, 6], LinearAndAngularData[0, 6]);
-            C_Vector3 TempLinearMotor_0 = new C_Vector3(LinearAndAngularData[2, 7], LinearAndAngularData[1, 7], LinearAndAngularData[0, 7]);
+            LinearMotor_0 = new C_Vector3(LinearAndAngularData[2, 7], LinearAndAngularData[1, 7], LinearAndAngularData[0, 7]);
             LinearMotor_1 = new C_Vector3(LinearAndAngularData[2, 8], LinearAndAngularData[1, 8], LinearAndAngularData[0, 8]);
 
             // Do Angular variables
-            C_Vector3 TempAngularLimit_0 = new C_Vector3(LinearAndAngularData[5, 0], LinearAndAngularData[4, 0], LinearAndAngularData[3, 0]);
-            C_Vector3 TempAngularLimit_1 = new C_Vector3(LinearAndAngularData[5, 1], LinearAndAngularData[4, 1], LinearAndAngularData[3, 1]);
+            AngularLimit_0 = new C_Vector3(LinearAndAngularData[5, 0], LinearAndAngularData[4, 0], LinearAndAngularData[3, 0]);
+            AngularLimit_1 = new C_Vector3(LinearAndAngularData[5, 1], LinearAndAngularData[4, 1], LinearAndAngularData[3, 1]);
             AngularBreak_0 = new C_Vector3(LinearAndAngularData[5, 2], LinearAndAngularData[4, 2], LinearAndAngularData[3, 2]);
             AngularBreak_1 = new C_Vector3(LinearAndAngularData[5, 3], LinearAndAngularData[4, 3], LinearAndAngularData[3, 3]);
-            C_Vector3 TempAngularSpring_0 = new C_Vector3(LinearAndAngularData[5, 4], LinearAndAngularData[4, 4], LinearAndAngularData[3, 4]);
-            C_Vector3 TempAngularSpring_1 = new C_Vector3(LinearAndAngularData[5, 5], LinearAndAngularData[4, 5], LinearAndAngularData[3, 5]);
+            AngularSpring_0 = new C_Vector3(LinearAndAngularData[5, 4], LinearAndAngularData[4, 4], LinearAndAngularData[3, 4]);
+            AngularSpring_1 = new C_Vector3(LinearAndAngularData[5, 5], LinearAndAngularData[4, 5], LinearAndAngularData[3, 5]);
             AngularDamper = new C_Vector3(LinearAndAngularData[5, 6], LinearAndAngularData[4, 6], LinearAndAngularData[3, 6]);
             AngularMotor_0 = new C_Vector3(LinearAndAngularData[5, 7], LinearAndAngularData[4, 7], LinearAndAngularData[3, 7]);
             AngularMotor_1 = new C_Vector3(LinearAndAngularData[5, 8], LinearAndAngularData[4, 8], LinearAndAngularData[3, 8]);
 
-            ConvertToDegrees(AngularLimit_0);
-            ConvertToDegrees(AngularLimit_1);
-            ConvertToDegrees(AngularMotor_0);
+            AngularLimit_0 = ConvertToDegrees(AngularLimit_0);
+            AngularLimit_1 = ConvertToDegrees(AngularLimit_1);
+            AngularMotor_0 = ConvertToDegrees(AngularMotor_0);
             AngularSpring_0.Divide(57.295776f);
             AngularSpring_1.Divide(0.017453292f);
             LinearMotor_0.Multiply(3.6f);
