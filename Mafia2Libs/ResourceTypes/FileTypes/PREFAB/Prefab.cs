@@ -180,7 +180,7 @@ namespace ResourceTypes.Prefab
                 }
                 else if(PrefabType == 10)
                 {
-                    InitData = new S_Wagon();
+                    InitData = new S_WagonInitData();
                     InitData.Load(MemStream);
                 }
                 else if(PrefabType == 9)
