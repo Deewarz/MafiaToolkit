@@ -24,6 +24,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
+    <CustomResourceTypesSupport>true</CustomResourceTypesSupport>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -31,6 +32,8 @@
     </DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>6</LangVersion>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -38,6 +41,8 @@
     </DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>7.0</LangVersion>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Mafia2Tool.Program</StartupObject>
@@ -161,9 +166,6 @@
     <Content Include="libs\Gibbed.Squish.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="libs\oo2core_8_win64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="libs\OodleSharp.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -198,6 +200,9 @@
     <Content Include="Localisations\sk_SK.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Update="libs\M2FBX.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="libs\M2PhysX.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
